@@ -1,4 +1,6 @@
 import { expect } from 'chai'
+
+import * as C from '../opCodes'
 import compute from './computer'
 
 const EPS = 1e-11
@@ -51,7 +53,7 @@ describe('compute', () => {
         buffer: '0.978147600734',
         computed: false
       }
-      const newState = compute('asin')(state)
+      const newState = compute(C.ASIN)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -63,7 +65,7 @@ describe('compute', () => {
         buffer: '0.20791169081',
         computed: false
       }
-      const newState = compute('acos')(state)
+      const newState = compute(C.ACOS)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -75,7 +77,7 @@ describe('compute', () => {
         buffer: '4.70463010948',
         computed: false
       }
-      const newState = compute('atan')(state)
+      const newState = compute(C.ATAN)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true

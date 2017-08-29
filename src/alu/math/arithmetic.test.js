@@ -1,4 +1,6 @@
 import { expect } from 'chai'
+
+import * as C from '../opCodes'
 import compute from './computer'
 
 describe('compute', () => {
@@ -14,7 +16,8 @@ describe('compute', () => {
       const expectedState = {
         stack: [3, 3, 4, 0],
         buffer: '3',
-        computed: true
+        computed: true,
+        inputMode: false
       }
       const newState = compute(C.ADD)(state)
       expect(newState).to.deep.equal(expectedState)

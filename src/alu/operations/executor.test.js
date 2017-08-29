@@ -1,4 +1,6 @@
 import { expect } from 'chai'
+
+import * as C from '../opCodes'
 import execute from './executor'
 
 describe('execute', () => {
@@ -17,7 +19,7 @@ describe('execute', () => {
         computed: false
       }
       const newState = execute(C.CLX)(state)
-      expect(newState).to.deep.equal(expectState)
+      expect(newState).to.deep.include(expectState)
     })
 
   })
@@ -35,7 +37,7 @@ describe('execute', () => {
         computed: true
       }
       const newState = execute(C.ADD)(state)
-      expect(newState).to.deep.equal(expectState)
+      expect(newState).to.deep.include(expectState)
     })
   })
 
