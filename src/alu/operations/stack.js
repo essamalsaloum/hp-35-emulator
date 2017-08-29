@@ -1,3 +1,4 @@
+import * as C from '../opCodes'
 import { newStack } from '../../store/init'
 
 export const enter = state => {
@@ -24,7 +25,7 @@ const clr = () => ({
   inputMode: false
 })
 
-const swapXY = state => {
+const swap = state => {
   const [x, y, ...rest] = state.stack
   return {
     stack: [y, x, ...rest],
@@ -45,9 +46,9 @@ const rollDown = state => {
 }
 
 export default{
-  enter,
-  clx,
-  clr,
-  swapXY,
-  rollDown
+  [C.ENTER]: enter,
+  [C.CLX]: clx,
+  [C.CLR]: clr,
+  [C.SWAP]: swap,
+  [C.ROLL_DOWN]: rollDown
 }

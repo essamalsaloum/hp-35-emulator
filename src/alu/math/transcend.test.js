@@ -15,7 +15,7 @@ describe('compute', () => {
         buffer: '78',
         computed: false
       }
-      const newState = compute('sin')(state)
+      const newState = compute(C.SIN)(state)
       const [x] = newState.stack
       const hpVal = 0.978147600734
       expect(floatEqual(x, hpVal)).to.be.true
@@ -27,7 +27,7 @@ describe('compute', () => {
         buffer: '78',
         computed: false
       }
-      const newState = compute('cos')(state)
+      const newState = compute(C.COS)(state)
       const [x] = newState.stack
       const hpVal = 0.207911690818
       expect(floatEqual(x, hpVal)).to.be.true
@@ -39,7 +39,7 @@ describe('compute', () => {
         buffer: '78',
         computed: false
       }
-      const newState = compute('tan')(state)
+      const newState = compute(C.TAN)(state)
       const [x] = newState.stack
       const hpVal = 4.70463010948
       expect(floatEqual(x, hpVal)).to.be.true

@@ -7,12 +7,14 @@ class Store {
 
   state = initialState()
 
-  setState(state) {
-    const date = new Date()
+  setState(updates) {
     console.group('old state')
     console.dir(this.state)
     console.groupEnd()
-    this.state = state
+
+    Object.assign(this.state, updates)
+
+    const date = new Date()
     console.group('new state ' + date.toLocaleTimeString() )
     console.dir(this.state)
     console.groupEnd()

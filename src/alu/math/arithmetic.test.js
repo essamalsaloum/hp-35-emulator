@@ -16,7 +16,7 @@ describe('compute', () => {
         buffer: '3',
         computed: true
       }
-      const newState = compute('add')(state)
+      const newState = compute(C.ADD)(state)
       expect(newState).to.deep.equal(expectedState)
     })
 

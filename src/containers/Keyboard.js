@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import store from '../store'
 import execute from '../alu/operations/executor'
+import * as C from '../alu/opCodes'
 import Key from '../components/Key'
 
 export default class Keyboard extends React.Component {
@@ -23,55 +24,55 @@ export default class Keyboard extends React.Component {
     return (
       <div>
         <div className="row">
-          <Key className="col s3" label="𝓍ʸ" keyPress={this.keyPress('pow')} />
-          <Key className="col s3" label="LOG" keyPress={this.keyPress('log')} />
-          <Key className="col s3" label="LN" keyPress={this.keyPress('ln')} />
-          <Key className="col s3" label="𝑒ˣ" keyPress={this.keyPress('exp')} />
-          <Key className="col s3" label="CLR" keyPress={this.keyPress('clr')} />
+          <Key className="col s3" label="𝓍ʸ" keyPress={this.keyPress(C.POW)} />
+          <Key className="col s3" label="LOG" keyPress={this.keyPress(C.LOG)} />
+          <Key className="col s3" label="LN" keyPress={this.keyPress(C.LN)} />
+          <Key className="col s3" label="𝑒ˣ" keyPress={this.keyPress(C.EXP)} />
+          <Key className="col s3" label="CLR" keyPress={this.keyPress(C.CLR)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="√𝑥" keyPress={this.keyPress('pow')} />
-          <Key className="col s3" label="ARC" keyPress={this.keyPress('arc')} />
-          <Key className="col s3" label="SIN" keyPress={this.keyPress('sin')} />
-          <Key className="col s3" label="COS" keyPress={this.keyPress('cos')} />
-          <Key className="col s3" label="TAN" keyPress={this.keyPress('tan')} />
+          <Key className="col s3" label="√𝑥" keyPress={this.keyPress(C.SQRT)} />
+          <Key className="col s3" label="ARC" keyPress={this.keyPress(C.ARC)} />
+          <Key className="col s3" label="SIN" keyPress={this.keyPress(C.SIN)} />
+          <Key className="col s3" label="COS" keyPress={this.keyPress(C.COS)} />
+          <Key className="col s3" label="TAN" keyPress={this.keyPress(C.TAN)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="¹/𝓍" keyPress={this.keyPress('reciproc')} />
-          <Key className="col s3" label="𝑥⬄𝑦" keyPress={this.keyPress('swapXY')} />
-          <Key className="col s3" label="R↓" keyPress={this.keyPress('rollDown')} />
-          <Key className="col s3" label="STO" keyPress={this.keyPress('sto')} />
-          <Key className="col s3" label="RCL" keyPress={this.keyPress('rcl')} />
+          <Key className="col s3" label="¹/𝓍" keyPress={this.keyPress(C.RECIPROC)} />
+          <Key className="col s3" label="𝑥⬄𝑦" keyPress={this.keyPress(C.SWAP)} />
+          <Key className="col s3" label="R↓" keyPress={this.keyPress(C.ROLL_DOWN)} />
+          <Key className="col s3" label="STO" keyPress={this.keyPress(C.STO)} />
+          <Key className="col s3" label="RCL" keyPress={this.keyPress(C.RCL)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="Enter ↑" keyPress={this.keyPress('enter')} />
-          <Key className="col s3" label="CHS" keyPress={this.keyPress('chs')} />
-          <Key className="col s3" label="EEX" keyPress={this.keyPress('eex')} />
-          <Key className="col s3" label="CL𝓧" keyPress={this.keyPress('clx')} />
+          <Key className="col s3" label="Enter ↑" keyPress={this.keyPress(C.ENTER)} />
+          <Key className="col s3" label="CHS" keyPress={this.keyPress(C.CHS)} />
+          <Key className="col s3" label="EEX" keyPress={this.keyPress(C.EEX)} />
+          <Key className="col s3" label="CL𝓧" keyPress={this.keyPress(C.CLX)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="-" keyPress={this.keyPress('sub')} />
-          <Key className="col s3" label="7" keyPress={this.keyPress('digit7')} />
-          <Key className="col s3" label="8" keyPress={this.keyPress('digit8')} />
-          <Key className="col s3" label="9" keyPress={this.keyPress('digit9')} />
+          <Key className="col s3" label="-" keyPress={this.keyPress(C.SUB)} />
+          <Key className="col s3" label="7" keyPress={this.keyPress(C.DIGIT_7)} />
+          <Key className="col s3" label="8" keyPress={this.keyPress(C.DIGIT_8)} />
+          <Key className="col s3" label="9" keyPress={this.keyPress(C.DIGIT_9)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="+" keyPress={this.keyPress('add')} />
-          <Key className="col s3" label="4" keyPress={this.keyPress('digit4')} />
-          <Key className="col s3" label="5" keyPress={this.keyPress('digit5')} />
-          <Key className="col s3" label="6" keyPress={this.keyPress('digit6')} />
+          <Key className="col s3" label="+" keyPress={this.keyPress(C.ADD)} />
+          <Key className="col s3" label="4" keyPress={this.keyPress(C.DIGIT_4)} />
+          <Key className="col s3" label="5" keyPress={this.keyPress(C.DIGIT_5)} />
+          <Key className="col s3" label="6" keyPress={this.keyPress(C.DIGIT_6)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="×" keyPress={this.keyPress('mul')} />
-          <Key className="col s3" label="1" keyPress={this.keyPress('digit1')} />
-          <Key className="col s3" label="2" keyPress={this.keyPress('digit2')} />
-          <Key className="col s3" label="3" keyPress={this.keyPress('digit3')} />
+          <Key className="col s3" label="×" keyPress={this.keyPress(C.MUL)} />
+          <Key className="col s3" label="1" keyPress={this.keyPress(C.DIGIT_1)} />
+          <Key className="col s3" label="2" keyPress={this.keyPress(C.DIGIT_2)} />
+          <Key className="col s3" label="3" keyPress={this.keyPress(C.DIGIT_3)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="÷" keyPress={this.keyPress('div')} />
-          <Key className="col s3" label="0" keyPress={this.keyPress('digit0')} />
-          <Key className="col s3" label="•" keyPress={this.keyPress('decimal')} />
-          <Key className="col s3" label="π" keyPress={this.keyPress('pi')} />
+          <Key className="col s3" label="÷" keyPress={this.keyPress(C.DIV)} />
+          <Key className="col s3" label="0" keyPress={this.keyPress(C.DIGIT_0)} />
+          <Key className="col s3" label="•" keyPress={this.keyPress(C.DECIMAL)} />
+          <Key className="col s3" label="π" keyPress={this.keyPress(C.PI)} />
         </div>
       </div>
     )

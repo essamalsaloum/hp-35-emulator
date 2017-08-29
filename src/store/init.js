@@ -14,7 +14,8 @@ export default () => {
     stack: newStack(),
     buffer: '0',
     computed: false,
-    inputMode: true
+    inputMode: true,
+    prevOpCode: ''
   }
 }
 

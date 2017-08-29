@@ -1,3 +1,4 @@
+import * as C from '../opCodes'
 import { enter } from './stack'
 
 const digit = digit => state => {
@@ -39,16 +40,16 @@ const decimal = state =>
   }
 
 export default {
-  digit0: digit('0'),
-  digit1: digit('1'),
-  digit2: digit('2'),
-  digit3: digit('3'),
-  digit4: digit('4'),
-  digit5: digit('5'),
-  digit6: digit('6'),
-  digit7: digit('7'),
-  digit8: digit('8'),
-  digit9: digit('9'),
-  pi,
-  decimal
+  [C.DECIMAL]: decimal,
+  [C.DIGIT_0]: digit('0'),
+  [C.DIGIT_1]: digit('1'),
+  [C.DIGIT_2]: digit('2'),
+  [C.DIGIT_3]: digit('3'),
+  [C.DIGIT_4]: digit('4'),
+  [C.DIGIT_5]: digit('5'),
+  [C.DIGIT_6]: digit('6'),
+  [C.DIGIT_7]: digit('7'),
+  [C.DIGIT_8]: digit('8'),
+  [C.DIGIT_9]: digit('9'),
+  [C.PI]: pi
 }

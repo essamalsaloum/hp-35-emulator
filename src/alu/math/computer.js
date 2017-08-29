@@ -20,8 +20,8 @@ const compute = opCode => state => {
     return state
   }
 
-  const { argCount = 0, fn } = operation
-  const newStack = argCount === 2 ? binaryFn(stack, fn) : unaryFn(stack, fn)
+  const { arity = 0, fn } = operation
+  const newStack = arity === 2 ? binaryFn(stack, fn) : unaryFn(stack, fn)
 
   return {
     stack: newStack,

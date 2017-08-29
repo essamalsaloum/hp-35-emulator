@@ -1,8 +1,10 @@
+import * as C from '../opCodes'
+
 export default {
-  add: { argCount: 2, fn: (x, y) => y + x },
-  sub: { argCount: 2, fn: (x, y) => y - x },
-  mul: { argCount: 2, fn: (x, y) => y * x },
-  div: { argCount: 2, fn: (x, y) => y / x },
-  reciproc: { argCount: 1, fn: x => 1 / x },
-  chs: { argCount: 1, fn: x => -x }
+  [C.ADD]: { arity: 2, fn: (x, y) => y + x },
+  [C.SUB]: { arity: 2, fn: (x, y) => y - x },
+  [C.MUL]: { arity: 2, fn: (x, y) => y * x },
+  [C.DIV]: { arity: 2, fn: (x, y) => y / x },
+  [C.RECIPROC]: { arity: 1, fn: x => 1 / x },
+  [C.CHS]: { arity: 1, fn: x => -x }
 }

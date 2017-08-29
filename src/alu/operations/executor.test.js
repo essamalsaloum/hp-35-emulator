@@ -16,7 +16,7 @@ describe('execute', () => {
         buffer: '0',
         computed: false
       }
-      const newState = execute('clx')(state)
+      const newState = execute(C.CLX)(state)
       expect(newState).to.deep.equal(expectState)
     })
 
@@ -34,7 +34,7 @@ describe('execute', () => {
         buffer: '3',
         computed: true
       }
-      const newState = execute('add')(state)
+      const newState = execute(C.ADD)(state)
       expect(newState).to.deep.equal(expectState)
     })
   })
