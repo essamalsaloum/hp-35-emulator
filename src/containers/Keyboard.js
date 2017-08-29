@@ -38,7 +38,7 @@ export default class Keyboard extends React.Component {
           <Key className="col s3" label="TAN" keyPress={this.keyPress(C.TAN)} />
         </div>
         <div className="row">
-          <Key className="col s3" label="¹/𝓍" keyPress={this.keyPress(C.RECIPROC)} />
+          <Key className="col s3" label="¹/𝓍" keyPress={this.keyPress(C.RECIPROCAL)} />
           <Key className="col s3" label="𝑥⬄𝑦" keyPress={this.keyPress(C.SWAP)} />
           <Key className="col s3" label="R↓" keyPress={this.keyPress(C.ROLL_DOWN)} />
           <Key className="col s3" label="STO" keyPress={this.keyPress(C.STO)} />

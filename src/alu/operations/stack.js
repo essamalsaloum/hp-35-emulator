@@ -6,7 +6,7 @@ export const enter = state => {
   return {
     stack: [x, x, ...rest.slice(0, -1)],
     buffer: x.toString(),
-    computed: false,
+    liftStack: false,
     inputMode: false
   }
 }
@@ -14,14 +14,14 @@ export const enter = state => {
 const clx = state => ({
   stack: [0, ...state.stack.slice(1)],
   buffer: '0',
-  computed: false,
+  liftStack: false,
   inputMode: false
 })
 
 const clr = () => ({
   stack: newStack(),
   buffer: '0',
-  computed: false,
+  liftStack: false,
   inputMode: false
 })
 
@@ -30,7 +30,7 @@ const swap = state => {
   return {
     stack: [y, x, ...rest],
     buffer: y.toString(),
-    computed: true,
+    liftStack: true,
     inputMode: false
   }
 }
@@ -40,7 +40,7 @@ const rollDown = state => {
   return {
     stack: [y, ...rest, x],
     buffer: y.toString(),
-    computed: true,
+    liftStack: true,
     inputMode: false
   }
 }

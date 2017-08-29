@@ -9,7 +9,7 @@ export default {
   [C.EXP]: { arity: 1, fn: x => Math.exp(x) },
   [C.SQRT]: { arity: 1, fn: x => Math.sqrt(x) },
 
-  [C.RECIPROC]: { arity: 1, fn: x => 1 / x },
+  [C.RECIPROCAL]: { arity: 1, fn: x => 1 / x },
 
   [C.SIN]: { arity: 1, fn: x => Math.sin(degreesToRadians(x)) },
   [C.COS]: { arity: 1, fn: x => Math.cos(degreesToRadians(x)) },

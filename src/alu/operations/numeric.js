@@ -2,7 +2,7 @@ import * as C from '../opCodes'
 import { enter } from './stack'
 
 const digit = digit => state => {
-  if (state.computed) {
+  if (state.liftStack) {
     state = enter(state)
   }
   if (!state.inputMode) {
@@ -12,13 +12,13 @@ const digit = digit => state => {
   return {
     stack: [parseFloat(buffer), ...state.stack.slice(1)],
     buffer,
-    computed: false,
+    liftStack: false,
     inputMode: true
   }
 }
 
 const pi = state => {
-  if (state.computed) {
+  if (state.liftStack) {
     state = enter(state)
   }
   if (!state.inputMode) {
@@ -28,7 +28,7 @@ const pi = state => {
   return {
     stack: [x, ...state.stack.slice(1)],
     buffer: x.toString(),
-    computed: true,
+    liftStack: true,
     inputMode: false
   }
 }

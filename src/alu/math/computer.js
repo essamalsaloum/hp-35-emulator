@@ -10,7 +10,7 @@ const unaryFn = ([x, ...rest], fn) =>
   [fn(x), ...rest]
 
 const binaryFn = ([x, y, ...rest], fn) =>
-  [fn(x, y), ...rest, 0]
+  [fn(x, y), ...rest, ...rest.slice(-1)]
 
 const compute = opCode => state => {
   const { stack } = state
@@ -26,7 +26,7 @@ const compute = opCode => state => {
   return {
     stack: newStack,
     buffer: newStack[0].toString(),
-    computed: true,
+    liftStack: true,
     inputMode: false
   }
 }

@@ -14,7 +14,7 @@ const opCodes = [
   C.LOG,
   C.MUL,
   C.POW,
-  C.RECIPROC,
+  C.RECIPROCAL,
   C.SIN,
   C.SQRT,
   C.SUB,
