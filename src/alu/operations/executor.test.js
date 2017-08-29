@@ -32,7 +32,7 @@ describe('execute', () => {
         liftStack: true
       }
       const expectState = {
-        stack: [3, 3, 4, 0],
+        stack: [3, 3, 4, 4],
         buffer: '3',
         liftStack: true
       }

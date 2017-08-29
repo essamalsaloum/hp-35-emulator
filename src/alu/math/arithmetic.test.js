@@ -14,7 +14,7 @@ describe('compute', () => {
         liftStack: true
       }
       const expectedState = {
-        stack: [3, 3, 4, 0],
+        stack: [3, 3, 4, 4],
         buffer: '3',
         liftStack: true,
         inputMode: false
