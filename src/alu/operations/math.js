@@ -21,8 +21,7 @@ const opCodes = [
   C.TAN
 ]
 
-export default (() => {
-  const operations = {}
-  opCodes.forEach(opCode => operations[opCode] = compute(opCode))
-  return operations
-})()
+export default opCodes.reduce((prev, opCode) => {
+  prev[opCode] = compute(opCode)
+  return prev
+}, {})
