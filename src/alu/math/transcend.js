@@ -3,7 +3,7 @@ const degreesToRadians = degrees => degrees * Math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / Math.PI
 
 export default {
-  [C.POW]: { arity: 2, fn: (x, y) => Math.pow(y, x) },
+  [C.POW]: { arity: 2, fn: (x, y) => Math.pow(x, y) },
   [C.LOG]: { arity: 1, fn: x => Math.log10(x) },
   [C.LN]: { arity: 1, fn: x => Math.log(x) },
   [C.EXP]: { arity: 1, fn: x => Math.exp(x) },
