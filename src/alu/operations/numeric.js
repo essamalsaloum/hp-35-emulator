@@ -37,5 +37,5 @@ export default {
   [C.DIGIT_7]: { entry: true, stackLift: false, fn: digit('7') },
   [C.DIGIT_8]: { entry: true, stackLift: false, fn: digit('8') },
   [C.DIGIT_9]: { entry: true, stackLift: false, fn: digit('9') },
-  [C.PI]: { entry: true, stackLift: true, fn: pi }
+  [C.PI]: { entry: false, stackLift: true, fn: pi }
 }

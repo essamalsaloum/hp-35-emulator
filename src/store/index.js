@@ -8,14 +8,14 @@ class Store {
   state = initialState()
 
   setState(updates) {
-    console.group('old state')
+    const date = new Date()
+    console.group('old state ' + date.toLocaleTimeString())
     console.dir(this.state)
     console.groupEnd()
 
     Object.assign(this.state, updates)
 
-    const date = new Date()
-    console.group('new state ' + date.toLocaleTimeString() )
+    console.group('new state')
     console.dir(this.state)
     console.groupEnd()
 
@@ -36,7 +36,7 @@ class Store {
     handler(this.state)
 
     return {
-      remove: () =>this.handlers.delete(handler)
+      remove: () => this.handlers.delete(handler)
     }
   }
 

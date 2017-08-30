@@ -30,7 +30,7 @@ const handleStackLift = state => {
   }
 }
 
-// Make sure to ARC's in a row cancel each other out
+// Make sure two ARC's in a row cancel each other out
 const lastOpCode = (state, opCode) => opCode === C.ARC && state.lastOpCode === C.ARC ? null : opCode
 
 export const execute = opCode => state => {
