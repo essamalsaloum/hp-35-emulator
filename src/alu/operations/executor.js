@@ -30,6 +30,9 @@ const handleStackLift = state => {
   }
 }
 
+// Make sure to ARC's in a row cancel each other out
+const lastOpCode = (state, opCode) => opCode === C.ARC && state.lastOpCode === C.ARC ? null : opCode
+
 export const execute = opCode => state => {
   if (state.lastOpCode === C.ARC && arcMap[opCode]) {
     opCode = arcMap[opCode]
@@ -47,7 +50,7 @@ export const execute = opCode => state => {
   }
 
   return Object.assign({}, fn(state), {
-    lastOpCode: opCode,
+    lastOpCode: lastOpCode(state, opCode),
     entry: entry !== null ? entry : state.entry,
     stackLift: stackLift !== null ? stackLift : state.stackLift
   })

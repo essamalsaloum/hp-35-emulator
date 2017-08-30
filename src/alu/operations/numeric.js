@@ -1,9 +1,6 @@
 import * as C from '../opCodes'
 
 const digit = digit => state => {
-  // if (state.stackLift) {
-  //   state = enter(state)
-  // }
   if (!state.entry) {
     state.buffer = '0'
   }
