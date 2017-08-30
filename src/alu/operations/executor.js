@@ -18,16 +18,30 @@ const reducers = Object.assign({},
   { [C.ARC]: identity }
 )
 
+const handleStackLift = state => {
+  const [x, ...rest] = state.stack
+  return {
+    ...state,
+    stack: [x, x, ...rest.slice(0, -1)]
+  }
+}
+
 export const execute = opCode => state => {
-  if (state.prevOpCode === C.ARC && arcMap[opCode]) {
+  if (state.lastOpCode === C.ARC && arcMap[opCode]) {
     opCode = arcMap[opCode]
   }
-  const reducer = reducers[opCode]
-  if (!reducer) {
+
+  const { entry, stackLift, fn } = reducers[opCode]
+
+  if (entry) {
+    state = state.stackLift ? handleStackLift(state) : state
+  }
+
+  if (!fn) {
     console.error(`execute: not implemented [${opCode}]`)
     return state
   }
-  return Object.assign(reducer(state), { prevOpCode: opCode })
+  return Object.assign(fn(state), { stackLift, entry, lastOpCode: opCode })
 }
 
 export default execute

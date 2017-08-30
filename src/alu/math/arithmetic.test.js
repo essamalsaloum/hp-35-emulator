@@ -10,14 +10,11 @@ describe('compute', () => {
     it('should add X and Y for opcode add', () => {
       const state = {
         stack: [1, 2, 3, 4],
-        buffer: '1',
-        liftStack: true
+        buffer: '1'
       }
       const expectedState = {
         stack: [3, 3, 4, 4],
-        buffer: '3',
-        liftStack: true,
-        inputMode: false
+        buffer: '3'
       }
       const newState = compute(C.ADD)(state)
       expect(newState).to.deep.equal(expectedState)

@@ -24,10 +24,9 @@ const compute = opCode => state => {
   const newStack = arity === 2 ? binaryFn(stack, fn) : unaryFn(stack, fn)
 
   return {
+    ...state,
     stack: newStack,
-    buffer: newStack[0].toString(),
-    liftStack: true,
-    inputMode: false
+    buffer: newStack[0].toString()
   }
 }
 

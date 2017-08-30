@@ -22,6 +22,6 @@ const opCodes = [
 ]
 
 export default opCodes.reduce((prev, opCode) => {
-  prev[opCode] = compute(opCode)
+  prev[opCode] = { entry: false, stackLift: true, fn: compute(opCode) }
   return prev
 }, {})

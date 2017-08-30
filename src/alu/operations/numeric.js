@@ -1,35 +1,24 @@
 import * as C from '../opCodes'
-import { enter } from './stack'
 
 const digit = digit => state => {
-  if (state.liftStack) {
-    state = enter(state)
-  }
-  if (!state.inputMode) {
+  // if (state.stackLift) {
+  //   state = enter(state)
+  // }
+  if (!state.entry) {
     state.buffer = '0'
   }
   const buffer = state.buffer === '0' ? digit : state.buffer.concat(digit)
   return {
     stack: [parseFloat(buffer), ...state.stack.slice(1)],
-    buffer,
-    liftStack: false,
-    inputMode: true
+    buffer
   }
 }
 
 const pi = state => {
-  if (state.liftStack) {
-    state = enter(state)
-  }
-  if (!state.inputMode) {
-    state.buffer = '0'
-  }
   const x = Math.PI
   return {
     stack: [x, ...state.stack.slice(1)],
-    buffer: x.toString(),
-    liftStack: true,
-    inputMode: false
+    buffer: x.toString()
   }
 }
 
@@ -40,16 +29,16 @@ const decimal = state =>
   }
 
 export default {
-  [C.DECIMAL]: decimal,
-  [C.DIGIT_0]: digit('0'),
-  [C.DIGIT_1]: digit('1'),
-  [C.DIGIT_2]: digit('2'),
-  [C.DIGIT_3]: digit('3'),
-  [C.DIGIT_4]: digit('4'),
-  [C.DIGIT_5]: digit('5'),
-  [C.DIGIT_6]: digit('6'),
-  [C.DIGIT_7]: digit('7'),
-  [C.DIGIT_8]: digit('8'),
-  [C.DIGIT_9]: digit('9'),
-  [C.PI]: pi
+  [C.DECIMAL]: { entry: true, stackLift: false, fn: decimal },
+  [C.DIGIT_0]: { entry: true, stackLift: false, fn: digit('0') },
+  [C.DIGIT_1]: { entry: true, stackLift: false, fn: digit('1') },
+  [C.DIGIT_2]: { entry: true, stackLift: false, fn: digit('2') },
+  [C.DIGIT_3]: { entry: true, stackLift: false, fn: digit('3') },
+  [C.DIGIT_4]: { entry: true, stackLift: false, fn: digit('4') },
+  [C.DIGIT_5]: { entry: true, stackLift: false, fn: digit('5') },
+  [C.DIGIT_6]: { entry: true, stackLift: false, fn: digit('6') },
+  [C.DIGIT_7]: { entry: true, stackLift: false, fn: digit('7') },
+  [C.DIGIT_8]: { entry: true, stackLift: false, fn: digit('8') },
+  [C.DIGIT_9]: { entry: true, stackLift: false, fn: digit('9') },
+  [C.PI]: { entry: true, stackLift: true, fn: pi }
 }

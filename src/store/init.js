@@ -13,9 +13,10 @@ export default () => {
   return {
     stack: newStack(),
     buffer: '0',
-    liftStack: false,
-    inputMode: true,
-    prevOpCode: ''
+    stackLift: false,
+    entry: true,
+    memory: 0,
+    lastOpCode: ''
   }
 }
 

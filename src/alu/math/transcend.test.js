@@ -15,7 +15,7 @@ describe('compute', () => {
       const state = {
         stack: [78, 0, 0, 0],
         buffer: '78',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.SIN)(state)
       const [x] = newState.stack
@@ -27,7 +27,7 @@ describe('compute', () => {
       const state = {
         stack: [78, 0, 0, 0],
         buffer: '78',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.COS)(state)
       const [x] = newState.stack
@@ -39,7 +39,7 @@ describe('compute', () => {
       const state = {
         stack: [78, 0, 0, 0],
         buffer: '78',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.TAN)(state)
       const [x] = newState.stack
@@ -51,7 +51,7 @@ describe('compute', () => {
       const state = {
         stack: [0.978147600734, 0, 0, 0],
         buffer: '0.978147600734',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.ASIN)(state)
       const [x] = newState.stack
@@ -63,7 +63,7 @@ describe('compute', () => {
       const state = {
         stack: [0.20791169081, 0, 0, 0],
         buffer: '0.20791169081',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.ACOS)(state)
       const [x] = newState.stack
@@ -75,7 +75,7 @@ describe('compute', () => {
       const state = {
         stack: [4.70463010948, 0, 0, 0],
         buffer: '4.70463010948',
-        liftStack: false
+        stackLift: false
       }
       const newState = compute(C.ATAN)(state)
       const [x] = newState.stack

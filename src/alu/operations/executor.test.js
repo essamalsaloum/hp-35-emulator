@@ -11,12 +11,12 @@ describe('execute', () => {
       const state = {
         stack: [1, 2, 3, 4],
         buffer: '1',
-        liftStack: true
+        stackLift: true
       }
       const expectState = {
         stack: [0, 2, 3, 4],
         buffer: '0',
-        liftStack: false
+        stackLift: false
       }
       const newState = execute(C.CLX)(state)
       expect(newState).to.deep.include(expectState)
@@ -29,12 +29,12 @@ describe('execute', () => {
       const state = {
         stack: [1, 2, 3, 4],
         buffer: '1',
-        liftStack: true
+        stackLift: true
       }
       const expectState = {
         stack: [3, 3, 4, 4],
         buffer: '3',
-        liftStack: true
+        stackLift: true
       }
       const newState = execute(C.ADD)(state)
       expect(newState).to.deep.include(expectState)
