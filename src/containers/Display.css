@@ -1,0 +1,11 @@
+.Display {
+  width: 320px;
+  margin: 8px;
+  padding: 8px;
+  background-color: #f0f0f0;
+}
+
+.Display--row {
+  margin: 0 8px;
+  font-family: 'Roboto', sans-serif;
+}

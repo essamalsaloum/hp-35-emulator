@@ -38,15 +38,16 @@ export const execute = opCode => state => {
     opCode = arcMap[opCode]
   }
 
-  const { entry, stackLift, fn } = reducers[opCode]
+  const reducer = reducers[opCode]
+  if (!reducer) {
+    console.error(`execute: not implemented [${opCode}]`)
+    return state
+  }
+
+  const { entry, stackLift, fn } = reducer
 
   if (entry) {
     state = state.stackLift === true ? handleStackLift(state) : state
-  }
-
-  if (!fn) {
-    console.error(`execute: not implemented [${opCode}]`)
-    return state
   }
 
   return Object.assign({}, fn(state), {

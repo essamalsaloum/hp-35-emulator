@@ -1,7 +1,7 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 
 import store from '../store'
+import './Display.css'
 
 const labels = ['x', 'y', 'z', 't', 't1', 't2', 't3', 't4', 't5', 't6']
 
@@ -28,16 +28,15 @@ export default class Display extends React.Component {
     return stack.map((register, index) => {
       const value = index === 0 ? buffer : register.toString()
       return (
-        <div key={index}>{`${labels[index]}: ${value}`}</div>
+        <div className="Display--row" key={index}>{`${labels[index]}: ${value}`}</div>
       )
     }).reverse()
   }
 
   render() {
     return (
-      <div>
+      <div className="Display">
         {this.renderStack()}
-        <hr />
       </div>
     )
   }

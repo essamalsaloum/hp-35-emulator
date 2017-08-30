@@ -5,6 +5,13 @@ import store from '../store'
 import execute from '../alu/operations/executor'
 import * as C from '../alu/opCodes'
 import Key from '../components/Key'
+import './Keyboard.css'
+
+const defaultKeyWidth = 48
+const arithKeyWidth = 36
+const enterKeyWidth = 120
+const inputKeyWidth = 52
+
 
 export default class Keyboard extends React.Component {
 
@@ -22,57 +29,57 @@ export default class Keyboard extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="row">
-          <Key className="col s3" label="𝓍ʸ" keyPress={this.keyPress(C.POW)} />
-          <Key className="col s3" label="LOG" keyPress={this.keyPress(C.LOG)} />
-          <Key className="col s3" label="LN" keyPress={this.keyPress(C.LN)} />
-          <Key className="col s3" label="𝑒ˣ" keyPress={this.keyPress(C.EXP)} />
-          <Key className="col s3" label="CLR" keyPress={this.keyPress(C.CLR)} />
+      <div className="Keyboard">
+        <div className="Keyboard--row">
+          <Key label="xʸ" width={defaultKeyWidth} keyPress={this.keyPress(C.POW)} />
+          <Key label="LOG" width={defaultKeyWidth} keyPress={this.keyPress(C.LOG)} />
+          <Key label="LN" width={defaultKeyWidth} keyPress={this.keyPress(C.LN)} />
+          <Key label="eˣ" width={defaultKeyWidth} keyPress={this.keyPress(C.EXP)} />
+          <Key label="CLR" width={defaultKeyWidth} keyPress={this.keyPress(C.CLR)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="√𝑥" keyPress={this.keyPress(C.SQRT)} />
-          <Key className="col s3" label="ARC" keyPress={this.keyPress(C.ARC)} />
-          <Key className="col s3" label="SIN" keyPress={this.keyPress(C.SIN)} />
-          <Key className="col s3" label="COS" keyPress={this.keyPress(C.COS)} />
-          <Key className="col s3" label="TAN" keyPress={this.keyPress(C.TAN)} />
+        <div className="Keyboard--row">
+          <Key label="√x" width={defaultKeyWidth} keyPress={this.keyPress(C.SQRT)} />
+          <Key label="ARC" width={defaultKeyWidth} keyPress={this.keyPress(C.ARC)} />
+          <Key label="SIN" width={defaultKeyWidth} keyPress={this.keyPress(C.SIN)} />
+          <Key label="COS" width={defaultKeyWidth} keyPress={this.keyPress(C.COS)} />
+          <Key label="TAN" width={defaultKeyWidth} keyPress={this.keyPress(C.TAN)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="¹/𝓍" keyPress={this.keyPress(C.RECIPROCAL)} />
-          <Key className="col s3" label="𝑥⬄𝑦" keyPress={this.keyPress(C.SWAP)} />
-          <Key className="col s3" label="R↓" keyPress={this.keyPress(C.ROLL_DOWN)} />
-          <Key className="col s3" label="STO" keyPress={this.keyPress(C.STO)} />
-          <Key className="col s3" label="RCL" keyPress={this.keyPress(C.RCL)} />
+        <div className="Keyboard--row">
+          <Key label="¹/x" width={defaultKeyWidth} keyPress={this.keyPress(C.RECIPROCAL)} />
+          <Key label="x↔︎y" width={defaultKeyWidth} keyPress={this.keyPress(C.SWAP)} />
+          <Key label="R↓" width={defaultKeyWidth} keyPress={this.keyPress(C.ROLL_DOWN)} />
+          <Key label="STO" width={defaultKeyWidth} keyPress={this.keyPress(C.STO)} />
+          <Key label="RCL" width={defaultKeyWidth} keyPress={this.keyPress(C.RCL)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="Enter ↑" keyPress={this.keyPress(C.ENTER)} />
-          <Key className="col s3" label="CHS" keyPress={this.keyPress(C.CHS)} />
-          <Key className="col s3" label="EEX" keyPress={this.keyPress(C.EEX)} />
-          <Key className="col s3" label="CL𝓧" keyPress={this.keyPress(C.CLX)} />
+        <div className="Keyboard--row">
+          <Key label="Enter ↑" width={enterKeyWidth} keyPress={this.keyPress(C.ENTER)} />
+          <Key label="CHS" width={defaultKeyWidth} keyPress={this.keyPress(C.CHS)} />
+          <Key label="EEX" width={defaultKeyWidth} keyPress={this.keyPress(C.EEX)} />
+          <Key label="CLX" width={defaultKeyWidth} keyPress={this.keyPress(C.CLX)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="-" keyPress={this.keyPress(C.SUB)} />
-          <Key className="col s3" label="7" keyPress={this.keyPress(C.DIGIT_7)} />
-          <Key className="col s3" label="8" keyPress={this.keyPress(C.DIGIT_8)} />
-          <Key className="col s3" label="9" keyPress={this.keyPress(C.DIGIT_9)} />
+        <div className="Keyboard--row">
+          <Key label="-" width={arithKeyWidth} keyPress={this.keyPress(C.SUB)} />
+          <Key label="7" width={inputKeyWidth} keyPress={this.keyPress(C.DIGIT_7)} />
+          <Key label="8" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_8)} />
+          <Key label="9" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_9)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="+" keyPress={this.keyPress(C.ADD)} />
-          <Key className="col s3" label="4" keyPress={this.keyPress(C.DIGIT_4)} />
-          <Key className="col s3" label="5" keyPress={this.keyPress(C.DIGIT_5)} />
-          <Key className="col s3" label="6" keyPress={this.keyPress(C.DIGIT_6)} />
+        <div className="Keyboard--row">
+          <Key label="+" width={arithKeyWidth}keyPress={this.keyPress(C.ADD)} />
+          <Key label="4" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_4)} />
+          <Key label="5" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_5)} />
+          <Key label="6" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_6)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="×" keyPress={this.keyPress(C.MUL)} />
-          <Key className="col s3" label="1" keyPress={this.keyPress(C.DIGIT_1)} />
-          <Key className="col s3" label="2" keyPress={this.keyPress(C.DIGIT_2)} />
-          <Key className="col s3" label="3" keyPress={this.keyPress(C.DIGIT_3)} />
+        <div className="Keyboard--row">
+          <Key label="×" width={arithKeyWidth}keyPress={this.keyPress(C.MUL)} />
+          <Key label="1" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_1)} />
+          <Key label="2" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_2)} />
+          <Key label="3" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_3)} />
         </div>
-        <div className="row">
-          <Key className="col s3" label="÷" keyPress={this.keyPress(C.DIV)} />
-          <Key className="col s3" label="0" keyPress={this.keyPress(C.DIGIT_0)} />
-          <Key className="col s3" label="•" keyPress={this.keyPress(C.DECIMAL)} />
-          <Key className="col s3" label="π" keyPress={this.keyPress(C.PI)} />
+        <div className="Keyboard--row">
+          <Key label="÷" width={arithKeyWidth}keyPress={this.keyPress(C.DIV)} />
+          <Key label="0" width={inputKeyWidth}keyPress={this.keyPress(C.DIGIT_0)} />
+          <Key label="•" width={inputKeyWidth}keyPress={this.keyPress(C.DECIMAL)} />
+          <Key label="π" width={inputKeyWidth}keyPress={this.keyPress(C.PI)} />
         </div>
       </div>
     )
