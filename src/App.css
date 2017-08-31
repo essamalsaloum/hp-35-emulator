@@ -1,4 +1,6 @@
 .App {
+  border: 1px solid gray;
+  border-radius: 8px;
   margin: 32px auto 16px auto;
   width: 320px;
 }

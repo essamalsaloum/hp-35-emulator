@@ -1,11 +1,13 @@
 .Keyboard {
-  margin: 32px 16px 16px 16px;
+  margin: 4px;
+  padding: 32px 16px 16px 16px;
+  border-radius: 4px;
   background-color: lightblue;
-  padding: 16px 8px;
+  padding: 8px;
 }
 
 .Keyboard--row {
   display: flex;
   justify-content: space-between;
-  margin: 16px 0;
+  margin: 8px 0;
 }

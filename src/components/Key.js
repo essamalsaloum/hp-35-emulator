@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 const style = {
   display: 'block',
   boxSizing: 'border-box',
+  height: 32,
   fontSize: 12
 }
 

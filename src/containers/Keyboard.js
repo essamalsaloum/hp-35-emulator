@@ -7,7 +7,7 @@ import './Keyboard.css'
 
 const defaultKeyWidth = 48
 const arithKeyWidth = 36
-const enterKeyWidth = 108
+const enterKeyWidth = 110
 const inputKeyWidth = 52
 
 export default class Keyboard extends React.PureComponent {

@@ -13,7 +13,6 @@ class App extends React.PureComponent {
 
     document.addEventListener('keyup', ev => {
       ev.preventDefault()
-      console.log(ev)
       keyUpHandler(ev)
     })
   }
