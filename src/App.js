@@ -3,8 +3,9 @@ import React from 'react'
 import store from './store'
 import Display from './containers/Display'
 import Keyboard from './containers/Keyboard'
+import './App.css'
 
-class App extends React.Component {
+class App extends React.PureComponent {
 
   componentDidMount() {
     store.notify()
@@ -12,7 +13,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="App">
         <Display />
         <Keyboard />
       </div>

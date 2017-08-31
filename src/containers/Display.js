@@ -5,7 +5,7 @@ import './Display.css'
 
 const labels = ['x', 'y', 'z', 't', 't1', 't2', 't3', 't4', 't5', 't6']
 
-export default class Display extends React.Component {
+export default class Display extends React.PureComponent {
 
   state = {}
 

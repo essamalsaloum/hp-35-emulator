@@ -2,18 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import store from '../store'
-import execute from '../alu/operations/executor'
-import * as C from '../alu/opCodes'
+import execute from '../processor/operations/executor'
+import * as C from '../processor/opCodes'
 import Key from '../components/Key'
 import './Keyboard.css'
 
 const defaultKeyWidth = 48
 const arithKeyWidth = 36
-const enterKeyWidth = 120
+const enterKeyWidth = 108
 const inputKeyWidth = 52
 
-
-export default class Keyboard extends React.Component {
+export default class Keyboard extends React.PureComponent {
 
   static propTypes = {
     keyPress: PropTypes.func

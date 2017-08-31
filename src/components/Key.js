@@ -5,9 +5,7 @@ import PropTypes from 'prop-types'
 const style = {
   display: 'block',
   boxSizing: 'border-box',
-  margin: 12,
-  fontSize: 12,
-  // fontFamily: ['Zapf Dingbats', 'sans-serif']
+  fontSize: 12
 }
 
 export default function Key(props) {
