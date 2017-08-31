@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import RaisedButton from 'material-ui/RaisedButton'
 
 const style = {
   display: 'block',
@@ -9,13 +8,13 @@ const style = {
 }
 
 export default function Key(props) {
-  const { className, label, width = 40, keyPress } = props
+  const { className, label, width = 40, onClick } = props
   return (
     <button
       type="button"
       className={className}
       style={{ ...style, width }}
-      onClick={keyPress}
+      onClick={onClick}
     >
       {label}
     </button>
@@ -26,11 +25,11 @@ Key.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string.isRequired,
   width: PropTypes.number,
-  keyPress: PropTypes.func
+  onClick: PropTypes.func
 }
 
 const noop = () => undefined
 
 Key.defaultProps = {
-  keyPress: noop
+  onClick: noop
 }
