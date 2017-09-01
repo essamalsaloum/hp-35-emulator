@@ -1,5 +1,5 @@
 import * as C from '../opCodes'
-import compute from '../math/computer'
+import evaluate from '../math/evaluate'
 
 const opCodes = [
   C.ACOS,
@@ -22,6 +22,6 @@ const opCodes = [
 ]
 
 export default opCodes.reduce((prev, opCode) => {
-  prev[opCode] = { entry: false, stackLift: true, fn: compute(opCode) }
+  prev[opCode] = { entry: false, stackLift: true, fn: evaluate(opCode) }
   return prev
 }, {})

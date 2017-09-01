@@ -1,7 +1,7 @@
-import * as C from '../opCodes'
-import numeric from './numeric'
-import stack from './stack'
-import math from './math'
+import * as C from './opCodes'
+import input from './instructions/input'
+import stack from './instructions/stack'
+import math from './instructions/math'
 
 const arcMap = {
   [C.SIN]: C.ASIN,
@@ -10,7 +10,7 @@ const arcMap = {
 }
 
 const reducers = Object.assign({},
-  numeric,
+  input,
   stack,
   math,
   {

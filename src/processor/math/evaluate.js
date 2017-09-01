@@ -1,7 +1,7 @@
 import arithmetic from './arithmetic'
 import transcend from './transcend'
 
-const operations = Object.assign({},
+const instructions = Object.assign({},
   arithmetic,
   transcend
 )
@@ -12,15 +12,15 @@ const unaryFn = ([x, ...rest], fn) =>
 const binaryFn = ([x, y, ...rest], fn) =>
   [fn(x, y), ...rest, ...rest.slice(-1)]
 
-const compute = opCode => state => {
+const evaluate = opCode => state => {
   const { stack } = state
-  const operation = operations[opCode]
-  if (!operation) {
-    console.error(`compute: not implemented [${opCode}]`)
+  const instruction = instructions[opCode]
+  if (!instruction) {
+    console.error(`evaluate: not implemented [${opCode}]`)
     return state
   }
 
-  const { arity = 0, fn } = operation
+  const { arity = 0, fn } = instruction
   const newStack = arity === 2 ? binaryFn(stack, fn) : unaryFn(stack, fn)
 
   return {
@@ -30,4 +30,4 @@ const compute = opCode => state => {
   }
 }
 
-export default compute
+export default evaluate

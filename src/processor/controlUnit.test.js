@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import * as C from '../opCodes'
-import execute from './executor'
+import execute from './controlUnit'
 
 describe('execute', () => {
 
@@ -25,7 +25,7 @@ describe('execute', () => {
   })
 
   describe('arithmetic functions', () => {
-    it('should add X and Y on ADD through the executor', () => {
+    it('should add X and Y on ADD through the control unit', () => {
       const state = {
         stack: [1, 2, 3, 4],
         buffer: '1',

@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 
 import * as C from '../opCodes'
-import compute from './computer'
+import evaluate from './evaluate'
 
-describe('compute', () => {
+describe('evaluate', () => {
 
   describe('arithmetic functions', () => {
 
@@ -16,7 +16,7 @@ describe('compute', () => {
         stack: [3, 3, 4, 4],
         buffer: '3'
       }
-      const newState = compute(C.ADD)(state)
+      const newState = evaluate(C.ADD)(state)
       expect(newState).to.deep.equal(expectedState)
     })
 
