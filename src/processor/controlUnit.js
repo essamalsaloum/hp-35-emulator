@@ -9,7 +9,7 @@ const arcMap = {
   [C.TAN]: C.ATAN
 }
 
-const reducers = Object.assign({},
+const instructions = Object.assign({},
   input,
   stack,
   math,
@@ -38,23 +38,23 @@ export const execute = opCode => state => {
     opCode = arcMap[opCode]
   }
 
-  const reducer = reducers[opCode]
-  if (!reducer) {
+  const instruction = instructions[opCode]
+  if (!instruction) {
     console.error(`execute: not implemented [${opCode}]`)
     return state
   }
 
-  const { entry, stackLift, fn } = reducer
+  const { entry, stackLift, fn } = instruction
 
-  if (entry) {
-    state = state.stackLift === true ? handleStackLift(state) : state
-  }
+  state = state.stackLift === true ? handleStackLift(state) : state
 
-  return Object.assign({}, fn(state), {
-    lastOpCode: lastOpCode(state, opCode),
-    entry: entry !== null ? entry : state.entry,
-    stackLift: stackLift !== null ? stackLift : state.stackLift
-  })
+  return Object.assign({},
+    fn(state),
+    {
+      lastOpCode: lastOpCode(state, opCode),
+      entry: entry !== null ? entry : state.entry,
+      stackLift: stackLift !== null ? stackLift : state.stackLift
+    })
 }
 
 export default execute
