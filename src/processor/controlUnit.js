@@ -22,17 +22,23 @@ const instructions = Object.assign({},
   }
 )
 
-const handleStackLift = state => {
+const liftStack = state => {
   const [x, ...rest] = state.stack
   return {
     ...state,
-    stack: [x, x, ...rest.slice(0, -1)]
+    stack: [x, x, ...rest.slice(0, -1)],
+    stackLift: false
   }
 }
 
 // Make sure two ARC's in a row cancel each other out
 const lastOpCode = (state, opCode) => opCode === C.ARC && state.lastOpCode === C.ARC ? null : opCode
 
+/*
+  The  operations Enter, CLX and CLS disable stack lift.
+  A number keyed in after one of these disabling operations writes over the number
+  currently in the X–register. The Y–, Z– and T–registers remain unchanged.
+*/
 export const execute = opCode => state => {
   if (state.lastOpCode === C.ARC && arcMap[opCode]) {
     opCode = arcMap[opCode]
@@ -46,7 +52,9 @@ export const execute = opCode => state => {
 
   const { entry, stackLift, fn } = instruction
 
-  state = state.stackLift === true ? handleStackLift(state) : state
+  if (entry) {
+    state = state.stackLift === true ? liftStack(state) : state
+  }
 
   return Object.assign({},
     fn(state),

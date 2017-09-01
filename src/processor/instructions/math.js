@@ -6,7 +6,6 @@ const opCodes = [
   C.ADD,
   C.ASIN,
   C.ATAN,
-  C.CHS,
   C.COS,
   C.DIV,
   C.EXP,
