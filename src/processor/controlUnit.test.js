@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import * as C from '../opCodes'
+import * as C from './opCodes'
 import execute from './controlUnit'
 
 describe('execute', () => {
