@@ -1,20 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const style = {
-  display: 'block',
-  boxSizing: 'border-box',
-  height: 32,
-  fontSize: 12
-}
+import './Key.css'
 
 export default function Key(props) {
-  const { className, label, width = 40, onClick } = props
+  const { label, width = 40, onClick } = props
   return (
     <button
       type="button"
-      className={className}
-      style={{ ...style, width }}
+      className="Key"
+      style={{width}}
       onClick={onClick}
     >
       {label}

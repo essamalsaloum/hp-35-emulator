@@ -26,8 +26,7 @@ const liftStack = state => {
   const [x, ...rest] = state.stack
   return {
     ...state,
-    stack: [x, x, ...rest.slice(0, -1)],
-    stackLift: false
+    stack: [x, x, ...rest.slice(0, -1)]
   }
 }
 
@@ -52,7 +51,7 @@ export const execute = opCode => state => {
 
   const { entry, stackLift, fn } = instruction
 
-  if (entry) {
+  if (entry && state.autoStack) {
     state = state.stackLift === true ? liftStack(state) : state
   }
 

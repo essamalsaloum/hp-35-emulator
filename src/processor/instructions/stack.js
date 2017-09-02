@@ -12,11 +12,13 @@ const enter = state => {
 }
 
 const clx = state => ({
+  ...state,
   stack: [0, ...state.stack.slice(1)],
   buffer: '0'
 })
 
-const clr = () => ({
+const clr = state => ({
+  ...state,
   stack: newStack(),
   buffer: '0'
 })
@@ -24,6 +26,7 @@ const clr = () => ({
 const swap = state => {
   const [x, y, ...rest] = state.stack
   return {
+    ...state,
     stack: [y, x, ...rest],
     buffer: y.toString()
   }
@@ -32,6 +35,7 @@ const swap = state => {
 const rollDown = state => {
   const [x, y, ...rest] = state.stack
   return {
+    ...state,
     stack: [y, ...rest, x],
     buffer: y.toString()
   }

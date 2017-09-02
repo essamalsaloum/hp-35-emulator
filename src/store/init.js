@@ -16,7 +16,8 @@ export default () => {
     stackLift: false,
     entry: true,
     memory: 0,
-    lastOpCode: ''
+    lastOpCode: '',
+    autoStack: true
   }
 }
 

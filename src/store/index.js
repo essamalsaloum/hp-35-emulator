@@ -15,10 +15,6 @@ class Store {
 
     Object.assign(this.state, updates)
 
-    console.group('new state')
-    console.dir(this.state)
-    console.groupEnd()
-
     this.notify()
   }
 
@@ -41,6 +37,10 @@ class Store {
   }
 
   notify() {
+    console.group('new state')
+    console.dir(this.state)
+    console.groupEnd()
+
     for (const handler of this.handlers) {
       handler(this.state)
     }
