@@ -8,13 +8,7 @@ class Store {
   state = initialState()
 
   setState(updates) {
-    const date = new Date()
-    console.group('old state ' + date.toLocaleTimeString())
-    console.dir(this.state)
-    console.groupEnd()
-
-    Object.assign(this.state, updates)
-
+    this.state = Object.assign({}, this.state, updates)
     this.notify()
   }
 
@@ -37,10 +31,6 @@ class Store {
   }
 
   notify() {
-    console.group('new state')
-    console.dir(this.state)
-    console.groupEnd()
-
     for (const handler of this.handlers) {
       handler(this.state)
     }

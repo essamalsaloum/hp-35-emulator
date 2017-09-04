@@ -1,4 +1,4 @@
-import * as C from '../opCodes'
+import * as C from '../keyCodes'
 import { newStack } from '../../store/init'
 
 

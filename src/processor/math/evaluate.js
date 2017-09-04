@@ -6,22 +6,22 @@ const funcs = Object.assign({},
   transcend
 )
 
-const unaryFn = ([x, ...rest], fn) =>
+const monadicFn = ([x, ...rest], fn) =>
   [fn(x), ...rest]
 
-const binaryFn = ([x, y, ...rest], fn) =>
+const dyadicFn = ([x, y, ...rest], fn) =>
   [fn(x, y), ...rest, ...rest.slice(-1)]
 
-const evaluate = opCode => state => {
+const evaluate = keyCode => state => {
   const { stack } = state
-  const func = funcs[opCode]
+  const func = funcs[keyCode]
   if (!func) {
-    console.error(`evaluate: not implemented [${opCode}]`)
+    console.error(`evaluate: not implemented [${keyCode}]`)
     return state
   }
 
   const { arity = 0, fn } = func
-  const newStack = arity === 2 ? binaryFn(stack, fn) : unaryFn(stack, fn)
+  const newStack = arity === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
 
   return {
     ...state,

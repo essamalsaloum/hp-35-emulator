@@ -1,7 +1,6 @@
-import * as C from '../processor/opCodes'
-import keyPress from './keyPress'
+import * as C from '../processor/keyCodes'
 
-const keyToOpCode = {
+const keyToKeyCode = {
   '0': C.DIGIT_0,
   '1': C.DIGIT_1,
   '2': C.DIGIT_2,
@@ -23,9 +22,4 @@ const keyToOpCode = {
   Backspace: C.CLX
 }
 
-export default keyboardEvent => {
-  const opCode = keyToOpCode[keyboardEvent.key]
-  if (opCode) {
-    keyPress(opCode)
-  }
-}
+export default keyboardEvent => keyToKeyCode[keyboardEvent.key]

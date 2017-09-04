@@ -1,4 +1,4 @@
-import * as C from './opCodes'
+import * as C from './keyCodes'
 import input from './instructions/input'
 import stack from './instructions/stack'
 import math from './instructions/math'
@@ -31,21 +31,21 @@ const liftStack = state => {
 }
 
 // Make sure two ARC's in a row cancel each other out
-const lastOpCode = (state, opCode) => opCode === C.ARC && state.lastOpCode === C.ARC ? null : opCode
+const lastKeyCode = (state, keyCode) => keyCode === C.ARC && state.lastKeyCode === C.ARC ? null : keyCode
 
 /*
   The  operations Enter, CLX and CLS disable stack lift.
   A number keyed in after one of these disabling operations writes over the number
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
-export const execute = opCode => state => {
-  if (state.lastOpCode === C.ARC && arcMap[opCode]) {
-    opCode = arcMap[opCode]
+export const execute = keyCode => state => {
+  if (state.lastKeyCode === C.ARC && arcMap[keyCode]) {
+    keyCode = arcMap[keyCode]
   }
 
-  const instruction = instructions[opCode]
+  const instruction = instructions[keyCode]
   if (!instruction) {
-    console.error(`execute: not implemented [${opCode}]`)
+    console.error(`execute: not implemented [${keyCode}]`)
     return state
   }
 
@@ -58,7 +58,7 @@ export const execute = opCode => state => {
   return Object.assign({},
     fn(state),
     {
-      lastOpCode: lastOpCode(state, opCode),
+      lastKeyCode: lastKeyCode(state, keyCode),
       entry: entry !== null ? entry : state.entry,
       stackLift: stackLift !== null ? stackLift : state.stackLift
     })

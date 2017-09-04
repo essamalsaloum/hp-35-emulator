@@ -1,4 +1,4 @@
-import * as C from '../opCodes'
+import * as C from '../keyCodes'
 const degreesToRadians = degrees => degrees * Math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / Math.PI
 

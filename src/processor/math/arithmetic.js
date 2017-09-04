@@ -1,4 +1,4 @@
-import * as C from '../opCodes'
+import * as C from '../keyCodes'
 
 export default {
   [C.ADD]: { arity: 2, fn: (x, y) => y + x },
