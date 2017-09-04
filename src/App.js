@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import store from './store'
 import execute from './processor/controlUnit'
 import keyUpHandler from './processor/keyUpHandler'
-import Display from './containers/Display'
+import Display from './components/Display'
 import OptionPanel from './components/OptionPanel'
 import Keyboard from './components/Keyboard'
 import './App.css'
@@ -15,6 +15,8 @@ class App extends React.PureComponent {
     test: PropTypes.bool
   }
 
+  state = {}
+
   constructor(props) {
     super(props)
     this.onClick = this.onClick.bind(this)
@@ -22,6 +24,7 @@ class App extends React.PureComponent {
 
   componentWillMount() {
     this.subscription = store.subscribe(state => {
+      this.setState(state)
       if (!this.props.test) {
         const date = new Date()
         console.group('state ' + date.toLocaleTimeString())
@@ -54,10 +57,11 @@ class App extends React.PureComponent {
   }
 
   render() {
+    const { buffer, stack } = this.state
     return (
       <div className="App">
-        <Display />
-        <OptionPanel />
+        <Display buffer={buffer} stack={stack} />
+        <OptionPanel/>
         <Keyboard onClick={this.onClick} />
       </div>
     )
