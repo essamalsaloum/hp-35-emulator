@@ -9,8 +9,10 @@ export default function Key(props) {
     <button
       type="button"
       className="Key"
-      style={{width}}
+      style={{ width }}
       onClick={onClick}
+      onKeyUp={ev => ev.preventDefault()}
+      onKeyDown={ev => ev.preventDefault()}
     >
       {label}
     </button>
