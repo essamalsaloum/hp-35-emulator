@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import store from './store'
 import execute from './processor/controlUnit'
-import keyUpHandler from './processor/keyUpHandler'
+import mapKeyboardEvent from './processor/keyboardEventMapper'
 import Display from './components/Display'
 import OptionPanel from './components/OptionPanel'
 import Keyboard from './components/Keyboard'
@@ -41,7 +41,7 @@ class App extends React.PureComponent {
   componentDidMount() {
     document.addEventListener('keyup', ev => {
       ev.preventDefault()
-      const keyCode = keyUpHandler(ev)
+      const keyCode = mapKeyboardEvent(ev)
       if (keyCode) {
         this.keyPress(keyCode)
       }
