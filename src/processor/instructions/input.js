@@ -33,9 +33,11 @@ const digit = digit => state => {
 
   buffer = joinNumber(mantissa, exponent)
 
+  const [, y, z, t] = state.stack
+  const x = parseFloat(buffer)
   return {
     ...state,
-    stack: [parseFloat(buffer), ...state.stack.slice(1)],
+    stack: [x, y, z, t],
     buffer
   }
 }
@@ -54,10 +56,12 @@ const enterExponent = state => {
   if (buffer.indexOf('e') !== -1 || buffer === '.') {
     return state
   }
+  const [, y, z, t] = state.stack
+  const x = parseFloat(buffer)
   return {
     ...state,
     buffer: buffer === '0' ? '1e+0' : buffer.concat('e+0'),
-    stack: [parseFloat(buffer), ...state.stack.slice(1)],
+    stack: [x, y, z, t]
   }
 }
 
