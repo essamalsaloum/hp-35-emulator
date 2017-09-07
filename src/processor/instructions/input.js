@@ -11,6 +11,12 @@ const splitNumber = buffer => {
 
 const joinNumber = (mantissa, exponent) => mantissa + (exponent ? 'e' + exponent : '')
 
+const bufferToStack = (buffer, stack) => {
+  const [, y, z, t] = stack
+  const x = parseFloat(buffer)
+  return [x, y, z, t]
+}
+
 const digit = digit => state => {
   let buffer = state.entry ? state.buffer : '0'
   let [mantissa, exponent] = splitNumber(buffer)
@@ -33,21 +39,23 @@ const digit = digit => state => {
 
   buffer = joinNumber(mantissa, exponent)
 
-  const [, y, z, t] = state.stack
-  const x = parseFloat(buffer)
   return {
     ...state,
-    stack: [x, y, z, t],
-    buffer
+    buffer,
+    stack: bufferToStack(buffer, state.stack)
   }
 }
 
 const decimal = state => {
-  const buffer = state.entry ? state.buffer : '0'
-  return buffer.indexOf('.') !== -1 ? state : {
+  let buffer = state.entry ? state.buffer : '0'
+  if (buffer.indexOf('.') !== -1) {
+    return state
+  }
+  buffer += '.'
+  return {
     ...state,
-    buffer: buffer === '0' ? '.' : buffer.concat('.'),
-    stack: [parseFloat(buffer), ...state.stack.slice(1)],
+    buffer,
+    stack: bufferToStack(buffer, state.stack)
   }
 }
 
@@ -56,18 +64,15 @@ const enterExponent = state => {
   if (buffer.indexOf('e') !== -1 || buffer === '.') {
     return state
   }
-  const [, y, z, t] = state.stack
-  const x = parseFloat(buffer)
   return {
     ...state,
     buffer: buffer === '0' ? '1e+0' : buffer.concat('e+0'),
-    stack: [x, y, z, t]
+    stack: bufferToStack(buffer, state.stack)
   }
 }
 
 const changeSign = state => {
-  const [x] = state.stack
-  if (x === 0) {
+  if (state.stack[0] === 0) {
     return state
   }
 
@@ -79,13 +84,12 @@ const changeSign = state => {
     mantissa = mantissa.startsWith('-') ? mantissa.slice(1) : '-'.concat(mantissa)
   }
 
-  const [, y, z, t] = state.stack
   const buffer = joinNumber(mantissa, exponent)
 
   return {
     ...state,
     buffer,
-    stack: [parseFloat(buffer), y, z, t]
+    stack: bufferToStack(buffer, state.stack)
   }
 }
 
