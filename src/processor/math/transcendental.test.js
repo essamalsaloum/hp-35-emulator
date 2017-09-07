@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import * as C from '../keyCodes'
-import evaluate from './evaluate'
+import { evaluate } from './evaluate'
 
 const EPS = 1e-11
 

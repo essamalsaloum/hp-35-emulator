@@ -1,9 +1,9 @@
 import arithmetic from './arithmetic'
-import transcend from './transcend'
+import transcendental from './transcendental'
 
 const funcs = {
   ...arithmetic,
-  ...transcend
+  ...transcendental
 }
 
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
@@ -18,8 +18,7 @@ export const evaluate = keyCode => state => {
     return state
   }
 
-  const { arity = 0, fn } = func
-  const newStack = arity === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
+  const newStack = func.length === 2 ? dyadicFn(stack, func) : monadicFn(stack, func)
 
   return {
     ...state,
