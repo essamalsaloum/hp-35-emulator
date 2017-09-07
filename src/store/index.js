@@ -8,7 +8,7 @@ class Store {
   state = initialState()
 
   setState(updates) {
-    this.state = Object.assign({}, this.state, updates)
+    this.state = { ...this.state, ...updates }
     this.notify()
   }
 

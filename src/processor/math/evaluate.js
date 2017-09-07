@@ -1,10 +1,10 @@
 import arithmetic from './arithmetic'
 import transcend from './transcend'
 
-const funcs = Object.assign({},
-  arithmetic,
-  transcend
-)
+const funcs = {
+  ...arithmetic,
+  ...transcend
+}
 
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 

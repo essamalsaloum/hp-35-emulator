@@ -9,18 +9,16 @@ const arcMap = {
   [C.TAN]: C.ATAN
 }
 
-const instructions = Object.assign({},
-  input,
-  stack,
-  math,
-  {
-    [C.ARC]: {
-      entry: null,
-      stackLift: null,
-      fn: state => state
-    }
+const instructions = {
+  ...input,
+  ...stack,
+  ...math,
+  [C.ARC]: {
+    entry: null,
+    stackLift: null,
+    fn: state => state
   }
-)
+}
 
 const liftStack = state => {
   const [x, y, z] = state.stack
@@ -55,13 +53,12 @@ export const execute = keyCode => state => {
     state = state.stackLift === true ? liftStack(state) : state
   }
 
-  return Object.assign({},
-    fn(state),
-    {
-      lastKeyCode: lastKeyCode(state, keyCode),
-      entry: entry !== null ? entry : state.entry,
-      stackLift: stackLift !== null ? stackLift : state.stackLift
-    })
+  return {
+    ...fn(state),
+    lastKeyCode: lastKeyCode(state, keyCode),
+    entry: entry !== null ? entry : state.entry,
+    stackLift: stackLift !== null ? stackLift : state.stackLift
+  }
 }
 
 export default execute
