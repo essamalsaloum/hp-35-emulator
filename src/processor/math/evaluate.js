@@ -10,7 +10,7 @@ const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-const evaluate = keyCode => state => {
+export const evaluate = keyCode => state => {
   const { stack } = state
   const func = funcs[keyCode]
   if (!func) {
@@ -28,4 +28,4 @@ const evaluate = keyCode => state => {
   }
 }
 
-export default evaluate
+export const getKeyCodes = () => Object.keys(funcs)
