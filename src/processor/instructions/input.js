@@ -51,7 +51,7 @@ const decimal = state => {
 
 const enterExponent = state => {
   const buffer = state.entry ? state.buffer : '0'
-  if (buffer.indexOf('e') !== -1) {
+  if (buffer.indexOf('e') !== -1 || buffer === '.') {
     return state
   }
   return {
