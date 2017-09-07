@@ -1,6 +1,5 @@
 import * as C from '../keyCodes'
 
-
 const splitNumber = buffer => {
   const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)
   if (!parts) {
@@ -18,7 +17,7 @@ const digit = digit => state => {
 
   if (exponent) {
     if (exponent === '+0') {
-      exponent = '+'+ digit
+      exponent = '+' + digit
     } else if (exponent === '-0') {
       exponent = '-' + digit
     } else if (/^[+-]?\d$/.test(exponent)) {
@@ -70,28 +69,28 @@ const changeSign = state => {
 
   let [mantissa, exponent] = splitNumber(state.buffer)
   if (exponent) {
-    const sign = exponent.startsWith('-') ? '+'  : '-'
+    const sign = exponent.startsWith('-') ? '+' : '-'
     exponent = sign + exponent.slice(1)
   } else {
     mantissa = mantissa.startsWith('-') ? mantissa.slice(1) : '-'.concat(mantissa)
   }
 
-  const [, ...rest] = state.stack
+  const [, y, z, t] = state.stack
   const buffer = joinNumber(mantissa, exponent)
 
   return {
     ...state,
     buffer,
-    stack: [parseFloat(buffer), ...rest]
+    stack: [parseFloat(buffer), y, z, t]
   }
 }
 
 const pi = state => {
   const pi = Math.PI
-  const [x, ...rest] = state.stack
+  const [x, y, z] = state.stack
   return {
     ...state,
-    stack: [pi, x, ...rest.slice(0, -1)],
+    stack: [pi, x, y, z],
     buffer: pi.toString()
   }
 }

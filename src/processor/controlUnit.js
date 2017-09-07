@@ -23,10 +23,10 @@ const instructions = Object.assign({},
 )
 
 const liftStack = state => {
-  const [x, ...rest] = state.stack
+  const [x, y, z] = state.stack
   return {
     ...state,
-    stack: [x, x, ...rest.slice(0, -1)]
+    stack: [x, x, y, z]
   }
 }
 

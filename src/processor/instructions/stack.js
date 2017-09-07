@@ -1,12 +1,10 @@
 import * as C from '../keyCodes'
-import { newStack } from '../../store/init'
-
 
 const enter = state => {
-  const [x, ...rest] = state.stack
+  const [x, y, z] = state.stack
   return {
     ...state,
-    stack: [x, x, ...rest.slice(0, -1)],
+    stack: [x, x, y, z],
     buffer: x.toString()
   }
 }
@@ -19,24 +17,24 @@ const clx = state => ({
 
 const clr = state => ({
   ...state,
-  stack: newStack(),
+  stack: [0, 0, 0, 0],
   buffer: '0'
 })
 
 const swap = state => {
-  const [x, y, ...rest] = state.stack
+  const [x, y, z, t] = state.stack
   return {
     ...state,
-    stack: [y, x, ...rest],
+    stack: [y, x, z, t],
     buffer: y.toString()
   }
 }
 
 const rollDown = state => {
-  const [x, y, ...rest] = state.stack
+  const [x, y, z, t] = state.stack
   return {
     ...state,
-    stack: [y, ...rest, x],
+    stack: [y, z, t, x],
     buffer: y.toString()
   }
 }
@@ -50,11 +48,10 @@ const storeMem = state => {
 
 const recallMem = state => {
   state = enter(state)
-  // eslint-disable-next-line no-unused-vars
-  const [x, ...rest] = state.stack
+  const [, y, z, t] = state.stack
   return {
     ...state,
-    stack: [state.memory, ...rest],
+    stack: [state.memory, y, z, t],
     buffer: state.memory.toString()
   }
 }

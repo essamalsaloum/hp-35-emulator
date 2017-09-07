@@ -6,11 +6,9 @@ const funcs = Object.assign({},
   transcend
 )
 
-const monadicFn = ([x, ...rest], fn) =>
-  [fn(x), ...rest]
+const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 
-const dyadicFn = ([x, y, ...rest], fn) =>
-  [fn(x, y), ...rest, ...rest.slice(-1)]
+const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
 const evaluate = keyCode => state => {
   const { stack } = state
