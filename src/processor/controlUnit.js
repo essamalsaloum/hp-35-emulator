@@ -1,19 +1,19 @@
-import * as C from './keyCodes'
+import * as A from './actionCodes'
 import input from './instructions/input'
 import stack from './instructions/stack'
 import math from './instructions/math'
 
 const arcMap = {
-  [C.SIN]: C.ASIN,
-  [C.COS]: C.ACOS,
-  [C.TAN]: C.ATAN
+  [A.SIN]: A.ASIN,
+  [A.COS]: A.ACOS,
+  [A.TAN]: A.ATAN
 }
 
 const instructions = {
   ...input,
   ...stack,
   ...math,
-  [C.ARC]: {
+  [A.ARC]: {
     entry: null,
     stackLift: null,
     fn: state => state
@@ -29,21 +29,21 @@ const liftStack = state => {
 }
 
 // Make sure two ARC's in a row cancel each other out
-const lastKeyCode = (state, keyCode) => keyCode === C.ARC && state.lastKeyCode === C.ARC ? null : keyCode
+const lastAction = (state, actionCode) => actionCode === A.ARC && state.lastAction === A.ARC ? null : actionCode
 
 /*
   The  operations Enter, CLX and CLS disable stack lift.
   A number keyed in after one of these disabling operations writes over the number
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
-export const execute = keyCode => state => {
-  if (state.lastKeyCode === C.ARC && arcMap[keyCode]) {
-    keyCode = arcMap[keyCode]
+export const execute = (state, actionCode) => {
+  if (state.lastAction === A.ARC && arcMap[actionCode]) {
+    actionCode = arcMap[actionCode]
   }
 
-  const instruction = instructions[keyCode]
+  const instruction = instructions[actionCode]
   if (!instruction) {
-    console.error(`execute: not implemented [${keyCode}]`)
+    console.error(`execute: not implemented [${actionCode}]`)
     return state
   }
 
@@ -55,7 +55,7 @@ export const execute = keyCode => state => {
 
   return {
     ...fn(state),
-    lastKeyCode: lastKeyCode(state, keyCode),
+    lastAction: lastAction(state, actionCode),
     entry: entry !== null ? entry : state.entry,
     stackLift: stackLift !== null ? stackLift : state.stackLift
   }
