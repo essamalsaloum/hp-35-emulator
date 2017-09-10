@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import * as C from '../keyCodes'
+import * as A from '../actionCodes'
 import { evaluate } from './evaluate'
 
 describe('evaluate', () => {
@@ -16,7 +16,7 @@ describe('evaluate', () => {
         stack: [3, 3, 4, 4],
         buffer: '3'
       }
-      const newState = evaluate(C.ADD)(state)
+      const newState = evaluate(A.ADD)(state)
       expect(newState).to.deep.equal(expectedState)
     })
 

@@ -1,40 +1,42 @@
 import { expect } from 'chai'
 
-import * as C from './keyCodes'
+import * as A from './actionCodes'
 import execute from './controlUnit'
 import initialState from '../store/init'
 
-const m_e = [C.DIGIT_9, C.DECIMAL, C.DIGIT_1, C.DIGIT_0, C.DIGIT_9, C.DIGIT_3, C.DIGIT_8, C.EEX, C.DIGIT_3, C.DIGIT_1, C.CHS]
-const e = [C.DIGIT_1, C.DECIMAL, C.DIGIT_6, C.DIGIT_0, C.DIGIT_2, C.DIGIT_1, C.DIGIT_8, C.EEX, C.DIGIT_1, C.DIGIT_9, C.CHS]
-const eps_0 = [C.DIGIT_8, C.DECIMAL, C.DIGIT_8, C.DIGIT_5, C.DIGIT_4, C.DIGIT_1, C.DIGIT_9, C.EEX, C.DIGIT_1, C.DIGIT_2, C.CHS]
-const h = [C.DIGIT_6, C.DECIMAL, C.DIGIT_6, C.DIGIT_2, C.DIGIT_6, C.DIGIT_0, C.DIGIT_8, C.EEX, C.DIGIT_3, C.DIGIT_4, C.CHS]
-const c = [C.DIGIT_2, C.DECIMAL, C.DIGIT_9, C.DIGIT_9, C.DIGIT_7, C.DIGIT_9, C.DIGIT_2, C.EEX, C.DIGIT_8]
+const m_e = [9, '.', 1, 0, 9, 3, 8, A.EEX, 3, 1, A.CHS]
+const e = [1, '.', 6, 0, 2, 1, 8, A.EEX, 1, 9, A.CHS]
+const eps_0 = [8, '.', 8, 5, 4, 1, 9, A.EEX, 1, 2, A.CHS]
+const h = [6, '.', 6, 2, 6, 0, 8, A.EEX, 3, 4, A.CHS]
+const c = [2, '.', 9, 9, 7, 9, 2, A.EEX, 8]
 
-const keyStrokes = [
-  ...m_e, C.ENTER,
-  C.DIGIT_4, C.ENTER,
+const actionCodes = [
+  ...m_e, A.ENTER,
+  4, A.ENTER,
   ...e,
-  C.POW,
-  C.MUL,
-  C.DIGIT_8, C.ENTER,
-  C.DIGIT_2, C.ENTER,
+  A.POW,
+  A.MUL,
+  8, A.ENTER,
+  2, A.ENTER,
   ...eps_0,
-  C.POW,
-  C.MUL,
-  C.DIGIT_3,
-  C.ENTER,
+  A.POW,
+  A.MUL,
+  3,
+  A.ENTER,
   ...h,
-  C.POW,
-  C.MUL,
+  A.POW,
+  A.MUL,
   ...c,
-  C.MUL,
-  C.DIV
+  A.MUL,
+  A.DIV
 ]
 
 describe('processor', () => {
   it('should compute the Rydberg constant', () => {
     const expectedRydbergConstant = 1.0973781e+7
-    const finalState = keyStrokes.reduce((state, keyStroke) => execute(keyStroke)(state), initialState())
+    const finalState = actionCodes
+      .map(code => code.toString())
+      .reduce(execute, initialState())
     const [computedRydbergConstant] = finalState.stack
     expect(Math.abs(computedRydbergConstant - expectedRydbergConstant) < 1.0).to.be.true
   })

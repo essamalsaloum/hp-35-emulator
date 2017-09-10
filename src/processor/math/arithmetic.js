@@ -1,9 +1,9 @@
-import * as C from '../keyCodes'
+import * as A from '../actionCodes'
 
 export default {
-  [C.ADD]: (x, y) => y + x,
-  [C.SUB]: (x, y) => y - x,
-  [C.MUL]: (x, y) => y * x,
-  [C.DIV]: (x, y) => y / x,
-  [C.RECIPROCAL]: x => 1 / x
+  [A.ADD]: (x, y) => y + x,
+  [A.SUB]: (x, y) => y - x,
+  [A.MUL]: (x, y) => y * x,
+  [A.DIV]: (x, y) => y / x,
+  [A.RECIPROCAL]: x => 1 / x
 }

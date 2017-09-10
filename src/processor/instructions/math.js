@@ -1,6 +1,6 @@
 import { evaluate, getKeyCodes } from '../math/evaluate'
 
-export default getKeyCodes().reduce((prev, keyCode) => {
-  prev[keyCode] = { entry: false, stackLift: true, fn: evaluate(keyCode) }
+export default getKeyCodes().reduce((prev, actionCode) => {
+  prev[actionCode] = { entry: false, stackLift: true, fn: evaluate(actionCode) }
   return prev
 }, {})

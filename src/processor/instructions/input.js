@@ -1,4 +1,4 @@
-import * as C from '../keyCodes'
+import * as A from '../actionCodes'
 
 const splitNumber = buffer => {
   const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)
@@ -104,18 +104,18 @@ const pi = state => {
 }
 
 export default {
-  [C.CHS]: { entry: null, stackLift: null, fn: changeSign },
-  [C.DECIMAL]: { entry: true, stackLift: false, fn: decimal },
-  [C.DIGIT_0]: { entry: true, stackLift: false, fn: digit('0') },
-  [C.DIGIT_1]: { entry: true, stackLift: false, fn: digit('1') },
-  [C.DIGIT_2]: { entry: true, stackLift: false, fn: digit('2') },
-  [C.DIGIT_3]: { entry: true, stackLift: false, fn: digit('3') },
-  [C.DIGIT_4]: { entry: true, stackLift: false, fn: digit('4') },
-  [C.DIGIT_5]: { entry: true, stackLift: false, fn: digit('5') },
-  [C.DIGIT_6]: { entry: true, stackLift: false, fn: digit('6') },
-  [C.DIGIT_7]: { entry: true, stackLift: false, fn: digit('7') },
-  [C.DIGIT_8]: { entry: true, stackLift: false, fn: digit('8') },
-  [C.DIGIT_9]: { entry: true, stackLift: false, fn: digit('9') },
-  [C.EEX]: { entry: true, stackLift: false, fn: enterExponent },
-  [C.PI]: { entry: false, stackLift: true, fn: pi }
+  [A.CHS]: { entry: null, stackLift: null, fn: changeSign },
+  [A.DECIMAL]: { entry: true, stackLift: false, fn: decimal },
+  [A.DIGIT_0]: { entry: true, stackLift: false, fn: digit('0') },
+  [A.DIGIT_1]: { entry: true, stackLift: false, fn: digit('1') },
+  [A.DIGIT_2]: { entry: true, stackLift: false, fn: digit('2') },
+  [A.DIGIT_3]: { entry: true, stackLift: false, fn: digit('3') },
+  [A.DIGIT_4]: { entry: true, stackLift: false, fn: digit('4') },
+  [A.DIGIT_5]: { entry: true, stackLift: false, fn: digit('5') },
+  [A.DIGIT_6]: { entry: true, stackLift: false, fn: digit('6') },
+  [A.DIGIT_7]: { entry: true, stackLift: false, fn: digit('7') },
+  [A.DIGIT_8]: { entry: true, stackLift: false, fn: digit('8') },
+  [A.DIGIT_9]: { entry: true, stackLift: false, fn: digit('9') },
+  [A.EEX]: { entry: true, stackLift: false, fn: enterExponent },
+  [A.PI]: { entry: false, stackLift: true, fn: pi }
 }

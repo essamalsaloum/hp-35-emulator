@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import * as C from './keyCodes'
+import * as A from './actionCodes'
 import execute from './controlUnit'
 
 describe('execute', () => {
@@ -18,7 +18,7 @@ describe('execute', () => {
         buffer: '0',
         stackLift: false
       }
-      const newState = execute(C.CLX)(state)
+      const newState = execute(state, A.CLX)
       expect(newState).to.deep.include(expectState)
     })
 
@@ -36,7 +36,7 @@ describe('execute', () => {
         buffer: '3',
         stackLift: true
       }
-      const newState = execute(C.ADD)(state)
+      const newState = execute(state, A.ADD)
       expect(newState).to.deep.include(expectState)
     })
   })
