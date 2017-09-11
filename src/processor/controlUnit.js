@@ -49,7 +49,7 @@ export const execute = (state, keyCode) => {
 
   const { entry, stackLift, fn } = instruction
 
-  if (entry && state.autoStack) {
+  if (entry) {
     state = state.stackLift === true ? liftStack(state) : state
   }
 
