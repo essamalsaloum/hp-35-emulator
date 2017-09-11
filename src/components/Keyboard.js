@@ -42,25 +42,25 @@ export default function Keyboard({onClick}) {
         </div>
         <div className="Keyboard--row">
           <Key label="-" width={arithKeyWidth} onClick={onClick(C.SUB)} />
-          <Key label="7" width={inputKeyWidth} onClick={onClick(C.DIGIT_7)} />
-          <Key label="8" width={inputKeyWidth} onClick={onClick(C.DIGIT_8)} />
-          <Key label="9" width={inputKeyWidth} onClick={onClick(C.DIGIT_9)} />
+          <Key label="7" width={inputKeyWidth} onClick={onClick(C.D7)} />
+          <Key label="8" width={inputKeyWidth} onClick={onClick(C.D8)} />
+          <Key label="9" width={inputKeyWidth} onClick={onClick(C.D9)} />
         </div>
         <div className="Keyboard--row">
           <Key label="+" width={arithKeyWidth} onClick={onClick(C.ADD)} />
-          <Key label="4" width={inputKeyWidth} onClick={onClick(C.DIGIT_4)} />
-          <Key label="5" width={inputKeyWidth} onClick={onClick(C.DIGIT_5)} />
-          <Key label="6" width={inputKeyWidth} onClick={onClick(C.DIGIT_6)} />
+          <Key label="4" width={inputKeyWidth} onClick={onClick(C.D4)} />
+          <Key label="5" width={inputKeyWidth} onClick={onClick(C.D5)} />
+          <Key label="6" width={inputKeyWidth} onClick={onClick(C.D6)} />
         </div>
         <div className="Keyboard--row">
           <Key label="×" width={arithKeyWidth} onClick={onClick(C.MUL)} />
-          <Key label="1" width={inputKeyWidth} onClick={onClick(C.DIGIT_1)} />
-          <Key label="2" width={inputKeyWidth} onClick={onClick(C.DIGIT_2)} />
-          <Key label="3" width={inputKeyWidth} onClick={onClick(C.DIGIT_3)} />
+          <Key label="1" width={inputKeyWidth} onClick={onClick(C.D1)} />
+          <Key label="2" width={inputKeyWidth} onClick={onClick(C.D2)} />
+          <Key label="3" width={inputKeyWidth} onClick={onClick(C.D3)} />
         </div>
         <div className="Keyboard--row">
           <Key label="÷" width={arithKeyWidth} onClick={onClick(C.DIV)} />
-          <Key label="0" width={inputKeyWidth} onClick={onClick(C.DIGIT_0)} />
+          <Key label="0" width={inputKeyWidth} onClick={onClick(C.D0)} />
           <Key label="•" width={inputKeyWidth} onClick={onClick(C.DOT)} />
           <Key label="π" width={inputKeyWidth} onClick={onClick(C.PI)} />
         </div>
