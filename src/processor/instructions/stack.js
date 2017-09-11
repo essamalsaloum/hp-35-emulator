@@ -1,4 +1,4 @@
-import * as A from '../actionCodes'
+import * as C from '../keyCodes'
 
 const enter = state => {
   const [x, y, z] = state.stack
@@ -57,11 +57,11 @@ const recallMem = state => {
 }
 
 export default {
-  [A.ENTER]: { entry: false, stackLift: false, fn: enter },
-  [A.CLX]: { entry: false, stackLift: false, fn: clx },
-  [A.CLR]: { entry: false, stackLift: false, fn: clr },
-  [A.SWAP]: { entry: false, stackLift: true, fn: swap },
-  [A.ROLL_DOWN]: { entry: false, stackLift: true, fn: rollDown },
-  [A.STO]: { entry: false, stackLift: true, fn: storeMem },
-  [A.RCL]: { entry: false, stackLift: true, fn: recallMem }
+  [C.ENTER]: { entry: false, stackLift: false, fn: enter },
+  [C.CLX]: { entry: false, stackLift: false, fn: clx },
+  [C.CLR]: { entry: false, stackLift: false, fn: clr },
+  [C.SWAP]: { entry: false, stackLift: true, fn: swap },
+  [C.ROLL_DOWN]: { entry: false, stackLift: true, fn: rollDown },
+  [C.STO]: { entry: false, stackLift: true, fn: storeMem },
+  [C.RCL]: { entry: false, stackLift: true, fn: recallMem }
 }

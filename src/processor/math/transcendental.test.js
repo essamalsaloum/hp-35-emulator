@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import * as A from '../actionCodes'
+import * as C from '../keyCodes'
 import { evaluate } from './evaluate'
 
 const EPS = 1e-11
@@ -17,7 +17,7 @@ describe('evaluate', () => {
         buffer: '78',
         stackLift: false
       }
-      const newState = evaluate(A.SIN)(state)
+      const newState = evaluate(C.SIN)(state)
       const [x] = newState.stack
       const hpVal = 0.978147600734
       expect(floatEqual(x, hpVal)).to.be.true
@@ -29,7 +29,7 @@ describe('evaluate', () => {
         buffer: '78',
         stackLift: false
       }
-      const newState = evaluate(A.COS)(state)
+      const newState = evaluate(C.COS)(state)
       const [x] = newState.stack
       const hpVal = 0.207911690818
       expect(floatEqual(x, hpVal)).to.be.true
@@ -41,7 +41,7 @@ describe('evaluate', () => {
         buffer: '78',
         stackLift: false
       }
-      const newState = evaluate(A.TAN)(state)
+      const newState = evaluate(C.TAN)(state)
       const [x] = newState.stack
       const hpVal = 4.70463010948
       expect(floatEqual(x, hpVal)).to.be.true
@@ -53,7 +53,7 @@ describe('evaluate', () => {
         buffer: '0.978147600734',
         stackLift: false
       }
-      const newState = evaluate(A.ASIN)(state)
+      const newState = evaluate(C.ASIN)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -65,7 +65,7 @@ describe('evaluate', () => {
         buffer: '0.20791169081',
         stackLift: false
       }
-      const newState = evaluate(A.ACOS)(state)
+      const newState = evaluate(C.ACOS)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -77,7 +77,7 @@ describe('evaluate', () => {
         buffer: '4.70463010948',
         stackLift: false
       }
-      const newState = evaluate(A.ATAN)(state)
+      const newState = evaluate(C.ATAN)(state)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true

@@ -10,11 +10,11 @@ const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-export const evaluate = actionCode => state => {
+export const evaluate = keyCode => state => {
   const { stack } = state
-  const func = funcs[actionCode]
+  const func = funcs[keyCode]
   if (!func) {
-    console.error(`evaluate: not implemented [${actionCode}]`)
+    console.error(`evaluate: not implemented [${keyCode}]`)
     return state
   }
 

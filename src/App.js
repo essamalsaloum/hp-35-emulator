@@ -41,19 +41,19 @@ class App extends React.PureComponent {
   componentDidMount() {
     document.addEventListener('keyup', ev => {
       ev.preventDefault()
-      const actionCode = mapKeyboardEvent(ev)
-      if (actionCode) {
-        this.keyPress(actionCode)
+      const keyCode = mapKeyboardEvent(ev)
+      if (keyCode) {
+        this.keyPress(keyCode)
       }
     })
   }
 
-  keyPress(actionCode) {
-    store.setState(execute(store.getState(), actionCode))
+  keyPress(keyCode) {
+    store.setState(execute(store.getState(), keyCode))
   }
 
-  onClick(actionCode) {
-    return () => this.keyPress(actionCode)
+  onClick(keyCode) {
+    return () => this.keyPress(keyCode)
   }
 
   render() {

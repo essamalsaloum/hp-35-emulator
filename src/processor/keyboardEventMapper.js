@@ -1,25 +1,25 @@
-import * as A from '../processor/actionCodes'
+import * as C from '../processor/keyCodes'
 
 const keyToKeyCode = {
-  '0': A.DIGIT_0,
-  '1': A.DIGIT_1,
-  '2': A.DIGIT_2,
-  '3': A.DIGIT_3,
-  '4': A.DIGIT_4,
-  '5': A.DIGIT_5,
-  '6': A.DIGIT_6,
-  '7': A.DIGIT_7,
-  '8': A.DIGIT_8,
-  '9': A.DIGIT_9,
-  '.': A.DECIMAL,
-  ',': A.DECIMAL,
-  '+': A.ADD,
-  '-': A.SUB,
-  '*': A.MUL,
-  '/': A.DIV,
-  '±': A.CHS,
-  Enter: A.ENTER,
-  Backspace: A.CLX
+  '0': C.D0,
+  '1': C.D1,
+  '2': C.D2,
+  '3': C.D3,
+  '4': C.D4,
+  '5': C.D5,
+  '6': C.D6,
+  '7': C.D7,
+  '8': C.D8,
+  '9': C.D9,
+  '.': C.DOT,
+  ',': C.DOT,
+  '+': C.ADD,
+  '-': C.SUB,
+  '*': C.MUL,
+  '/': C.DIV,
+  '±': C.CHS,
+  Enter: C.ENTER,
+  Backspace: C.CLX
 }
 
 export default keyboardEvent => keyToKeyCode[keyboardEvent.key]
