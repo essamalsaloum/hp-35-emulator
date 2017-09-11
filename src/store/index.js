@@ -5,7 +5,7 @@ class Store {
   //------
   // State
 
-  state = initialState()
+  state = { ...initialState }
 
   setState(updates) {
     this.state = { ...this.state, ...updates }
