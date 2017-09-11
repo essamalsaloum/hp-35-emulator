@@ -5,7 +5,7 @@ export default () => {
     stackLift: false,
     entry: true,
     memory: 0,
-    lastAction: '',
+    lastKey: '',
     autoStack: true
   }
 }

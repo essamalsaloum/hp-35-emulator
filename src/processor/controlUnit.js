@@ -29,7 +29,7 @@ const liftStack = state => {
 }
 
 // Make sure two ARC's in a row cancel each other out
-const lastAction = (state, keyCode) => keyCode === C.ARC && state.lastAction === C.ARC ? null : keyCode
+const lastKey = (state, keyCode) => keyCode === C.ARC && state.lastKey === C.ARC ? null : keyCode
 
 /*
   The  operations Enter, CLX and CLS disable stack lift.
@@ -37,7 +37,7 @@ const lastAction = (state, keyCode) => keyCode === C.ARC && state.lastAction ===
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
 export const execute = (state, keyCode) => {
-  if (state.lastAction === C.ARC && arcMap[keyCode]) {
+  if (state.lastKey === C.ARC && arcMap[keyCode]) {
     keyCode = arcMap[keyCode]
   }
 
@@ -55,7 +55,7 @@ export const execute = (state, keyCode) => {
 
   return {
     ...fn(state),
-    lastAction: lastAction(state, keyCode),
+    lastKey: lastKey(state, keyCode),
     entry: entry !== null ? entry : state.entry,
     stackLift: stackLift !== null ? stackLift : state.stackLift
   }
