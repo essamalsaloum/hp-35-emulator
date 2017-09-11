@@ -5,7 +5,7 @@ import store from './store'
 import execute from './processor/controlUnit'
 import mapKeyboardEvent from './processor/keyboardEventMapper'
 import Display from './components/Display'
-import OptionPanel from './components/OptionPanel'
+// import OptionPanel from './components/OptionPanel'
 import Keyboard from './components/Keyboard'
 import './App.css'
 
@@ -61,7 +61,6 @@ class App extends React.PureComponent {
     return (
       <div className="App">
         <Display buffer={buffer} stack={stack} />
-        <OptionPanel/>
         <Keyboard onClick={this.onClick} />
       </div>
     )
