@@ -9,6 +9,7 @@
         "MULT",
         "epowx",
         "reciproc",
+        "unittests",
         "xpowy"
     ],
     // flagWords - list of words to be always considered incorrect

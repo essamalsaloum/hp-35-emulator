@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+hp35-tests
 
 # testing
 /coverage
