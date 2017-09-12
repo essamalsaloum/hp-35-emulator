@@ -1,8 +1,5 @@
 import { expect } from 'chai'
-
-import * as C from './keyCodes'
-import execute from './controlUnit'
-import initialState from '../store/init'
+import { C, execute, initialState } from './index'
 
 const m_e = [C.D9, C.DOT, C.D1, C.D0, C.D9, C.D3, C.D8, C.EEX, C.D3, C.D1, C.CHS]
 const e = [C.D1, C.DOT, C.D6, C.D0, C.D2, C.D1, C.D8, C.EEX, C.D1, C.D9, C.CHS]

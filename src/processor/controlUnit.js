@@ -36,7 +36,7 @@ const lastKey = (state, keyCode) => keyCode === C.ARC && state.lastKey === C.ARC
   C number keyed in after one of these disabling operations writes over the number
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
-export const execute = (state, keyCode) => {
+export function execute(state, keyCode) {
   if (state.lastKey === C.ARC && arcMap[keyCode]) {
     keyCode = arcMap[keyCode]
   }
@@ -60,5 +60,3 @@ export const execute = (state, keyCode) => {
     stackLift: stackLift !== null ? stackLift : state.stackLift
   }
 }
-
-export default execute

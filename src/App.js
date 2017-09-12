@@ -2,10 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import store from './store'
-import execute from './processor/controlUnit'
+import {execute} from './processor/controlUnit'
 import mapKeyboardEvent from './processor/keyboardEventMapper'
 import Display from './components/Display'
-// import OptionPanel from './components/OptionPanel'
 import Keyboard from './components/Keyboard'
 import './App.css'
 
