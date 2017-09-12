@@ -39,7 +39,7 @@ const compute = keyCode => state => {
   const { stack } = state
   const func = funcs[keyCode]
   if (!func) {
-    console.error(`evaluate: not implemented [${keyCode}]`)
+    console.error(`math: not implemented [${keyCode}]`)
     return state
   }
 
