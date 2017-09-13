@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import store from './store'
-import {execute} from './processor/controlUnit'
+import { execute } from './processor'
 import mapKeyboardEvent from './processor/keyboardEventMapper'
 import Display from './components/Display'
 import Keyboard from './components/Keyboard'
+import ProgramPanel from './containers/ProgramPanel'
 import './App.css'
 
 class App extends React.PureComponent {
@@ -38,13 +39,16 @@ class App extends React.PureComponent {
   }
 
   componentDidMount() {
-    document.addEventListener('keyup', ev => {
-      ev.preventDefault()
-      const keyCode = mapKeyboardEvent(ev)
-      if (keyCode) {
-        this.keyPress(keyCode)
-      }
-    })
+    const elem = document.querySelector('.App__main')
+    if (elem) {
+      elem.addEventListener('keyup', ev => {
+        ev.preventDefault()
+        const keyCode = mapKeyboardEvent(ev)
+        if (keyCode) {
+          this.keyPress(keyCode)
+        }
+      })
+    }
   }
 
   keyPress(keyCode) {
@@ -57,10 +61,14 @@ class App extends React.PureComponent {
 
   render() {
     const { buffer, stack } = this.state
+    // tabIndex needed to allow div to receive focus
     return (
       <div className="App">
-        <Display buffer={buffer} stack={stack} />
-        <Keyboard onClick={this.onClick} />
+        <div className="App__main" tabIndex="0">
+          <Display buffer={buffer} stack={stack} />
+          <Keyboard onClick={this.onClick} />
+        </div>
+        <ProgramPanel />
       </div>
     )
   }

@@ -4,6 +4,7 @@ export default {
   stackLift: false,
   entry: true,
   memory: 0,
-  lastKey: ''
+  lastKey: '',
+  program: []
 }
 

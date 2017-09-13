@@ -1,4 +1,4 @@
 export { default as initialState } from './store/init'
-export { execute, execProg } from './processor/controlUnit'
+export { execute } from './processor'
 import * as C from './processor/keyCodes'
 export { C }

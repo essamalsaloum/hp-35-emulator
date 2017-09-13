@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import './Key.css'
 
 export default function Key(props) {

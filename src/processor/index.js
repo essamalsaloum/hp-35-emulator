@@ -5,6 +5,9 @@ import math from './instructions/math'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
+const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
+const isValidKeyCode = keyCode =>  isValidNumber(keyCode) || !!instructions[keyCode]
+
 const arcMap = {
   [C.SIN]: C.ASIN,
   [C.COS]: C.ACOS,
@@ -51,7 +54,7 @@ const enterNumber = (state, num) => {
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
 export function execute(state, keyCode) {
-  if (NUMERIC_CONSTANT_REGEX.test(keyCode)) {
+  if (isValidNumber(keyCode)) {
     return enterNumber(state, parseFloat(keyCode))
   }
 
@@ -79,9 +82,32 @@ export function execute(state, keyCode) {
   }
 }
 
-export function execProg(state, prog) {
-  const keyCodes = prog.toLowerCase()
-    .split(/\s+/)
-    .filter(keyCode => keyCode !== '')
-  return keyCodes.reduce(execute, state)
+export function compile(text) {
+  const lines = text
+    .toLowerCase()
+    .split(/\n/)
+    .map(line => line.trim())
+    .filter(line => !line.startsWith('^'))
+
+  return lines.reduce((acc, line) => {
+    let error = false
+    if (line !== '' && !line.startsWith('//')) {
+      if (isValidKeyCode(line)) {
+        acc.keyCodes.push(line)
+      } else {
+        error = true
+      }
+    }
+    acc.text += line + '\n'
+    if (error) {
+      acc.error = true
+      const indicator = '^'.repeat(line.length)
+      acc.text += `${indicator} ERROR\n`
+    }
+    return acc
+  }, {
+      keyCodes: [],
+      text: '',
+      error: false
+    })
 }

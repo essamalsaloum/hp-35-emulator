@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import * as C from '../processor/keyCodes'
 import Key from './Key'
 import './Keyboard.css'
