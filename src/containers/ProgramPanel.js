@@ -11,7 +11,7 @@ export default class ProgramPanel extends React.PureComponent {
   constructor() {
     super()
     this.handleChange = this.handleChange.bind(this)
-    this.executeProg = this.executeProg.bind(this)
+    this.runStop = this.runStop.bind(this)
   }
 
   componentWillMount() {
@@ -24,14 +24,23 @@ export default class ProgramPanel extends React.PureComponent {
     this.subscription.remove()
   }
 
-  executeProg() {
+  runStop() {
+    const { running } = store.getState()
+    if (running) {
+      return store.setState({ running: false })
+    }
+
     const { keyCodes, text, error } = processor.compile(this.state.text)
     this.setState({ text })
     if (error) {
-      console.log(error)
-    } else {
-      store.setState(keyCodes.reduce(processor.execute, store.getState()))
+      return console.log(error)
     }
+
+    store.setState({ running: true })
+    processor.runProg(keyCodes)
+      .then(() => {
+        store.setState({ running: false })
+      })
   }
 
   handleChange(event) {
@@ -51,7 +60,7 @@ export default class ProgramPanel extends React.PureComponent {
           onChange={this.handleChange}
         />
         <div className="ProgramPanel__buttons">
-          <button className="btn" onClick={this.executeProg}>Run</button>
+          <button className="btn" onClick={this.runStop}>R/S</button>
         </div>
       </div>
     )

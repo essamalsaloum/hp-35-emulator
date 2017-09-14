@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Display.css'
 
-const labels = ['x', 'y', 'z', 't', 't1', 't2', 't3', 't4', 't5', 't6']
+const labels = ['x', 'y', 'z', 't']
 
 function renderStack(stack, buffer) {
   return stack.map((register, index) => {

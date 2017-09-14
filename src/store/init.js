@@ -5,6 +5,8 @@ export default {
   entry: true,
   memory: 0,
   lastKey: '',
-  program: []
+  program: [],
+  running: false,
+  delay: 0
 }
 

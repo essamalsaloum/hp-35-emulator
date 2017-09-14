@@ -2,11 +2,12 @@ import * as C from './keyCodes'
 import input from './instructions/input'
 import stack from './instructions/stack'
 import math from './instructions/math'
+import store from '../store'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
-const isValidKeyCode = keyCode =>  isValidNumber(keyCode) || !!instructions[keyCode]
+const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructions[keyCode]
 
 const arcMap = {
   [C.SIN]: C.ASIN,
@@ -82,6 +83,28 @@ export function execute(state, keyCode) {
   }
 }
 
+const executeYield = (keyCode, delay) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const state = store.getState()
+      if (state.running) {
+        store.setState(execute(state, keyCode))
+      }
+      resolve()
+    }, delay)
+  })
+}
+
+export function runProg(keyCodes) {
+  const { delay } = store.getState()
+  return keyCodes.reduce((promise, keyCode) => promise.then(() => {
+    const { running } = store.getState()
+    if (running) {
+      return executeYield(keyCode, delay)
+    }
+  }), Promise.resolve())
+}
+
 export function compile(text) {
   const lines = text
     .toLowerCase()
@@ -101,7 +124,8 @@ export function compile(text) {
     acc.text += line + '\n'
     if (error) {
       acc.error = true
-      const indicator = '^'.repeat(line.length)
+      const len = line.length
+      const indicator = len < 3 ? '^'.repeat(len) : `^${'_'.repeat(len-2)}^`
       acc.text += `${indicator} ERROR\n`
     }
     return acc
