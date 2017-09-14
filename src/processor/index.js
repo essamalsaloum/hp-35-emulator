@@ -105,16 +105,28 @@ export function runProg(keyCodes) {
   }), Promise.resolve())
 }
 
-export function compile(text) {
+function compileMarkdown(text) {
+  const matches = text.match(/```[\s\S]+?```/g)
+  let progText = ''
+  if (matches) {
+    progText = matches.reduce((buf, match) => {
+      buf += match.slice(3, -3) + '\n'
+      return buf
+    }, '')
+  }
+  return compilePlainText(progText)
+}
+
+function compilePlainText(text) {
   const lines = text
     .toLowerCase()
     .split(/\n/)
     .map(line => line.trim())
-    .filter(line => !line.startsWith('^'))
+    .filter(line => line !== '' && !line.startsWith('^'))
 
   return lines.reduce((acc, line) => {
     let error = false
-    if (line !== '' && !line.startsWith('//')) {
+    if (!line.startsWith('//')) {
       if (isValidKeyCode(line)) {
         acc.keyCodes.push(line)
       } else {
@@ -125,7 +137,7 @@ export function compile(text) {
     if (error) {
       acc.error = true
       const len = line.length
-      const indicator = len < 3 ? '^'.repeat(len) : `^${'_'.repeat(len-2)}^`
+      const indicator = len < 3 ? '^'.repeat(len) : `^${'_'.repeat(len - 2)}^`
       acc.text += `${indicator} ERROR\n`
     }
     return acc
@@ -134,4 +146,8 @@ export function compile(text) {
       text: '',
       error: false
     })
+
+}
+export function compile(text) {
+  return /\s*#/.test(text) ? compileMarkdown(text) : compilePlainText(text)
 }
