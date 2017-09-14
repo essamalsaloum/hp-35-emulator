@@ -1,22 +1,28 @@
 import React from 'react'
 import store from '../store'
+// import Switch from 'react-toggle-switch'
 import * as processor from '../processor'
 import './ProgramPanel.css'
 
+const DELAY_MS = 1000
+
 export default class ProgramPanel extends React.PureComponent {
   state = {
-    text: ''
+    text: '',
+    delay: 0
   }
 
   constructor() {
     super()
     this.handleChange = this.handleChange.bind(this)
     this.runStop = this.runStop.bind(this)
+    this.toggleDelay = this.toggleDelay.bind(this)
+    console.log(this.toggleDelay)
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ program }) => {
-      this.setState({ program })
+    this.subscription = store.subscribe(({ program, delay }) => {
+      this.setState({ program, delay })
     })
   }
 
@@ -48,6 +54,11 @@ export default class ProgramPanel extends React.PureComponent {
     this.setState({ text })
   }
 
+  toggleDelay() {
+    const delay = this.state.delay === 0 ? DELAY_MS : 0
+    store.setState({ delay })
+  }
+
   render() {
     return (
       <div className="ProgramPanel">
@@ -60,6 +71,14 @@ export default class ProgramPanel extends React.PureComponent {
           onChange={this.handleChange}
         />
         <div className="ProgramPanel__buttons">
+          <div>
+            <input
+              type="checkbox"
+              checked={this.state.delay !== 0}
+              onChange={this.toggleDelay}
+            />
+            <span style={{fontSize: 12}}>Slow</span>
+          </div>
           <button className="btn" onClick={this.runStop}>R/S</button>
         </div>
       </div>

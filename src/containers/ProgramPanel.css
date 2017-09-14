@@ -33,6 +33,7 @@
 .ProgramPanel__buttons {
   display: flex;
   flex-flow: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin: 8px 4px;
 }
