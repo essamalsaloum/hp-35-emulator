@@ -9,12 +9,6 @@ const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
 const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructions[keyCode]
 
-const arcMap = {
-  [C.SIN]: C.ASIN,
-  [C.COS]: C.ACOS,
-  [C.TAN]: C.ATAN
-}
-
 const instructions = {
   ...input,
   ...stack,
@@ -33,10 +27,6 @@ const liftStack = state => {
     stack: [x, x, y, z]
   }
 }
-
-// Make sure two ARC's in a row cancel each other out
-const lastKey = (state, keyCode) => keyCode === C.ARC && state.lastKey === C.ARC ? null : keyCode
-
 
 const enterNumber = (state, num) => {
   const [x, y, z] = state.stack
@@ -59,10 +49,6 @@ export function execute(state, keyCode) {
     return enterNumber(state, parseFloat(keyCode))
   }
 
-  if (state.lastKey === C.ARC && arcMap[keyCode]) {
-    keyCode = arcMap[keyCode]
-  }
-
   const instruction = instructions[keyCode]
   if (!instruction) {
     console.error(`execute: not implemented [${keyCode}]`)
@@ -77,7 +63,6 @@ export function execute(state, keyCode) {
 
   return {
     ...fn(state),
-    lastKey: lastKey(state, keyCode),
     entry: entry !== null ? entry : state.entry,
     stackLift: stackLift !== null ? stackLift : state.stackLift
   }

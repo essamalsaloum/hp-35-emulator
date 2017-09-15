@@ -17,7 +17,6 @@ export default class ProgramPanel extends React.PureComponent {
     this.handleChange = this.handleChange.bind(this)
     this.runStop = this.runStop.bind(this)
     this.toggleDelay = this.toggleDelay.bind(this)
-    console.log(this.toggleDelay)
   }
 
   componentWillMount() {

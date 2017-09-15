@@ -9,7 +9,39 @@ const arithKeyWidth = 36
 const enterKeyWidth = 110
 const inputKeyWidth = 52
 
-export default function Keyboard({onClick}) {
+export default class Keyboard extends React.PureComponent {
+
+  static propTypes = {
+    onClick: PropTypes.func
+  }
+
+  static defaultProps = {
+    onClick: () => undefined
+  }
+
+  state = {
+    arc: false
+  }
+
+  constructor(props) {
+    super(props)
+    this.toggleArc = this.toggleArc.bind(this)
+    this.applyArc = this.applyArc.bind(this)
+  }
+
+  toggleArc() {
+    this.setState({ arc: !this.state.arc })
+  }
+
+  applyArc(keyCode, arcKeyCode) {
+    const { onClick } = this.props
+    const { arc } = this.state
+    arc ? onClick(arcKeyCode)() : onClick(keyCode)()
+    this.setState({ arc: false })
+  }
+
+  render() {
+    const { onClick } = this.props
     return (
       <div className="Keyboard">
         <div className="Keyboard--row">
@@ -21,10 +53,10 @@ export default function Keyboard({onClick}) {
         </div>
         <div className="Keyboard--row">
           <Key label="√x" width={defaultKeyWidth} onClick={onClick(C.SQRT)} />
-          <Key label="ARC" width={defaultKeyWidth} onClick={onClick(C.ARC)} />
-          <Key label="SIN" width={defaultKeyWidth} onClick={onClick(C.SIN)} />
-          <Key label="COS" width={defaultKeyWidth} onClick={onClick(C.COS)} />
-          <Key label="TAN" width={defaultKeyWidth} onClick={onClick(C.TAN)} />
+          <Key label="ARC" width={defaultKeyWidth} onClick={this.toggleArc} />
+          <Key label="SIN" width={defaultKeyWidth} onClick={() => this.applyArc(C.SIN, C.ASIN)} />
+          <Key label="COS" width={defaultKeyWidth} onClick={() => this.applyArc(C.COS, C.ACOS)} />
+          <Key label="TAN" width={defaultKeyWidth} onClick={() => this.applyArc(C.TAN, C.ATAN)} />
         </div>
         <div className="Keyboard--row">
           <Key label="¹/x" width={defaultKeyWidth} onClick={onClick(C.RECIPROCAL)} />
@@ -65,12 +97,5 @@ export default function Keyboard({onClick}) {
         </div>
       </div>
     )
-}
-
-Keyboard.propTypes = {
-  onClick: PropTypes.func
-}
-
-Keyboard.defaultProps = {
-  onClick: () => undefined
+  }
 }
