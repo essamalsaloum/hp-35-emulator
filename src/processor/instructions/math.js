@@ -1,5 +1,8 @@
 import * as C from '../keyCodes'
 
+const degreesToRadians = degrees => degrees * Math.PI / 180.0
+const radiansToDegrees = radians => radians * 180.0 / Math.PI
+
 const arithmetic = {
   [C.ADD]: (x, y) => y + x,
   [C.SUB]: (x, y) => y - x,
@@ -7,9 +10,6 @@ const arithmetic = {
   [C.DIV]: (x, y) => y / x,
   [C.RECIPROCAL]: x => 1 / x
 }
-
-const degreesToRadians = degrees => degrees * Math.PI / 180.0
-const radiansToDegrees = radians => radians * 180.0 / Math.PI
 
 const transcendental = {
   [C.POW]: (x, y) => Math.pow(x, y),
