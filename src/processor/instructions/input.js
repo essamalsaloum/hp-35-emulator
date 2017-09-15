@@ -48,7 +48,7 @@ const digit = digit => state => {
 
 const decimal = state => {
   let buffer = state.entry ? state.buffer : '0'
-  if (buffer.indexOf('.') !== -1) {
+  if (/[e.]/.test(buffer)) {
     return state
   }
   buffer += '.'
