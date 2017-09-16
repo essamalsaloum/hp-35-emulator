@@ -133,7 +133,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLX" width={inputKeyWidth} onClick={() => this.onClick(C.CLX)} />
         </div>
         <div className="Keypad--row">
-          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} style={boldKeyStyle} />
+          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLX)} style={boldKeyStyle} />
           <Key label="7" width={inputKeyWidth} onClick={() => this.onClick(C.D7)} style={boldKeyStyle} />
           <Key label="8" width={inputKeyWidth} onClick={() => this.onClick(C.D8)} style={boldKeyStyle} />
           <Key label="9" width={inputKeyWidth} onClick={() => this.onClick(C.D9)} style={boldKeyStyle} />
@@ -154,7 +154,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="-" width={inputKeyWidth} onClick={() => this.onClick(C.SUB)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
-          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} />
+          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLX)} />
           <Key label="0" width={inputKeyWidth} onClick={() => this.onClick(C.D0)} style={boldKeyStyle} />
           <Key label="•" width={inputKeyWidth} onClick={() => this.onClick(C.DOT)} style={boldKeyStyle} />
           <Key label="π" width={inputKeyWidth} onClick={() => this.onClick(C.PI)} style={boldKeyStyle} />
