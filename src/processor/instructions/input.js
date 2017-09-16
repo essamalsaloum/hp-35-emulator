@@ -1,4 +1,4 @@
-import * as C from '../keyCodes'
+import C from '../keyCodes'
 
 const splitNumber = buffer => {
   const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)

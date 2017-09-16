@@ -1,4 +1,4 @@
-import * as C from '../keyCodes'
+import C from '../keyCodes'
 
 const enter = state => {
   const [x, y, z] = state.stack

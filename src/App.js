@@ -60,12 +60,12 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { buffer, stack } = this.state
+    const { buffer, stack, shift } = this.state
     // tabIndex needed to allow div to receive focus
     return (
       <div className="App">
         <div className="App__main" tabIndex="0">
-          <Display buffer={buffer} stack={stack} />
+          <Display buffer={buffer} stack={stack} shift={shift} />
           <Keyboard onClick={this.onClick} />
         </div>
         <ProgramPanel />

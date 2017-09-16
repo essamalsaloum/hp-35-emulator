@@ -1,4 +1,4 @@
-import * as C from './keyCodes'
+import C from './keyCodes'
 import input from './instructions/input'
 import stack from './instructions/stack'
 import math from './instructions/math'

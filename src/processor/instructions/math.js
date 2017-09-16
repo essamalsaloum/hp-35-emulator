@@ -1,4 +1,4 @@
-import * as C from '../keyCodes'
+import C from '../keyCodes'
 
 const degreesToRadians = degrees => degrees * Math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / Math.PI
@@ -13,9 +13,11 @@ const arithmetic = {
 
 const transcendental = {
   [C.POW]: (x, y) => Math.pow(x, y),
+  [C.TEN_POW]: x => Math.pow(10, x),
   [C.LOG]: x => Math.log10(x),
   [C.LN]: x => Math.log(x),
   [C.EXP]: x => Math.exp(x),
+  [C.SQR]: x => x * x,
   [C.SQRT]: x => Math.sqrt(x),
   [C.RECIPROCAL]: x => 1 / x,
   [C.SIN]: x => Math.sin(degreesToRadians(x)),

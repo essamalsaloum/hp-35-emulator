@@ -6,6 +6,7 @@ export default {
   memory: 0,
   program: [],
   running: false,
-  delay: 0
+  delay: 0,
+  shift: 0
 }
 

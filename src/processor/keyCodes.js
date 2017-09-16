@@ -1,39 +1,44 @@
-export const ACOS = 'acos'
-export const ADD = 'add'
-export const ARC = 'arc'
-export const ASIN = 'asin'
-export const ATAN = 'atan'
-export const CHS = 'chs'
-export const CLR = 'clr'
-export const CLX = 'clx'
-export const COS = 'cos'
-export const DOT = 'dot'
-export const D0 = 'd0'
-export const D1 = 'd1'
-export const D2 = 'd2'
-export const D3 = 'd3'
-export const D4 = 'd4'
-export const D5 = 'd5'
-export const D6 = 'd6'
-export const D7 = 'd7'
-export const D8 = 'd8'
-export const D9 = 'd9'
-export const DIV = 'div'
-export const EEX = 'eex'
-export const ENTER = 'enter'
-export const EXP = 'exp'
-export const LN = 'ln'
-export const LOG = 'log'
-export const MUL = 'mul'
-export const PI = 'pi'
-export const POW = 'pow'
-export const RCL = 'rcl'
-export const RECIPROCAL = 'reciprocal'
-export const ROLL_DOWN = 'rollDown'
-export const SIN = 'sin'
-export const SQR = 'sqr'
-export const SQRT = 'sqrt'
-export const STO = 'sto'
-export const SUB = 'sub'
-export const SWAP = 'swap'
-export const TAN = 'tan'
+export default {
+  ACOS: 'acos',
+  ADD: 'add',
+  ARC: 'arc',
+  ASIN: 'asin',
+  ATAN: 'atan',
+  CHS: 'chs',
+  CLR: 'clr',
+  CLX: 'clx',
+  COS: 'cos',
+  DOT: 'dot',
+  D0: 'd0',
+  D1: 'd1',
+  D2: 'd2',
+  D3: 'd3',
+  D4: 'd4',
+  D5: 'd5',
+  D6: 'd6',
+  D7: 'd7',
+  D8: 'd8',
+  D9: 'd9',
+  DIV: 'div',
+  EEX: 'eex',
+  ENTER: 'enter',
+  EXP: 'exp',
+  LN: 'ln',
+  LOG: 'log',
+  MUL: 'mul',
+  PI: 'pi',
+  POW: 'pow',
+  RCL: 'rcl',
+  RECIPROCAL: 'reciprocal',
+  ROLL_DOWN: 'rollDown',
+  SHIFT_LEFT: 'shiftLeft',
+  SHIFT_RIGHT: 'shiftRight',
+  SIN: 'sin',
+  SQR: 'sqr',
+  SQRT: 'sqrt',
+  STO: 'sto',
+  SUB: 'sub',
+  SWAP: 'swap',
+  TAN: 'tan',
+  TEN_POW: 'tenPow'
+}

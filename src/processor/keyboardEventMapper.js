@@ -1,4 +1,4 @@
-import * as C from '../processor/keyCodes'
+import C from '../processor/keyCodes'
 
 const keyToKeyCode = {
   '0': C.D0,
