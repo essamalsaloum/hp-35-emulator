@@ -62,7 +62,7 @@ export default class ProgramPanel extends React.PureComponent {
   handleChange(event) {
     const text = event.target.value
     this.setState({ text})
-    store.setState({running: false, shiftIndex: false })
+    store.setState({running: false, shiftIndex: 0 })
   }
 
   toggleDelay() {

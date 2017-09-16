@@ -61,6 +61,7 @@ export function execute(state, keyCode) {
 
   const instruction = instructionSet[keyCode]
   if (!instruction) {
+    // throw new Error(`execute: not implemented [${keyCode}]`)
     console.error(`execute: not implemented [${keyCode}]`)
     return state
   }
