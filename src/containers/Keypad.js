@@ -48,7 +48,6 @@ const keyMap = {
   [C.TAN]: [C.TAN, C.TAN, C.ATAN]
 }
 
-const zoomLabelStyle = { fontSize: '120%' }
 const shiftTopKeyStyle = { color: theme.topLabelColor }
 const shiftBottomKeyStyle = { color: theme.bottomLabelColor }
 const boldKeyStyle = { fontWeight: 'bold' }
@@ -120,32 +119,32 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLX" width={inputKeyWidth} onClick={() => this.onClick(C.CLX)} />
         </div>
         <div className="Keypad--row">
-          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} style={boldKeyStyle}/>
-          <Key label="7" width={inputKeyWidth} onClick={() => this.onClick(C.D7)}  style={boldKeyStyle}/>
-          <Key label="8" width={inputKeyWidth} onClick={() => this.onClick(C.D8)}  style={boldKeyStyle}/>
-          <Key label="9" width={inputKeyWidth} onClick={() => this.onClick(C.D9)}  style={boldKeyStyle}/>
-          <Key label="÷" width={inputKeyWidth} onClick={() => this.onClick(C.DIV)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} style={boldKeyStyle} />
+          <Key label="7" width={inputKeyWidth} onClick={() => this.onClick(C.D7)} style={boldKeyStyle} />
+          <Key label="8" width={inputKeyWidth} onClick={() => this.onClick(C.D8)} style={boldKeyStyle} />
+          <Key label="9" width={inputKeyWidth} onClick={() => this.onClick(C.D9)} style={boldKeyStyle} />
+          <Key label="÷" width={inputKeyWidth} onClick={() => this.onClick(C.DIV)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
-          <Key label="f" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_LEFT)} style={{...boldKeyStyle, ...shiftTopKeyStyle}} />
-          <Key label="4" width={inputKeyWidth} onClick={() => this.onClick(C.D4)}  style={boldKeyStyle}/>
-          <Key label="5" width={inputKeyWidth} onClick={() => this.onClick(C.D5)}  style={boldKeyStyle}/>
-          <Key label="6" width={inputKeyWidth} onClick={() => this.onClick(C.D6)}  style={boldKeyStyle}/>
-          <Key label="×" width={inputKeyWidth} onClick={() => this.onClick(C.MUL)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+          <Key label="f" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_LEFT)} style={{ ...boldKeyStyle, ...shiftTopKeyStyle }} />
+          <Key label="4" width={inputKeyWidth} onClick={() => this.onClick(C.D4)} style={boldKeyStyle} />
+          <Key label="5" width={inputKeyWidth} onClick={() => this.onClick(C.D5)} style={boldKeyStyle} />
+          <Key label="6" width={inputKeyWidth} onClick={() => this.onClick(C.D6)} style={boldKeyStyle} />
+          <Key label="×" width={inputKeyWidth} onClick={() => this.onClick(C.MUL)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
-          <Key label="g" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_RIGHT)} style={{...boldKeyStyle, ...shiftBottomKeyStyle }} />
-          <Key label="1" width={inputKeyWidth} onClick={() => this.onClick(C.D1)}  style={boldKeyStyle}/>
-          <Key label="2" width={inputKeyWidth} onClick={() => this.onClick(C.D2)}  style={boldKeyStyle}/>
-          <Key label="3" width={inputKeyWidth} onClick={() => this.onClick(C.D3)}  style={boldKeyStyle}/>
-          <Key label="-" width={inputKeyWidth} onClick={() => this.onClick(C.SUB)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+          <Key label="g" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_RIGHT)} style={{ ...boldKeyStyle, ...shiftBottomKeyStyle }} />
+          <Key label="1" width={inputKeyWidth} onClick={() => this.onClick(C.D1)} style={boldKeyStyle} />
+          <Key label="2" width={inputKeyWidth} onClick={() => this.onClick(C.D2)} style={boldKeyStyle} />
+          <Key label="3" width={inputKeyWidth} onClick={() => this.onClick(C.D3)} style={boldKeyStyle} />
+          <Key label="-" width={inputKeyWidth} onClick={() => this.onClick(C.SUB)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
           <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} />
-          <Key label="0" width={inputKeyWidth} onClick={() => this.onClick(C.D0)}  style={boldKeyStyle}/>
-          <Key label="•" width={inputKeyWidth} onClick={() => this.onClick(C.DOT)}  style={boldKeyStyle}/>
-          <Key label="π" width={inputKeyWidth} onClick={() => this.onClick(C.PI)}  style={boldKeyStyle}/>
-          <Key label="+" width={inputKeyWidth} onClick={() => this.onClick(C.ADD)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+          <Key label="0" width={inputKeyWidth} onClick={() => this.onClick(C.D0)} style={boldKeyStyle} />
+          <Key label="•" width={inputKeyWidth} onClick={() => this.onClick(C.DOT)} style={boldKeyStyle} />
+          <Key label="π" width={inputKeyWidth} onClick={() => this.onClick(C.PI)} style={boldKeyStyle} />
+          <Key label="+" width={inputKeyWidth} onClick={() => this.onClick(C.ADD)} style={boldKeyStyle} />
         </div>
       </div>
     )

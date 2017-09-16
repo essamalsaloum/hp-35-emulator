@@ -16,8 +16,8 @@ const topLabelStyle = {
 }
 
 const bottomLabelStyle = {
-  fontSize: 11,
-  lineHeight: '1em',
+  fontSize: 10,
+  backgroundColor: theme.bottomLabelBackgroundColor,
   color: theme.bottomLabelColor
 }
 
