@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import store from './store'
-import { execute } from './processor'
-import mapKeyboardEvent from './processor/keyboardEventMapper'
 import Display from './containers/Display'
 import Keypad from './containers/Keypad'
 import ProgramPanel from './containers/ProgramPanel'
@@ -28,19 +26,6 @@ class App extends React.PureComponent {
 
   componentWillUnmount() {
     this.subscription.remove()
-  }
-
-  componentDidMount() {
-    const elem = document.querySelector('.App--main')
-    if (elem) {
-      elem.addEventListener('keyup', ev => {
-        ev.preventDefault()
-        const keyCode = mapKeyboardEvent(ev)
-        if (keyCode) {
-          store.setState(execute(store.getState(), keyCode))
-        }
-      })
-    }
   }
 
   render() {

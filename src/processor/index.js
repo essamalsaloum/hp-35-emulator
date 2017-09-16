@@ -1,22 +1,32 @@
 import C from './keyCodes'
-import input from './instructions/input'
-import stack from './instructions/stack'
-import math from './instructions/math'
+import { inputInstructions } from './instructions/input'
+import { stackInstructions } from './instructions/stack'
+import { mathInstructions } from './instructions/math'
 import store from '../store'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
-const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructions[keyCode]
+const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructionSet[keyCode]
 
-const instructions = {
-  ...input,
-  ...stack,
-  ...math,
-  [C.ARC]: {
-    entry: null,
-    stackLift: null,
-    fn: state => state
+const instructionSet = {
+  ...inputInstructions,
+  ...stackInstructions,
+  ...mathInstructions
+}
+
+const listeners = new Set()
+
+export function subscribe(listener) {
+  listeners.add(listener)
+  return {
+    remove: () => listeners.delete(listener)
+  }
+}
+
+function notify(keyCode) {
+  for (const listener of listeners) {
+    listener(keyCode)
   }
 }
 
@@ -49,7 +59,7 @@ export function execute(state, keyCode) {
     return enterNumber(state, parseFloat(keyCode))
   }
 
-  const instruction = instructions[keyCode]
+  const instruction = instructionSet[keyCode]
   if (!instruction) {
     console.error(`execute: not implemented [${keyCode}]`)
     return state
@@ -61,8 +71,19 @@ export function execute(state, keyCode) {
     state = state.stackLift === true ? liftStack(state) : state
   }
 
+  const newState = fn(state)
+
+  if (!entry) {
+    if (state.entry) {
+      notify(state.stack[0].toString())
+    }
+    if (keyCode !== C.ENTER) {
+      notify(keyCode)
+    }
+  }
+
   return {
-    ...fn(state),
+    ...newState,
     entry: entry !== null ? entry : state.entry,
     stackLift: stackLift !== null ? stackLift : state.stackLift
   }
@@ -133,6 +154,8 @@ function compilePlainText(text) {
     })
 
 }
+
 export function compile(text) {
   return /\s*#/.test(text) ? compileMarkdown(text) : compilePlainText(text)
 }
+

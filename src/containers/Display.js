@@ -7,7 +7,7 @@ const labels = ['x', 'y', 'z', 't']
 const annunciators = ['', 'f', 'g']
 
 const annunciatorStyles = [
-  {},
+  { color: '#689F38'},
   { color: theme.topLabelColor },
   { color: theme.bottomLabelColor }
 ]
@@ -17,8 +17,8 @@ export default class Display extends React.PureComponent {
   state = {}
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ stack, buffer, shiftIndex }) => {
-      this.setState({ stack, buffer, shiftIndex })
+    this.subscription = store.subscribe(({ stack, buffer, shiftIndex, running }) => {
+      this.setState({ stack, buffer, shiftIndex, running })
     })
   }
 
@@ -36,10 +36,11 @@ export default class Display extends React.PureComponent {
   }
 
   render() {
-    const { stack, buffer, shiftIndex} = this.state
+    const { stack, buffer, shiftIndex, running} = this.state
+    const annunciatorText = running ? 'running...' : annunciators[shiftIndex]
     return (
       <div className="Display">
-        <div className="Display--annunciator" style={annunciatorStyles[shiftIndex]}>{annunciators[shiftIndex]}</div>
+        <div className="Display--annunciator" style={annunciatorStyles[shiftIndex]}>{annunciatorText}</div>
         {this.renderStack(stack, buffer)}
       </div>
     )

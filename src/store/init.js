@@ -5,8 +5,9 @@ export default {
   entry: true,
   memory: 0,
   program: [],
+  shiftIndex: 0,
+  recording: false,
   running: false,
-  delay: 0,
-  shiftIndex: 0
+  delay: 0
 }
 

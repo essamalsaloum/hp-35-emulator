@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import store from '../store'
 import { execute } from '../processor'
+import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import C from '../processor/keyCodes'
 import Key from '../components/Key'
 import theme from '../theme'
@@ -70,6 +71,19 @@ export default class Keypad extends React.PureComponent {
     })
   }
 
+  componentDidMount() {
+    const elem = document.querySelector('.App--main')
+    if (elem) {
+      elem.addEventListener('keyup', ev => {
+        ev.preventDefault()
+        const keyCode = mapKeyboardEvent(ev)
+        if (keyCode) {
+          store.setState(execute(store.getState(), keyCode))
+        }
+      })
+    }
+  }
+
   componentWillUnmount() {
     this.subscription.remove()
   }
@@ -83,8 +97,8 @@ export default class Keypad extends React.PureComponent {
       store.setState({ shiftIndex: shiftIndex === 2 ? 0 : 2 })
     } else {
       keyCode = keyMap[keyCode][shiftIndex]
-      store.setState(execute(store.getState(), keyCode))
-      store.setState({ shiftIndex: 0 })
+      const newState = execute(store.getState(), keyCode)
+      store.setState({...newState, shiftIndex: 0})
     }
   }
 

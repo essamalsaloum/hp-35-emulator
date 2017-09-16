@@ -1,6 +1,7 @@
 .Key {
     display: block;
     box-sizing: border-box;
+    cursor: pointer;
     padding: 0;
     height: 32px;
     line-height: 1em;

@@ -1,5 +1,13 @@
 import C from '../keyCodes'
 
+export const liftStack = state => {
+  const [x, y, z] = state.stack
+  return {
+    ...state,
+    stack: [x, x, y, z]
+  }
+}
+
 const enter = state => {
   const [x, y, z] = state.stack
   return {
@@ -56,7 +64,7 @@ const recallMem = state => {
   }
 }
 
-export default {
+export const stackInstructions = {
   [C.ENTER]: { entry: false, stackLift: false, fn: enter },
   [C.CLX]: { entry: false, stackLift: false, fn: clx },
   [C.CLR]: { entry: false, stackLift: false, fn: clr },
