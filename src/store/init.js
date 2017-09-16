@@ -7,6 +7,6 @@ export default {
   program: [],
   running: false,
   delay: 0,
-  shift: 0
+  shiftIndex: 0
 }
 

@@ -69,7 +69,7 @@ export default class ProgramPanel extends React.PureComponent {
           value={this.state.text}
           onChange={this.handleChange}
         />
-        <div className="ProgramPanel__buttons">
+        <div className="ProgramPanel--buttons">
           <div>
             <input
               type="checkbox"

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import store from '../store'
 import { execute } from '../processor'
 import C from '../processor/keyCodes'
-import Key from './Key'
+import Key from '../components/Key'
 import theme from '../theme'
-import './Keyboard.css'
+import './Keypad.css'
 
 const inputKeyWidth = 48
 const enterKeyWidth = 110
@@ -48,11 +48,12 @@ const keyMap = {
   [C.TAN]: [C.TAN, C.TAN, C.ATAN]
 }
 
-const zoomLabelStyle = { fontSize: '110%' }
+const zoomLabelStyle = { fontSize: '120%' }
 const shiftTopKeyStyle = { color: theme.topLabelColor }
 const shiftBottomKeyStyle = { color: theme.bottomLabelColor }
+const boldKeyStyle = { fontWeight: 'bold' }
 
-export default class Keyboard extends React.PureComponent {
+export default class Keypad extends React.PureComponent {
 
   static propTypes = {
     onClick: PropTypes.func
@@ -65,82 +66,86 @@ export default class Keyboard extends React.PureComponent {
   state = {}
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ shift }) => {
-      this.setState({ shift })
+    this.subscription = store.subscribe(({ shiftIndex }) => {
+      this.setState({ shiftIndex })
     })
   }
 
+  componentWillUnmount() {
+    this.subscription.remove()
+  }
+
   onClick(keyCode) {
-    const { shift } = this.state
+    const { shiftIndex } = this.state
     if (keyCode === C.SHIFT_LEFT) {
-      store.setState({ shift: shift === 1 ? 0 : 1 })
+      store.setState({ shiftIndex: shiftIndex === 1 ? 0 : 1 })
     }
     else if (keyCode === C.SHIFT_RIGHT) {
-      store.setState({ shift: shift === 2 ? 0 : 2 })
+      store.setState({ shiftIndex: shiftIndex === 2 ? 0 : 2 })
     } else {
-      keyCode = keyMap[keyCode][shift]
+      keyCode = keyMap[keyCode][shiftIndex]
       store.setState(execute(store.getState(), keyCode))
-      store.setState({ shift: 0 })
+      store.setState({ shiftIndex: 0 })
     }
   }
 
   render() {
     return (
-      <div className="Keyboard">
-        <div className="Keyboard--row">
+      <div className="Keypad">
+        <div className="Keypad--row">
           <Key label="x<sup>y</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.POW)} />
           <Key label="LOG" width={inputKeyWidth} onClick={() => this.onClick(C.LOG)} />
           <Key label="LN" width={inputKeyWidth} onClick={() => this.onClick(C.LN)} />
           <Key label="e<sup>x</sup>" topLabel="10<sup>x</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.EXP)} />
           <Key label="CLR" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} />
         </div>
-        <div className="Keyboard--row">
+        <div className="Keypad--row">
           <Key label="√x" width={inputKeyWidth} onClick={() => this.onClick(C.SQRT)} />
           <Key label="x<sup>2</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.SQR)} />
           <Key label="SIN" bottomLabel="ASIN" width={inputKeyWidth} onClick={() => this.onClick(C.SIN)} />
           <Key label="COS" bottomLabel="ACOS" width={inputKeyWidth} onClick={() => this.onClick(C.COS)} />
           <Key label="TAN" bottomLabel="ATAN" width={inputKeyWidth} onClick={() => this.onClick(C.TAN)} />
         </div>
-        <div className="Keyboard--row">
+        <div className="Keypad--row">
           <Key label="1/x" width={inputKeyWidth} onClick={() => this.onClick(C.RECIPROCAL)} />
           <Key label="x↔︎y" width={inputKeyWidth} onClick={() => this.onClick(C.SWAP)} />
           <Key label="R↓" width={inputKeyWidth} onClick={() => this.onClick(C.ROLL_DOWN)} />
           <Key label="STO" width={inputKeyWidth} onClick={() => this.onClick(C.STO)} />
           <Key label="RCL" width={inputKeyWidth} onClick={() => this.onClick(C.RCL)} />
         </div>
-        <div className="Keyboard--row">
+        <div className="Keypad--row">
           <Key label="Enter ↑" width={enterKeyWidth} onClick={() => this.onClick(C.ENTER)} />
           <Key label="CHS" width={inputKeyWidth} onClick={() => this.onClick(C.CHS)} />
           <Key label="EEX" width={inputKeyWidth} onClick={() => this.onClick(C.EEX)} />
           <Key label="CLX" width={inputKeyWidth} onClick={() => this.onClick(C.CLX)} />
         </div>
-        <div className="Keyboard--row">
+        <div className="Keypad--row">
+          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} style={boldKeyStyle}/>
+          <Key label="7" width={inputKeyWidth} onClick={() => this.onClick(C.D7)}  style={boldKeyStyle}/>
+          <Key label="8" width={inputKeyWidth} onClick={() => this.onClick(C.D8)}  style={boldKeyStyle}/>
+          <Key label="9" width={inputKeyWidth} onClick={() => this.onClick(C.D9)}  style={boldKeyStyle}/>
+          <Key label="÷" width={inputKeyWidth} onClick={() => this.onClick(C.DIV)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+        </div>
+        <div className="Keypad--row">
+          <Key label="f" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_LEFT)} style={{...boldKeyStyle, ...shiftTopKeyStyle}} />
+          <Key label="4" width={inputKeyWidth} onClick={() => this.onClick(C.D4)}  style={boldKeyStyle}/>
+          <Key label="5" width={inputKeyWidth} onClick={() => this.onClick(C.D5)}  style={boldKeyStyle}/>
+          <Key label="6" width={inputKeyWidth} onClick={() => this.onClick(C.D6)}  style={boldKeyStyle}/>
+          <Key label="×" width={inputKeyWidth} onClick={() => this.onClick(C.MUL)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+        </div>
+        <div className="Keypad--row">
+          <Key label="g" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_RIGHT)} style={{...boldKeyStyle, ...shiftBottomKeyStyle }} />
+          <Key label="1" width={inputKeyWidth} onClick={() => this.onClick(C.D1)}  style={boldKeyStyle}/>
+          <Key label="2" width={inputKeyWidth} onClick={() => this.onClick(C.D2)}  style={boldKeyStyle}/>
+          <Key label="3" width={inputKeyWidth} onClick={() => this.onClick(C.D3)}  style={boldKeyStyle}/>
+          <Key label="-" width={inputKeyWidth} onClick={() => this.onClick(C.SUB)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
+        </div>
+        <div className="Keypad--row">
           <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} />
-          <Key label="7" width={inputKeyWidth} onClick={() => this.onClick(C.D7)} />
-          <Key label="8" width={inputKeyWidth} onClick={() => this.onClick(C.D8)} />
-          <Key label="9" width={inputKeyWidth} onClick={() => this.onClick(C.D9)} />
-          <Key label="÷" width={inputKeyWidth} onClick={() => this.onClick(C.DIV)} style={zoomLabelStyle} />
-        </div>
-        <div className="Keyboard--row">
-          <Key label="<strong>f</strong>" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_LEFT)} style={shiftTopKeyStyle} />
-          <Key label="4" width={inputKeyWidth} onClick={() => this.onClick(C.D4)} />
-          <Key label="5" width={inputKeyWidth} onClick={() => this.onClick(C.D5)} />
-          <Key label="6" width={inputKeyWidth} onClick={() => this.onClick(C.D6)} />
-          <Key label="×" width={inputKeyWidth} onClick={() => this.onClick(C.MUL)} style={zoomLabelStyle} />
-        </div>
-        <div className="Keyboard--row">
-          <Key label="<strong>g</strong>" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_RIGHT)} style={shiftBottomKeyStyle} />
-          <Key label="1" width={inputKeyWidth} onClick={() => this.onClick(C.D1)} />
-          <Key label="2" width={inputKeyWidth} onClick={() => this.onClick(C.D2)} />
-          <Key label="3" width={inputKeyWidth} onClick={() => this.onClick(C.D3)} />
-          <Key label="-" width={inputKeyWidth} onClick={() => this.onClick(C.SUB)} style={zoomLabelStyle} />
-        </div>
-        <div className="Keyboard--row">
-          <Key label="C" width={inputKeyWidth} onClick={() => this.onClick(C.CLR)} />
-          <Key label="0" width={inputKeyWidth} onClick={() => this.onClick(C.D0)} />
-          <Key label="•" width={inputKeyWidth} onClick={() => this.onClick(C.DOT)} />
-          <Key label="π" width={inputKeyWidth} onClick={() => this.onClick(C.PI)} />
-          <Key label="+" width={inputKeyWidth} onClick={() => this.onClick(C.ADD)} style={zoomLabelStyle} />
+          <Key label="0" width={inputKeyWidth} onClick={() => this.onClick(C.D0)}  style={boldKeyStyle}/>
+          <Key label="•" width={inputKeyWidth} onClick={() => this.onClick(C.DOT)}  style={boldKeyStyle}/>
+          <Key label="π" width={inputKeyWidth} onClick={() => this.onClick(C.PI)}  style={boldKeyStyle}/>
+          <Key label="+" width={inputKeyWidth} onClick={() => this.onClick(C.ADD)} style={{...boldKeyStyle, ...zoomLabelStyle}} />
         </div>
       </div>
     )

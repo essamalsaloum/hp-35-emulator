@@ -30,7 +30,7 @@
     flex: 1;
 }
 
-.ProgramPanel__buttons {
+.ProgramPanel--buttons {
   display: flex;
   flex-flow: row;
   justify-content: space-between;
