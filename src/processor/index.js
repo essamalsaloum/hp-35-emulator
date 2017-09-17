@@ -8,6 +8,7 @@ const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
 const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructionSet[keyCode]
+const isCalculatorError = ({stack}) => isNaN(stack[0]) || !isFinite(stack[0])
 
 const instructionSet = {
   ...inputInstructions,
@@ -55,6 +56,18 @@ const enterNumber = (state, num) => {
   currently in the X–register. The Y–, Z– and T–registers remain unchanged.
 */
 export function execute(state, keyCode) {
+
+  if (isCalculatorError(state)) {
+    const [, y, z, t] = state.stack
+    return {
+      stack: [0, y, z, t],
+      buffer: '0',
+      running: false,
+      stackLift: false,
+      entry: false
+    }
+  }
+
   if (isValidNumber(keyCode)) {
     return enterNumber(state, parseFloat(keyCode))
   }
@@ -74,7 +87,12 @@ export function execute(state, keyCode) {
 
   const newState = fn(state)
 
-  if (!entry) {
+  const errorState = isCalculatorError(newState) ? {
+    buffer: 'Error',
+    running: false
+  } : {}
+
+  if (!(isCalculatorError(newState) || entry)) {
     if (state.entry) {
       notify(state.stack[0].toString())
     }
@@ -86,7 +104,8 @@ export function execute(state, keyCode) {
   return {
     ...newState,
     entry: entry !== null ? entry : state.entry,
-    stackLift: stackLift !== null ? stackLift : state.stackLift
+    stackLift: stackLift !== null ? stackLift : state.stackLift,
+    ...errorState
   }
 }
 

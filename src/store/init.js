@@ -5,7 +5,7 @@ export default {
   entry: true,
   memory: 0,
   program: [],
-  shiftIndex: 0,
+  keyModifier: null,
   recording: false,
   running: false,
   delay: 0

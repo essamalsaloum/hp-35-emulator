@@ -48,7 +48,7 @@ export default class ProgramPanel extends React.PureComponent {
       return console.log(error)
     }
 
-    store.setState({ running: true, recording: false, shiftIndex: 0 })
+    store.setState({ running: true, recording: false, keyModifier: null })
     processor.runProg(keyCodes)
       .then(() => {
         store.setState({ running: false })
@@ -62,7 +62,7 @@ export default class ProgramPanel extends React.PureComponent {
   handleChange(event) {
     const text = event.target.value
     this.setState({ text})
-    store.setState({running: false, shiftIndex: 0 })
+    store.setState({running: false, keyModifier: null })
   }
 
   toggleDelay() {

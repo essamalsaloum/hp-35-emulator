@@ -1,6 +1,7 @@
 export default {
   ACOS: 'acos',
   ADD: 'add',
+  ALOG: 'alog',
   ARC: 'arc',
   ASIN: 'asin',
   ATAN: 'atan',
@@ -31,14 +32,16 @@ export default {
   RCL: 'rcl',
   RECIPROCAL: 'reciprocal',
   ROLL_DOWN: 'rollDown',
-  SHIFT_LEFT: 'shiftLeft',
-  SHIFT_RIGHT: 'shiftRight',
   SIN: 'sin',
-  SQR: 'sqr',
   SQRT: 'sqrt',
   STO: 'sto',
   SUB: 'sub',
   SWAP: 'swap',
   TAN: 'tan',
-  TEN_POW: 'tenPow'
+
+  // new codes
+  ROOT: 'root',
+  SHIFT_TOP: 'shiftTop',
+  SHIFT_BOTTOM: 'shiftRight',
+  SQR: 'sqr',
 }

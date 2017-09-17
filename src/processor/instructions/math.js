@@ -3,6 +3,14 @@ import C from '../keyCodes'
 const degreesToRadians = degrees => degrees * Math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / Math.PI
 
+const degrees360 = angle => {
+  angle %= 360
+  if (angle < 0) {
+    angle += 360
+  }
+  return angle
+}
+
 const arithmetic = {
   [C.ADD]: (x, y) => y + x,
   [C.SUB]: (x, y) => y - x,
@@ -12,20 +20,20 @@ const arithmetic = {
 }
 
 const transcendental = {
-  [C.POW]: (x, y) => Math.pow(x, y),
-  [C.TEN_POW]: x => Math.pow(10, x),
-  [C.LOG]: x => Math.log10(x),
-  [C.LN]: x => Math.log(x),
+  [C.ACOS]: x => radiansToDegrees(Math.acos(x)),
+  [C.ALOG]: x => Math.pow(10, x),
+  [C.ASIN]: x => radiansToDegrees(Math.asin(x)),
+  [C.ATAN]: x => radiansToDegrees(Math.atan(x)),
+  [C.COS]: x => Math.cos(degreesToRadians(degrees360(x))),
   [C.EXP]: x => Math.exp(x),
+  [C.LN]: x => Math.log(x),
+  [C.LOG]: x => Math.log10(x),
+  [C.POW]: (x, y) => Math.pow(y, x),
+  [C.ROOT]: (x, y) => Math.pow(y, 1 / x),
+  [C.SIN]: x => Math.sin(degreesToRadians(degrees360(x))),
   [C.SQR]: x => x * x,
   [C.SQRT]: x => Math.sqrt(x),
-  [C.RECIPROCAL]: x => 1 / x,
-  [C.SIN]: x => Math.sin(degreesToRadians(x)),
-  [C.COS]: x => Math.cos(degreesToRadians(x)),
-  [C.TAN]: x => Math.tan(degreesToRadians(x)),
-  [C.ASIN]: x => radiansToDegrees(Math.asin(x)),
-  [C.ACOS]: x => radiansToDegrees(Math.acos(x)),
-  [C.ATAN]: x => radiansToDegrees(Math.atan(x))
+  [C.TAN]: x => Math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : Math.tan(degreesToRadians(degrees360(x)))
 }
 
 const funcs = {
@@ -33,9 +41,11 @@ const funcs = {
   ...transcendental
 }
 
-const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
+const eps = val => !isNaN(val) && Math.abs(val) < Number.EPSILON ? 0 : val
 
-const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
+const monadicFn = ([x, y, z, t], fn) => [eps(fn(x)), y, z, t]
+
+const dyadicFn = ([x, y, z, t], fn) => [eps(fn(x, y)), z, t, t]
 
 const compute = keyCode => state => {
   const { stack } = state

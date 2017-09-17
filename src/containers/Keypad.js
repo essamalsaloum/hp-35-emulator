@@ -11,42 +11,11 @@ import './Keypad.css'
 const inputKeyWidth = 48
 const enterKeyWidth = 110
 
-const keyMap = {
-  [C.ADD]: [C.ADD, C.ADD, C.ADD],
-  [C.CHS]: [C.CHS, C.CHS, C.CHS],
-  [C.CLR]: [C.CLR, C.CLR, C.CLR],
-  [C.CLX]: [C.CLX, C.CLX, C.CLX],
-  [C.COS]: [C.COS, C.COS, C.ACOS],
-  [C.DOT]: [C.DOT, C.DOT, C.DOT],
-  [C.D0]: [C.D0, C.D0, C.D0],
-  [C.D1]: [C.D1, C.D1, C.D1],
-  [C.D2]: [C.D2, C.D2],
-  [C.D3]: [C.D3, C.D3, C.D3],
-  [C.D4]: [C.D4, C.D4, C.D4],
-  [C.D5]: [C.D5, C.D5, C.D5],
-  [C.D6]: [C.D6, C.D6, C.D6],
-  [C.D7]: [C.D7, C.D7, C.D7],
-  [C.D8]: [C.D8, C.D8, C.D8],
-  [C.D9]: [C.D9, C.D9],
-  [C.DIV]: [C.DIV, C.DIV, C.DIV],
-  [C.EEX]: [C.EEX, C.EEX, C.EEX],
-  [C.ENTER]: [C.ENTER, C.ENTER, C.ENTER],
-  [C.EXP]: [C.EXP, C.TEN_POW, C.EXP],
-  [C.LN]: [C.LN, C.LN, C.LN],
-  [C.LOG]: [C.LOG, C.LOG, C.LOG],
-  [C.MUL]: [C.MUL, C.MUL, C.MUL],
-  [C.PI]: [C.PI, C.PI, C.PI],
-  [C.POW]: [C.POW, C.POW, C.POW],
-  [C.RCL]: [C.RCL, C.RCL, C.RCL],
-  [C.RECIPROCAL]: [C.RECIPROCAL, C.RECIPROCAL, C.RECIPROCAL],
-  [C.ROLL_DOWN]: [C.ROLL_DOWN, C.ROLL_DOWN, C.ROLL_DOWN],
-  [C.SIN]: [C.SIN, C.SIN, C.ASIN],
-  [C.SQR]: [C.SQR, C.SQR, C.SQR],
-  [C.SQRT]: [C.SQRT, C.SQRT, C.SQRT],
-  [C.STO]: [C.STO, C.STO, C.STO],
-  [C.SUB]: [C.SUB, C.SUB, C.SUB],
-  [C.SWAP]: [C.SWAP, C.SWAP, C.SWAP],
-  [C.TAN]: [C.TAN, C.TAN, C.ATAN]
+const shiftKeyModifiers = {
+  [C.EXP]: { [C.SHIFT_TOP]: C.ALOG },
+  [C.SIN]: {[C.SHIFT_BOTTOM]: C.ASIN},
+  [C.COS]: {[C.SHIFT_BOTTOM]: C.ACOS},
+  [C.TAN]: {[C.SHIFT_BOTTOM]: C.ATAN},
 }
 
 const shiftTopKeyStyle = { color: theme.topLabelColor }
@@ -66,8 +35,8 @@ export default class Keypad extends React.PureComponent {
   state = {}
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ shiftIndex }) => {
-      this.setState({ shiftIndex })
+    this.subscription = store.subscribe(({ keyModifier }) => {
+      this.setState({ keyModifier })
     })
   }
 
@@ -89,16 +58,17 @@ export default class Keypad extends React.PureComponent {
   }
 
   onClick(keyCode) {
-    const { shiftIndex } = this.state
-    if (keyCode === C.SHIFT_LEFT) {
-      store.setState({ shiftIndex: shiftIndex === 1 ? 0 : 1 })
+    const { keyModifier } = this.state
+    if (keyCode === C.SHIFT_TOP) {
+      store.setState({ keyModifier: keyModifier === C.SHIFT_TOP ? null : C.SHIFT_TOP })
     }
-    else if (keyCode === C.SHIFT_RIGHT) {
-      store.setState({ shiftIndex: shiftIndex === 2 ? 0 : 2 })
+    else if (keyCode === C.SHIFT_BOTTOM) {
+      store.setState({ keyModifier: keyModifier === C.SHIFT_BOTTOM ? null : C.SHIFT_BOTTOM })
     } else {
-      keyCode = keyMap[keyCode][shiftIndex]
+      const keyMap = shiftKeyModifiers[keyCode]
+      keyCode = (keyMap && keyMap[keyModifier]) || keyCode
       const newState = execute(store.getState(), keyCode)
-      store.setState({...newState, shiftIndex: 0})
+      store.setState({ ...newState, keyModifier: null })
     }
   }
 
@@ -106,7 +76,7 @@ export default class Keypad extends React.PureComponent {
     return (
       <div className="Keypad">
         <div className="Keypad--row">
-          <Key label="x<sup>y</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.POW)} />
+          <Key label="y<sup>x</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.POW)} />
           <Key label="LOG" width={inputKeyWidth} onClick={() => this.onClick(C.LOG)} />
           <Key label="LN" width={inputKeyWidth} onClick={() => this.onClick(C.LN)} />
           <Key label="e<sup>x</sup>" topLabel="10<sup>x</sup>" width={inputKeyWidth} onClick={() => this.onClick(C.EXP)} />
@@ -140,14 +110,14 @@ export default class Keypad extends React.PureComponent {
           <Key label="÷" width={inputKeyWidth} onClick={() => this.onClick(C.DIV)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
-          <Key label="f" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_LEFT)} style={{ ...boldKeyStyle, ...shiftTopKeyStyle }} />
+          <Key label="f" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_TOP)} style={{ ...boldKeyStyle, ...shiftTopKeyStyle }} />
           <Key label="4" width={inputKeyWidth} onClick={() => this.onClick(C.D4)} style={boldKeyStyle} />
           <Key label="5" width={inputKeyWidth} onClick={() => this.onClick(C.D5)} style={boldKeyStyle} />
           <Key label="6" width={inputKeyWidth} onClick={() => this.onClick(C.D6)} style={boldKeyStyle} />
           <Key label="×" width={inputKeyWidth} onClick={() => this.onClick(C.MUL)} style={boldKeyStyle} />
         </div>
         <div className="Keypad--row">
-          <Key label="g" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_RIGHT)} style={{ ...boldKeyStyle, ...shiftBottomKeyStyle }} />
+          <Key label="g" width={inputKeyWidth} onClick={() => this.onClick(C.SHIFT_BOTTOM)} style={{ ...boldKeyStyle, ...shiftBottomKeyStyle }} />
           <Key label="1" width={inputKeyWidth} onClick={() => this.onClick(C.D1)} style={boldKeyStyle} />
           <Key label="2" width={inputKeyWidth} onClick={() => this.onClick(C.D2)} style={boldKeyStyle} />
           <Key label="3" width={inputKeyWidth} onClick={() => this.onClick(C.D3)} style={boldKeyStyle} />
