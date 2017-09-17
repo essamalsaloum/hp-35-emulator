@@ -30,7 +30,7 @@ export default class Display extends React.PureComponent {
     return stack.map((register, index) => {
       const value = index === 0 ? buffer : register.toString()
       return (
-        <div className="Display--row" key={index}>{`${labels[index]}: ${value}`}</div>
+        <div className="Display--row" key={index}  style={index > 0 ? {color: '#808080'} : {}}>{`${labels[index]}: ${value}`}</div>
       )
     }).reverse()
   }
