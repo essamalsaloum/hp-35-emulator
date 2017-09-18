@@ -41,7 +41,18 @@ export default {
 
   // new codes
   ROOT: 'root',
-  SHIFT_TOP: 'shiftTop',
-  SHIFT_BOTTOM: 'shiftRight',
+  SHIFT_UP: 'shiftUp',
+  SHIFT_DOWN: 'shiftDown',
   SQR: 'sqr',
+
+  // mathjs inspired key codes
+
+  ABS: 'abs',
+  CBRT: 'cbrt', // cubic root
+  CUBE: 'cube', // x^3,
+  GCD: 'gcd',
+  LCM: 'lcm',
+  NTH_ROOT: 'nthRoot'
+
+
 }

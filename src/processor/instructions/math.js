@@ -41,11 +41,9 @@ const funcs = {
   ...transcendental
 }
 
-const eps = val => !isNaN(val) && Math.abs(val) < Number.EPSILON ? 0 : val
+const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 
-const monadicFn = ([x, y, z, t], fn) => [eps(fn(x)), y, z, t]
-
-const dyadicFn = ([x, y, z, t], fn) => [eps(fn(x, y)), z, t, t]
+const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
 const compute = keyCode => state => {
   const { stack } = state

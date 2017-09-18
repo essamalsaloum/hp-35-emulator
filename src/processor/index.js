@@ -6,9 +6,20 @@ import store from '../store'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
+// const keyCodeAliases = {
+//   '+': C.ADD,
+//   '-': C.SUB,
+//   '*': C.MUL,
+//   '/': C.DIV,
+//   'y^x': C.POW,
+//   'x^2': C.SQR,
+//   'Vx': C.SQRT,
+//   'xVy': C.NTH_ROOT
+// }
+
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
 const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructionSet[keyCode]
-const isCalculatorError = ({stack}) => isNaN(stack[0]) || !isFinite(stack[0])
+const isCalculatorError = ({ stack }) => isNaN(stack[0]) || !isFinite(stack[0])
 
 const instructionSet = {
   ...inputInstructions,
@@ -109,7 +120,7 @@ export function execute(state, keyCode) {
   }
 }
 
-const executeYield = (keyCode, delay) => {
+const executeYield = (keyCode) => {
   return new Promise(resolve => {
     setTimeout(() => {
       const state = store.getState()
@@ -117,18 +128,29 @@ const executeYield = (keyCode, delay) => {
         store.setState(execute(state, keyCode))
       }
       resolve()
-    }, delay)
+    })
   })
 }
 
 export function runProg(keyCodes) {
-  const { delay } = store.getState()
   return keyCodes.reduce((promise, keyCode) => promise.then(() => {
     const { running } = store.getState()
     if (running) {
-      return executeYield(keyCode, delay)
+      return executeYield(keyCode)
     }
   }), Promise.resolve())
+}
+
+export function* createSingleStepIterator(keyCodes) {
+  for (const keyCode of keyCodes) {
+    console.log('sst')
+    const state = execute(store.getState(), keyCode)
+    store.setState(state)
+    if (!state.running) {
+      return
+    }
+    yield
+  }
 }
 
 function compileMarkdown(text) {

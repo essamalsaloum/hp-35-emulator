@@ -6,8 +6,8 @@ import './Display.css'
 
 const labels = ['x', 'y', 'z', 't']
 const annunciators = {
-  [C.SHIFT_TOP]: 'f',
-  [C.SHIFT_BOTTOM]: 'g'
+  [C.SHIFT_UP]: 'f',
+  [C.SHIFT_DOWN]: 'g'
 }
 
 const annunciatorStyles = [
@@ -21,8 +21,8 @@ export default class Display extends React.PureComponent {
   state = {}
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ stack, buffer, keyModifier, running }) => {
-      this.setState({ stack, buffer, keyModifier, running })
+    this.subscription = store.subscribe(({ stack, buffer, shiftKey, running }) => {
+      this.setState({ stack, buffer, shiftKey, running })
     })
   }
 
@@ -40,11 +40,11 @@ export default class Display extends React.PureComponent {
   }
 
   render() {
-    const { stack, buffer, keyModifier, running} = this.state
-    const annunciatorText = running ? 'running...' : keyModifier ? annunciators[keyModifier] : ''
+    const { stack, buffer, shiftKey, running} = this.state
+    const annunciatorText = running ? 'running...' : shiftKey ? annunciators[shiftKey] : ''
     return (
       <div className="Display">
-        <div className="Display--annunciator" style={annunciatorStyles[keyModifier]}>{annunciatorText}</div>
+        <div className="Display--annunciator" style={annunciatorStyles[shiftKey]}>{annunciatorText}</div>
         {this.renderStack(stack, buffer)}
       </div>
     )
