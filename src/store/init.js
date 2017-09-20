@@ -1,11 +1,21 @@
 export default {
-  stack: [0, 0, 0, 0],
-  buffer: '0',
-  stackLift: false,
-  entry: true,
-  memory: 0,
-  shiftKey: null,
-  recording: false,
-  running: false
+  processor: {
+    stack: [0, 0, 0, 0],
+    buffer: '0',
+    stackLift: false,
+    entry: true,
+    memory: 0
+  },
+  keypad: {
+    shiftKey: null
+  },
+  program: {
+    text: '',
+    keyCodes: [],
+    nextIndex: 0,
+    error: false,
+    running: false,
+    recording: false
+  }
 }
 

@@ -106,6 +106,7 @@ export function execute(state, keyCode) {
 
   if (!(isCalculatorError(newState) || entry)) {
     if (state.entry) {
+      console.log('state.stack[0]', state.stack[0])
       notify(util.formatNumber(state.stack[0]))
     }
     if (keyCode !== C.ENTER) {
@@ -124,9 +125,10 @@ export function execute(state, keyCode) {
 const executeYield = (keyCode) => {
   return new Promise(resolve => {
     setTimeout(() => {
-      const state = store.getState()
-      if (state.running) {
-        store.setState(execute(state, keyCode))
+      const program = store.getState().program
+      if (program.running) {
+        const newProcessorState = execute(store.getState().processor, keyCode)
+        store.setState({ processor: newProcessorState })
       }
       resolve()
     })
@@ -135,7 +137,7 @@ const executeYield = (keyCode) => {
 
 export function runProg(keyCodes) {
   return keyCodes.reduce((promise, keyCode) => promise.then(() => {
-    const { running } = store.getState()
+    const { running } = store.getState().program
     if (running) {
       return executeYield(keyCode)
     }
@@ -143,15 +145,27 @@ export function runProg(keyCodes) {
 }
 
 export function* createSingleStepIterator(keyCodes) {
-  let index = 0
+  let nextIndex = 0
+
   for (const keyCode of keyCodes) {
-    const state = execute(store.getState(), keyCode)
-    store.setState(state)
-    if (!state.running) {
+    const state = store.getState()
+    const processor = execute(state.processor, keyCode)
+    nextIndex += 1
+
+    store.setState({
+      processor: {
+        ...processor
+      },
+      program: {
+        ...state.program,
+        nextIndex
+      }
+    })
+
+    if (!state.program.running) {
       return
     }
-    index += 1
-    yield index
+    yield
   }
 }
 
@@ -192,8 +206,8 @@ function compilePlainText(text) {
     }
     return acc
   }, {
-      keyCodes: [],
       text: '',
+      keyCodes: [],
       error: false
     })
 
@@ -202,4 +216,3 @@ function compilePlainText(text) {
 export function compile(text) {
   return /\s*#/.test(text) ? compileMarkdown(text) : compilePlainText(text)
 }
-

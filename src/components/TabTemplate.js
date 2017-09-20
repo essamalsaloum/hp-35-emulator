@@ -5,7 +5,7 @@ export default class TabTemplate extends React.PureComponent {
 
   static propTypes = {
     selected: PropTypes.bool,
-    children: PropTypes.array
+    children: PropTypes.object
   }
 
   render() {
