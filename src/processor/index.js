@@ -122,7 +122,8 @@ export function execute(state, keyCode) {
   }
 }
 
-const executeYield = (keyCode) => {
+
+const executeAsync = (keyCode) => {
   return new Promise(resolve => {
     setTimeout(() => {
       const program = store.getState().program
@@ -135,13 +136,31 @@ const executeYield = (keyCode) => {
   })
 }
 
-export function runProg(keyCodes) {
-  return keyCodes.reduce((promise, keyCode) => promise.then(() => {
-    const { running } = store.getState().program
-    if (running) {
-      return executeYield(keyCode)
-    }
-  }), Promise.resolve())
+export function runToCompletion() {
+  const { program } = store.getState()
+  store.setState({ program: { ...program, running: true } })
+  const keyCodes = program.keyCodes.slice(program.nextIndex)
+  keyCodes
+    .reduce((promise, keyCode) => promise.then(() => {
+      return executeAsync(keyCode)
+    }), Promise.resolve())
+    .then(() => {
+      const { program } = store.getState()
+      store.setState({ program: { ...program, running: false, nextIndex: 0 } })
+    })
+}
+
+export function singleStep() {
+  const { program } = store.getState()
+  const { nextIndex, keyCodes } = program
+  if (nextIndex < keyCodes.length) {
+    executeAsync(keyCodes[nextIndex])
+      .then(() => {
+        store.setState({ program: { ...program, nextIndex: nextIndex + 1 } })
+      })
+  } else {
+    store.setState({ program: { ...program, nextIndex: 0 } })
+  }
 }
 
 export function* createSingleStepIterator(keyCodes) {
@@ -153,13 +172,8 @@ export function* createSingleStepIterator(keyCodes) {
     nextIndex += 1
 
     store.setState({
-      processor: {
-        ...processor
-      },
-      program: {
-        ...state.program,
-        nextIndex
-      }
+      processor: { ...processor },
+      program: { ...state.program, nextIndex }
     })
 
     if (!state.program.running) {

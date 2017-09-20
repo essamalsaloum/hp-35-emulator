@@ -12,6 +12,10 @@ class Store {
     this.notify()
   }
 
+  setSubState(name) {
+    return updates =>  this.setState({[name]: updates})
+  }
+
   getState() {
     return this.state
   }

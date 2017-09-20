@@ -24,12 +24,15 @@ export default class ProgramToolbar extends React.PureComponent {
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
     this.clearProgram = this.clearProgram.bind(this)
+    this.storeProgramState = store.setSubState('program')
   }
 
   componentWillMount() {
     this.subscription = store.subscribe(({ program }) => {
       this.setState(program)
     })
+    const {program } = store.getState()
+    this.storeProgramState({ ...program, running: false, nextIndex: 0 })
   }
 
   componentWillUnmount() {
@@ -39,74 +42,53 @@ export default class ProgramToolbar extends React.PureComponent {
   toggleRecording(ev, isInputChecked) {
     const recording = isInputChecked
     if (recording) {
-      store.setState({
-        program: {
-          ...this.state,
-          recording: true,
-          text: '',
-          keyCodes: []
-        }
+      this.storeProgramState({
+        ...this.state,
+        recording: true,
+        text: '',
+        keyCodes: []
       })
     } else {
-      store.setState({
-        program: {
-          ...this.state,
-          recording: false
-        }
+      this.storeProgramState({
+        ...this.state,
+        recording: false
       })
     }
   }
 
   runStop() {
     if (this.state.running) {
-      store.setState({
-        program: {
-          ...this.state,
-          running: false
-        }
+      this.storeProgramState({
+        ...this.state,
+        running: false
       })
       return
     }
 
-    const {text, keyCodes, error} = processor.compile(this.state.text)
+    const { text, keyCodes, error } = processor.compile(this.state.text)
 
     if (error) {
-      store.setState({
-        program: {
-          ...this.props.initialState,
-          text
-        }
-      })
-      return
-    }
-    store.setState({
-      program: {
+      this.storeProgramState({ ...this.props.initialState, text })
+    } else {
+      this.storeProgramState({
         ...this.state,
+        keyCodes,
+        nextIndex: 0,
+        error: false,
         running: true,
         recording: false
-      }
-    })
-
-    processor.runProg(keyCodes)
-      .then(() => {
-        store.setState({
-          program: {
-            ...this.state,
-            running: false
-          }
-        })
       })
+      processor.runToCompletion()
+    }
   }
 
   clearProgram() {
-    store.setState({
-      program: {
-        text: '',
-        keyCodes: [],
-        nextIndex: 0,
-        running: false,
-        error: false
-      }
+    this.storeProgramState({
+      text: '',
+      keyCodes: [],
+      nextIndex: 0,
+      running: false,
+      error: false
     })
   }
 

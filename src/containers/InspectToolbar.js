@@ -12,8 +12,8 @@ export default class InspectToolbar extends React.PureComponent {
 
   constructor() {
     super()
+    this.storeProgramState = store.setSubState('program')
     this.singleStep = this.singleStep.bind(this)
-    this.runToCompletion = this.runToCompletion.bind(this)
   }
 
   componentWillMount() {
@@ -28,46 +28,21 @@ export default class InspectToolbar extends React.PureComponent {
   }
 
   compile() {
-    const {program} = store.getState()
+    const { program } = store.getState()
     const { keyCodes, error } = processor.compile(program.text)
     if (!error) {
-      store.setState({
-        program: {
-          ...program,
-          keyCodes,
-          nextIndex: 0
-        }
+      this.storeProgramState({
+        ...program,
+        keyCodes,
+        nextIndex: 0,
+        running: false
       })
     }
   }
 
   singleStep() {
-    if (this.singleStepIterator === null) {
-      this.singleStepIterator = processor.createSingleStepIterator(this.state.keyCodes)
-      store.setState({ program: { ...this.state, running: true } })
-    }
-
-    const { done } = this.singleStepIterator.next()
-
-    if (done) {
-      this.singleStepIterator = null
-      store.setState({
-        program: {
-          ...this.state,
-          nextIndex: 0,
-          running: false
-        }
-      })
-    }
-
-    return done
-  }
-
-  runToCompletion() {
-    let done = this.singleStep()
-    while (!done) {
-      done = this.singleStep()
-    }
+    this.storeProgramState({ ...this.state, running: true })
+    processor.singleStep()
   }
 
   render() {
@@ -77,7 +52,7 @@ export default class InspectToolbar extends React.PureComponent {
         <ToolbarGroup firstChild={true}>
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <RunStopButton onClick={this.runToCompletion} disabled={keyCodes.length === 0} />
+          <RunStopButton onClick={processor.runToCompletion} disabled={keyCodes.length === 0} />
           <SingleStepButton onClick={this.singleStep} disabled={keyCodes.length === 0} />
         </ToolbarGroup>
       </Toolbar>

@@ -21,10 +21,11 @@ export default class ProgramTab extends React.PureComponent {
   state = {}
   subscriptions = []
 
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     this.onTextChange = this.onTextChange.bind(this)
     this.onTextUpdate = this.onTextUpdate.bind(this)
+    this.storeProgramState = store.setSubState('program')
   }
 
   componentWillMount() {
@@ -35,7 +36,7 @@ export default class ProgramTab extends React.PureComponent {
       const { program } = store.getState()
       if (program.recording && keyCode !== C.CLR) {
         const text = program.text + keyCode + '\n'
-        store.setState({ program: { ...program, text } })
+        this.storeProgramState({ ...program, text })
       }
     }))
   }
@@ -44,24 +45,26 @@ export default class ProgramTab extends React.PureComponent {
     this.subscriptions.forEach(subscription => subscription.remove())
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { text, recording} = this.state
+    return nextState.text !== text || nextState.recording !== recording
+  }
+
   onTextChange(event) {
     this.onTextUpdate(event.target.value)
   }
 
   onTextUpdate(text) {
-    store.setState({
-      program: {
-        ...this.state,
-        text,
-        keyCodes: [],
-        running: false
-      }
-
+    this.storeProgramState({
+      ...this.state,
+      text,
+      keyCodes: [],
+      running: false
     })
   }
 
   resetState() {
-    store.setState({ program: { ...resetState } })
+    this.storeProgramState({ ...resetState })
   }
 
   render() {

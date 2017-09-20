@@ -46,6 +46,9 @@ export default class Keypad extends React.PureComponent {
 
   state = {}
 
+  storeProcessorState = store.setSubState('processor')
+  storeKeypadState = store.setSubState('keypad')
+
   componentWillMount() {
     this.subscription = store.subscribe(({ keypad }) => {
       this.setState(keypad)
@@ -59,8 +62,7 @@ export default class Keypad extends React.PureComponent {
         ev.preventDefault()
         const keyCode = mapKeyboardEvent(ev)
         if (keyCode) {
-          const newProcessorState = execute(store.getState().processor, keyCode)
-          store.setState({ processor: newProcessorState })
+          this.storeProcessorState(execute(store.getState().processor, keyCode))
         }
       })
     }
@@ -73,21 +75,17 @@ export default class Keypad extends React.PureComponent {
   onClick(keyCode) {
     const { shiftKey } = this.state
     if (keyCode === C.SHIFT_UP) {
-      store.setState({ keypad: { shiftKey: shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP } })
+      this.storeKeypadState({ shiftKey: shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP })
     }
     else if (keyCode === C.SHIFT_DOWN) {
-      store.setState({ keypad: { shiftKey: shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN } })
+      this.storeKeypadState({ shiftKey: shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN })
     } else {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
       const newState = execute(store.getState().processor, keyCode)
       store.setState({
-        processor: {
-          ...newState
-        },
-        keypad: {
-          shiftKey: null
-        }
+        processor: { ...newState },
+        keypad: { shiftKey: null }
       })
     }
   }
