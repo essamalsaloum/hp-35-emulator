@@ -1,7 +1,9 @@
 import C from '../keyCodes'
+import math from 'mathjs'
+import * as util from '../../processor/util'
 
-const degreesToRadians = degrees => degrees * Math.PI / 180.0
-const radiansToDegrees = radians => radians * 180.0 / Math.PI
+const degreesToRadians = degrees => degrees * math.PI / 180.0
+const radiansToDegrees = radians => radians * 180.0 / math.PI
 
 const degrees360 = angle => {
   angle %= 360
@@ -20,20 +22,20 @@ const arithmetic = {
 }
 
 const transcendental = {
-  [C.ACOS]: x => radiansToDegrees(Math.acos(x)),
-  [C.ALOG]: x => Math.pow(10, x),
-  [C.ASIN]: x => radiansToDegrees(Math.asin(x)),
-  [C.ATAN]: x => radiansToDegrees(Math.atan(x)),
-  [C.COS]: x => Math.cos(degreesToRadians(degrees360(x))),
-  [C.EXP]: x => Math.exp(x),
-  [C.LN]: x => Math.log(x),
-  [C.LOG]: x => Math.log10(x),
-  [C.POW]: (x, y) => Math.pow(y, x),
-  [C.ROOT]: (x, y) => Math.pow(y, 1 / x),
-  [C.SIN]: x => Math.sin(degreesToRadians(degrees360(x))),
+  [C.ACOS]: x => radiansToDegrees(math.acos(x)),
+  [C.ALOG]: x => math.pow(10, x),
+  [C.ASIN]: x => radiansToDegrees(math.asin(x)),
+  [C.ATAN]: x => radiansToDegrees(math.atan(x)),
+  [C.COS]: x => math.cos(degreesToRadians(degrees360(x))),
+  [C.EXP]: x => math.exp(x),
+  [C.LN]: x => math.log(x),
+  [C.LOG]: x => math.log10(x),
+  [C.POW]: (x, y) => math.pow(y, x),
+  [C.ROOT]: (x, y) => math.pow(y, 1 / x),
+  [C.SIN]: x => math.sin(degreesToRadians(degrees360(x))),
   [C.SQR]: x => x * x,
-  [C.SQRT]: x => Math.sqrt(x),
-  [C.TAN]: x => Math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : Math.tan(degreesToRadians(degrees360(x)))
+  [C.SQRT]: x => math.sqrt(x),
+  [C.TAN]: x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
 }
 
 const funcs = {
@@ -58,7 +60,7 @@ const compute = keyCode => state => {
   return {
     ...state,
     stack: newStack,
-    buffer: newStack[0].toString()
+    buffer: util.formatNumber(newStack[0])
   }
 }
 

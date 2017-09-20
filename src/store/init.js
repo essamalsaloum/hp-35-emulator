@@ -4,7 +4,6 @@ export default {
   stackLift: false,
   entry: true,
   memory: 0,
-  program: [],
   shiftKey: null,
   recording: false,
   running: false

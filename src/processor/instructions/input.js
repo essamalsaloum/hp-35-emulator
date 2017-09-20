@@ -1,4 +1,5 @@
 import C from '../keyCodes'
+import * as util from '../../processor/util'
 
 const splitNumber = buffer => {
   const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)
@@ -99,7 +100,7 @@ const pi = state => {
   return {
     ...state,
     stack: [pi, x, y, z],
-    buffer: pi.toString()
+    buffer: util.formatNumber(pi)
   }
 }
 

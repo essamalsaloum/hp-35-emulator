@@ -1,28 +1,50 @@
 import React from 'react'
+import { Tabs, Tab } from 'material-ui/Tabs'
 import store from '../store'
 import C from '../processor/keyCodes'
 import * as processor from '../processor'
+import TabTemplate from '../components/TabTemplate'
+import ProgramTab from '../components/ProgramTab'
+import InspectTab from '../components/InspectTab'
 import './ProgramPanel.css'
+
+// see: https://github.com/callemall/material-ui/issues/2085
+
+const tabStyles = {
+  root: {
+    flex: '1 1 100%',
+    minHeight: 0,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  container: {
+    flex: '1 1 100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflowY: 'auto'
+  }
+}
 
 export default class ProgramPanel extends React.PureComponent {
   state = {
-    text: ''
+    text: '',
+    keyCodes: []
   }
 
   singleStepIterator = null
 
   constructor() {
     super()
-    this.handleChange = this.handleChange.bind(this)
+    this.onTextChange = this.onTextChange.bind(this)
     this.runStop = this.runStop.bind(this)
-    this.clear = this.clear.bind(this)
+    this.clear = this.clearProgram.bind(this)
     this.singleStep = this.singleStep.bind(this)
     this.toggleRecording = this.toggleRecording.bind(this)
   }
 
   componentWillMount() {
-    this.storeSubscription = store.subscribe(({ recording, program }) => {
-      this.setState({ recording, program })
+    this.storeSubscription = store.subscribe(({ recording, running }) => {
+      this.setState({ recording, running })
     })
     this.processorSubscription = processor.subscribe(keyCode => {
       if (this.state.recording && keyCode !== C.CLR) {
@@ -36,6 +58,14 @@ export default class ProgramPanel extends React.PureComponent {
     this.processorSubscription.remove()
   }
 
+  toggleRecording(ev, isInputChecked) {
+    const recording = isInputChecked
+    if (recording) {
+      this.setState({ text: '' })
+    }
+    store.setState({ recording })
+  }
+
   runStop() {
     const { running } = store.getState()
     if (running) {
@@ -43,9 +73,10 @@ export default class ProgramPanel extends React.PureComponent {
     }
 
     const { keyCodes, text, error } = processor.compile(this.state.text)
-    this.setState({ text })
+    this.setState({ keyCodes })
     if (error) {
-      return console.log(error)
+      this.setState({ text })
+      return
     }
 
     store.setState({ running: true, recording: false, shiftKey: null })
@@ -57,10 +88,11 @@ export default class ProgramPanel extends React.PureComponent {
 
   singleStep() {
     if (this.singleStepIterator === null) {
-      const { keyCodes, text, error } = processor.compile(this.state.text)
-      this.setState({ text })
+      const { keyCodes, error, text } = processor.compile(this.state.text)
+      this.setState({ keyCodes })
       if (error) {
-        return console.log(error)
+        this.setState({ text })
+        return
       }
       store.setState({ running: true, recording: false, shiftKey: null })
       this.singleStepIterator = processor.createSingleStepIterator(keyCodes)
@@ -73,49 +105,45 @@ export default class ProgramPanel extends React.PureComponent {
     }
   }
 
-  clear() {
-    this.setState({ text: '' })
+  clearProgram() {
+    this.setState({ text: '', keyCodes: [] })
   }
 
-  handleChange(event) {
+  onTextChange(event) {
     const text = event.target.value
     this.setState({ text })
     store.setState({ running: false, shiftKey: null })
   }
 
-  toggleRecording() {
-    const recording = !this.state.recording
-    if (recording) {
-      this.setState({ text: '' })
-    }
-    store.setState({ recording })
-  }
-
   render() {
+    const { text, keyCodes, recording, running } = this.state
     return (
       <div className="ProgramPanel">
-        <textarea
-          autoCapitalize="none"
-          autoComplete="off"
-          placeholder={this.state.recording ? '' : 'Enter your program here'}
-          spellCheck="false"
-          value={this.state.text}
-          onChange={this.handleChange}
-        />
-        <div className="ProgramPanel--buttons">
-          <div>
-            <input
-              type="checkbox"
-              checked={this.state.recording}
-              onChange={this.toggleRecording}
+        <Tabs
+          style={tabStyles.root}
+          contentContainerStyle={tabStyles.container}
+          tabTemplate={TabTemplate}
+        >
+          <Tab label="Program">
+            <ProgramTab
+              text={text}
+              recording={recording}
+              running={running}
+              onTextChange={this.onTextChange}
+              onToggleRecording={this.toggleRecording}
+              onClearProgram={this.clearProgram}
+              onRunStop={this.runStop}
             />
-            <span style={{ fontSize: 12 }}>Recording</span>
-          </div>
-          <div style={{ flex: 1 }}></div>
-          <button className="btn" style={{ marginRight: 8 }} onClick={this.clear}>Clear</button>
-          <button className="btn" style={{ marginRight: 8 }} onClick={this.singleStep}>SST</button>
-          <button className="btn" onClick={this.runStop}>R/S</button>
-        </div>
+          </Tab>
+          <Tab label="Inspect">
+            <InspectTab
+              keyCodes={keyCodes}
+              index={0}
+              onRunStop={() => undefined}
+              onSingleStep={this.singleStep}
+            />
+          </Tab>
+        </Tabs>
       </div>
     )
   }

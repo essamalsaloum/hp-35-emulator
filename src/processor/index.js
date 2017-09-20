@@ -3,6 +3,7 @@ import { inputInstructions } from './instructions/input'
 import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
 import store from '../store'
+import * as util from './util'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
@@ -55,7 +56,7 @@ const enterNumber = (state, num) => {
   return {
     ...state,
     stack: [num, x, y, z],
-    buffer: num.toString(),
+    buffer: util.formatNumber(num),
     entry: false,
     stackLift: true
   }
@@ -105,7 +106,7 @@ export function execute(state, keyCode) {
 
   if (!(isCalculatorError(newState) || entry)) {
     if (state.entry) {
-      notify(state.stack[0].toString())
+      notify(util.formatNumber(state.stack[0]))
     }
     if (keyCode !== C.ENTER) {
       notify(keyCode)
@@ -142,14 +143,15 @@ export function runProg(keyCodes) {
 }
 
 export function* createSingleStepIterator(keyCodes) {
+  let index = 0
   for (const keyCode of keyCodes) {
-    console.log('sst')
     const state = execute(store.getState(), keyCode)
     store.setState(state)
     if (!state.running) {
       return
     }
-    yield
+    index += 1
+    yield index
   }
 }
 

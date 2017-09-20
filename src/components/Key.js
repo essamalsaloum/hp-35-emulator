@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import theme from '../theme'
+import { pink800 as shiftUpColor } from 'material-ui/styles/colors'
+
 import './Key.css'
 
 const noop = () => undefined
@@ -10,15 +12,15 @@ const topLabelStyle = {
   fontSize: 12,
   fontWeight: 'bold',
   lineHeight: '1em',
-  color: theme.topLabelColor,
+  color: shiftUpColor,
   textAlign: 'center',
   marginBottom: 6
 }
 
 const bottomLabelStyle = {
   fontSize: 10,
-  backgroundColor: theme.bottomLabelBackgroundColor,
-  color: theme.bottomLabelColor
+  backgroundColor: theme.shiftDownBackgroundColor,
+  color: theme.shiftDownColor
 }
 
 const createMarkup = label => ({ __html: label })

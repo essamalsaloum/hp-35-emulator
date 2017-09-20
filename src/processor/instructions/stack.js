@@ -1,4 +1,5 @@
 import C from '../keyCodes'
+import * as util from '../../processor/util'
 
 export const liftStack = state => {
   const [x, y, z] = state.stack
@@ -13,7 +14,7 @@ const enter = state => {
   return {
     ...state,
     stack: [x, x, y, z],
-    buffer: x.toString()
+    buffer: util.formatNumber(x)
   }
 }
 
@@ -34,7 +35,7 @@ const swap = state => {
   return {
     ...state,
     stack: [y, x, z, t],
-    buffer: y.toString()
+    buffer: util.formatNumber(y)
   }
 }
 
@@ -43,7 +44,7 @@ const rollDown = state => {
   return {
     ...state,
     stack: [y, z, t, x],
-    buffer: y.toString()
+    buffer: util.formatNumber(y)
   }
 }
 
@@ -60,7 +61,7 @@ const recallMem = state => {
   return {
     ...state,
     stack: [state.memory, y, z, t],
-    buffer: state.memory.toString()
+    buffer: util.formatNumber(state.memory)
   }
 }
 

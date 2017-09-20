@@ -1,4 +1,5 @@
 import React from 'react'
+import math from 'mathjs'
 import store from '../store'
 import theme from '../theme'
 import C from '../processor/keyCodes'
@@ -12,8 +13,8 @@ const annunciators = {
 
 const annunciatorStyles = [
   { color: '#689F38'},
-  { color: theme.topLabelColor },
-  { color: theme.bottomLabelColor }
+  { color: theme.shiftUpColor },
+  { color: theme.shiftDownColor }
 ]
 
 export default class Display extends React.PureComponent {
@@ -32,7 +33,7 @@ export default class Display extends React.PureComponent {
 
   renderStack(stack, buffer) {
     return stack.map((register, index) => {
-      const value = index === 0 ? buffer : register.toString()
+      const value = index === 0 ? buffer : math.format(register, {precision: 14})
       return (
         <div className="Display--row" key={index}  style={index > 0 ? {color: '#808080'} : {}}>{`${labels[index]}: ${value}`}</div>
       )
