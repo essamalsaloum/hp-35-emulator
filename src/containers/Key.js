@@ -1,28 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import theme from '../theme'
 import store from '../store'
 import C from '../processor/keyCodes'
 import { execute } from '../processor'
 import './Key.css'
-
-const styles = {
-  topLabel: {
-    height: 14,
-    fontSize: 12,
-    fontWeight: 'bold',
-    lineHeight: '1em',
-    color: theme.shiftUpColor,
-    textAlign: 'center',
-    marginBottom: 6
-  },
-  bottomLabel: {
-    fontSize: 10,
-    backgroundColor: theme.shiftDownBackgroundColor,
-    color: theme.shiftDownColor
-  }
-}
-
 
 const shiftKeyModifiers = {
   [C.EXP]: { [C.SHIFT_UP]: C.ALOG },
@@ -33,8 +14,6 @@ const shiftKeyModifiers = {
 
 const createMarkup = label => ({ __html: label })
 
-const noop = () => undefined
-
 export default class Key extends React.PureComponent {
 
   static propTypes = {
@@ -42,17 +21,12 @@ export default class Key extends React.PureComponent {
     label: PropTypes.string.isRequired,
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
-    width: PropTypes.number,
-    style: PropTypes.object,
     addClass: PropTypes.string
   }
 
   static defaultProps = {
-    width: 48,
     topLabel: '',
     bottomLabel: '',
-    onClick: noop,
-    style: {}
   }
 
   state = {}
@@ -89,17 +63,10 @@ export default class Key extends React.PureComponent {
     }
   }
 
-  renderTopLabel() {
-    const { topLabel } = this.props
-    return topLabel !== '' && this.state.shiftKey === C.SHIFT_UP ? (<div style={styles.topLabel}></div>) : (
-      <div style={styles.topLabel} dangerouslySetInnerHTML={createMarkup(topLabel)}></div>
-    )
-  }
-
   renderBottomLabel() {
     const { bottomLabel } = this.props
-    return bottomLabel !== '' && this.state.shiftKey === C.SHIFT_DOWN ? (<div style={styles.bottomLabel}></div>) : (
-      <div style={styles.bottomLabel} dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
+    return bottomLabel !== '' && this.state.shiftKey === C.SHIFT_DOWN ? (<div className="Key--bottomLabel"></div>) : (
+      <div className="Key--bottomLabel" dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
     )
   }
 
@@ -107,29 +74,29 @@ export default class Key extends React.PureComponent {
     const { label, topLabel, bottomLabel, keyCode, addClass } = this.props
     const { shiftKey } = this.state
 
-
-    let keyLabel = label
-    let keyStyle = {}
+    const decorator = {
+      label,
+      shiftKey: ''
+    }
     if ((topLabel || keyCode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
-      keyLabel = topLabel || label
-      keyStyle = { backgroundColor: theme.shiftUpColor, color: '#fff' }
+      decorator.label = topLabel || label
+      decorator.shiftKey = shiftKey
     } else if ((bottomLabel || keyCode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
-      keyLabel = bottomLabel || label
-      keyStyle = { backgroundColor: theme.shiftDownColor, color: '#fff' }
+      decorator.label = bottomLabel || label
+      decorator.shiftKey = shiftKey
     }
 
     return (
       <div>
-        {this.renderTopLabel()}
+        <div className="Key--topLabel" dangerouslySetInnerHTML={createMarkup(topLabel)}></div>
         <button
           type="button"
-          className={`Key ${addClass} Key--keyCode-${keyCode}`}
-          style={keyStyle}
+          className={`Key ${addClass} Key--keyCode-${keyCode} Key--inverse-${decorator.shiftKey}`}
           onClick={() => this.onClick(keyCode)}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}
         >
-          <div style={keyStyle} dangerouslySetInnerHTML={createMarkup(keyLabel)}></div>
+          <div className={`Key--inverse-${decorator.shiftKey}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
           {this.renderBottomLabel()}
         </button>
       </div>
