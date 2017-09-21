@@ -25,7 +25,7 @@ class App extends React.PureComponent {
   componentWillMount() {
     this.subscription = store.subscribe(state => {
       this.setState(state)
-      if (!this.props.test) {
+      if (!this.props.test && process.env.NODE_ENV === 'development') {
         const date = new Date()
         console.group('state ' + date.toLocaleTimeString())
         console.dir(state)

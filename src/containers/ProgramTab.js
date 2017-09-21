@@ -4,9 +4,6 @@ import store from '../store'
 import C from '../processor/keyCodes'
 import * as processor from '../processor'
 
-import './ProgramTab.css'
-
-
 const resetState = {
   text: '',
   keyCodes: [],
@@ -16,6 +13,22 @@ const resetState = {
   recording: false
 }
 
+const styles = {
+  root: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  textarea: {
+    padding: 8,
+    borderStyle: 'none',
+    backgroundColor: '#fafafa',
+    resize: 'none',
+    fontFamily: `'Roboto', sans-serif`,
+    fontSize: 14,
+    flex: 1
+  }
+}
 export default class ProgramTab extends React.PureComponent {
 
   state = {}
@@ -25,18 +38,19 @@ export default class ProgramTab extends React.PureComponent {
     super()
     this.onTextChange = this.onTextChange.bind(this)
     this.onTextUpdate = this.onTextUpdate.bind(this)
-    this.storeProgramState = store.setSubState('program')
+    this.updateProgramState = store.setSubState('program')
   }
 
   componentWillMount() {
-    this.subscriptions.push(store.subscribe(({ program }) => {
-      this.setState(program)
+    this.subscriptions.push(store.subscribe(state => {
+      const { text, recording } = state.program
+      this.setState({ text, recording })
     }))
     this.subscriptions.push(processor.subscribe(keyCode => {
       const { program } = store.getState()
       if (program.recording && keyCode !== C.CLR) {
         const text = program.text + keyCode + '\n'
-        this.storeProgramState({ ...program, text })
+        this.updateProgramState({ text })
       }
     }))
   }
@@ -45,31 +59,21 @@ export default class ProgramTab extends React.PureComponent {
     this.subscriptions.forEach(subscription => subscription.remove())
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { text, recording} = this.state
-    return nextState.text !== text || nextState.recording !== recording
-  }
-
   onTextChange(event) {
     this.onTextUpdate(event.target.value)
   }
 
   onTextUpdate(text) {
-    this.storeProgramState({
-      ...this.state,
-      text,
-      keyCodes: [],
-      running: false
-    })
+    this.updateProgramState({ text })
   }
 
   resetState() {
-    this.storeProgramState({ ...resetState })
+    this.updateProgramState({ ...resetState })
   }
 
   render() {
     return (
-      <div className="ProgramTab">
+      <div style={styles.root}>
         <textarea
           autoCapitalize="none"
           autoComplete="off"
@@ -77,6 +81,7 @@ export default class ProgramTab extends React.PureComponent {
           spellCheck="false"
           value={this.state.text}
           onChange={this.onTextChange}
+          style={styles.textarea}
         />
         <ProgramToolbar initialState={{ ...resetState }} />
       </div>

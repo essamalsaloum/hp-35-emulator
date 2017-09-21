@@ -12,13 +12,14 @@ export default class InspectToolbar extends React.PureComponent {
 
   constructor() {
     super()
-    this.storeProgramState = store.setSubState('program')
+    this.updateProgramState = store.setSubState('program')
     this.singleStep = this.singleStep.bind(this)
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ program }) => {
-      this.setState(program)
+    this.subscription = store.subscribe(state => {
+      const { keyCodes } = state.program
+      this.setState({ keyCodes })
     })
     this.compile()
   }
@@ -31,8 +32,7 @@ export default class InspectToolbar extends React.PureComponent {
     const { program } = store.getState()
     const { keyCodes, error } = processor.compile(program.text)
     if (!error) {
-      this.storeProgramState({
-        ...program,
+      this.updateProgramState({
         keyCodes,
         nextIndex: 0,
         running: false
@@ -41,7 +41,7 @@ export default class InspectToolbar extends React.PureComponent {
   }
 
   singleStep() {
-    this.storeProgramState({ ...this.state, running: true })
+    this.updateProgramState({ running: true })
     processor.singleStep()
   }
 

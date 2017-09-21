@@ -1,29 +1,30 @@
 import React from 'react'
 import math from 'mathjs'
 import store from '../store'
-import theme from '../theme'
-import C from '../processor/keyCodes'
-import './Display.css'
 
 const labels = ['x', 'y', 'z', 't']
-const annunciators = {
-  [C.SHIFT_UP]: 'f',
-  [C.SHIFT_DOWN]: 'g'
-}
 
-const annunciatorStyles = [
-  { color: '#689F38' },
-  { color: theme.shiftUpColor },
-  { color: theme.shiftDownColor }
-]
+const styles = {
+  root: {
+    margin: '0 0 2px 0',
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: '#f0f0f0',
+    boxShadow: 'inset 0 0 4px #888'
+  },
+  displayRow: {
+    margin: '0 8px'
+  }
+}
 
 export default class Display extends React.PureComponent {
 
   state = {}
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ processor, keypad, program }) => {
-      this.setState({ processor, keypad, program })
+    this.subscription = store.subscribe(state => {
+      const { stack, buffer } = state.processor
+      this.setState({ stack, buffer })
     })
   }
 
@@ -34,19 +35,23 @@ export default class Display extends React.PureComponent {
   renderStack(stack, buffer) {
     return stack.map((register, index) => {
       const value = index === 0 ? buffer : math.format(register, { precision: 14 })
+      const style = { ...styles.displayRow }
+      if (index > 0) {
+        style.color = '#808080'
+      }
       return (
-        <div className="Display--row" key={index} style={index > 0 ? { color: '#808080' } : {}}>{`${labels[index]}: ${value}`}</div>
+        <div key={index} style={style}>
+          {`${labels[index]}: ${value}`}
+        </div>
       )
     }).reverse()
   }
 
   render() {
-    const { processor, keypad, program } = this.state
-    const annunciatorText = program.running ? 'running...' : keypad.shiftKey ? annunciators[keypad.shiftKey] : ''
+    const { stack, buffer } = this.state
     return (
-      <div className="Display">
-        <div className="Display--annunciator" style={annunciatorStyles[keypad.shiftKey]}>{annunciatorText}</div>
-        {this.renderStack(processor.stack, processor.buffer)}
+      <div style={styles.root}>
+        {this.renderStack(stack, buffer)}
       </div>
     )
   }

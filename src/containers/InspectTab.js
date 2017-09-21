@@ -36,8 +36,9 @@ export default class InspectTab extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ program }) => {
-      this.setState(program)
+    this.subscription = store.subscribe(state => {
+      const { keyCodes, nextIndex } = state.program
+      this.setState({ keyCodes, nextIndex })
     })
   }
 

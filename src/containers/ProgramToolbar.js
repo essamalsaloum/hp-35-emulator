@@ -24,15 +24,15 @@ export default class ProgramToolbar extends React.PureComponent {
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
     this.clearProgram = this.clearProgram.bind(this)
-    this.storeProgramState = store.setSubState('program')
+    this.updateProgramState = store.setSubState('program')
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ program }) => {
-      this.setState(program)
+    this.subscription = store.subscribe(state => {
+      const { text, running, recording } = state.program
+      this.setState({ text, running, recording })
     })
-    const {program } = store.getState()
-    this.storeProgramState({ ...program, running: false, nextIndex: 0 })
+    this.updateProgramState({ running: false, nextIndex: 0 })
   }
 
   componentWillUnmount() {
@@ -42,15 +42,13 @@ export default class ProgramToolbar extends React.PureComponent {
   toggleRecording(ev, isInputChecked) {
     const recording = isInputChecked
     if (recording) {
-      this.storeProgramState({
-        ...this.state,
+      this.updateProgramState({
         recording: true,
         text: '',
         keyCodes: []
       })
     } else {
-      this.storeProgramState({
-        ...this.state,
+      this.updateProgramState({
         recording: false
       })
     }
@@ -58,8 +56,7 @@ export default class ProgramToolbar extends React.PureComponent {
 
   runStop() {
     if (this.state.running) {
-      this.storeProgramState({
-        ...this.state,
+      this.updateProgramState({
         running: false
       })
       return
@@ -68,10 +65,9 @@ export default class ProgramToolbar extends React.PureComponent {
     const { text, keyCodes, error } = processor.compile(this.state.text)
 
     if (error) {
-      this.storeProgramState({ ...this.props.initialState, text })
+      this.updateProgramState({ ...this.props.initialState, text })
     } else {
-      this.storeProgramState({
-        ...this.state,
+      this.updateProgramState({
         keyCodes,
         nextIndex: 0,
         error: false,
@@ -83,7 +79,7 @@ export default class ProgramToolbar extends React.PureComponent {
   }
 
   clearProgram() {
-    this.storeProgramState({
+    this.updateProgramState({
       text: '',
       keyCodes: [],
       nextIndex: 0,
@@ -93,20 +89,21 @@ export default class ProgramToolbar extends React.PureComponent {
   }
 
   render() {
+    const { running, recording } = this.state
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
             label="Recording"
             labelPosition="right"
-            disabled={this.state.running}
-            toggled={this.state.recording}
+            disabled={running}
+            toggled={recording}
             onToggle={this.toggleRecording}
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
           <DeleteButton onClick={this.clearProgram} disabled={this.noText} />
-          <RunStopButton onClick={this.runStop} disabled={this.noText} running={this.state.running} />
+          <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
         </ToolbarGroup>
       </Toolbar>
     )

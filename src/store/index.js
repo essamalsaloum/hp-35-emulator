@@ -13,7 +13,7 @@ class Store {
   }
 
   setSubState(name) {
-    return updates =>  this.setState({[name]: updates})
+    return updates => this.setState({ [name]: { ...this.state[name], ...updates } })
   }
 
   getState() {
