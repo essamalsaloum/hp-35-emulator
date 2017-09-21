@@ -43,7 +43,7 @@ class App extends React.PureComponent {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="App">
-          <div className="App__main" tabIndex="0">
+          <div className="App--main" tabIndex="0">
             <Display />
             <Keypad />
           </div>

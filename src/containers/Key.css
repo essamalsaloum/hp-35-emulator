@@ -13,4 +13,21 @@
     -webkit-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.75);
+    width: 48px;
+}
+
+.Key--bold {
+    font-weight: bold;
+}
+
+.Key--keyCode-shiftUp {
+    color: #2E7D32;
+}
+
+.Key--keyCode-shiftDown {
+    color: #EF6C00;
+}
+
+.Key--keyCode-enter {
+  width: 110px;
 }
