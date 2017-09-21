@@ -123,7 +123,7 @@ export function execute(state, keyCode) {
 }
 
 
-const executeAsync = (keyCode) => {
+const executeAsync = (keyCode, delay = 0) => {
   return new Promise(resolve => {
     setTimeout(() => {
       const program = store.getState().program
@@ -132,17 +132,22 @@ const executeAsync = (keyCode) => {
         store.setState({ processor: newProcessorState })
       }
       resolve()
-    })
+    }, delay)
   })
 }
 
-export function runToCompletion() {
+export function runToCompletion(delay = 0) {
   const { program } = store.getState()
   store.setState({ program: { ...program, running: true } })
   const keyCodes = program.keyCodes.slice(program.nextIndex)
   keyCodes
     .reduce((promise, keyCode) => promise.then(() => {
-      return executeAsync(keyCode)
+      return executeAsync(keyCode, delay)
+      .then(() => {
+        const { program } = store.getState()
+        store.setState({ program: { ...program, nextIndex: program.nextIndex + 1 } })
+      })
+
     }), Promise.resolve())
     .then(() => {
       const { program } = store.getState()

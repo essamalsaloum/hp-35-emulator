@@ -56,7 +56,6 @@ export default class Keypad extends React.PureComponent {
 
   componentDidMount() {
     const elem = document.querySelector('.App__main')
-    console.log(elem)
     if (elem) {
       elem.addEventListener('keyup', ev => {
         const keyCode = mapKeyboardEvent(ev)

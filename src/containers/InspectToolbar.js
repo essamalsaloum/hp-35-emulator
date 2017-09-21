@@ -52,7 +52,7 @@ export default class InspectToolbar extends React.PureComponent {
         <ToolbarGroup firstChild={true}>
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <RunStopButton onClick={processor.runToCompletion} disabled={keyCodes.length === 0} />
+          <RunStopButton onClick={() => processor.runToCompletion(50)} disabled={keyCodes.length === 0} />
           <SingleStepButton onClick={this.singleStep} disabled={keyCodes.length === 0} />
         </ToolbarGroup>
       </Toolbar>
