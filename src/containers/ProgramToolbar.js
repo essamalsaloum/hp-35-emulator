@@ -4,6 +4,7 @@ import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import RunStopButton from '../components/RunStopButton'
 import DeleteButton from '../components/DeleteButton'
+import GitHubButton from '../components/GitHubButton'
 import store from '../store'
 import processor from '../processor'
 
@@ -102,6 +103,7 @@ export default class ProgramToolbar extends React.PureComponent {
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
+          <GitHubButton disabled={this.noText || running} />
           <DeleteButton onClick={this.clearProgram} disabled={this.noText || running} />
           <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
         </ToolbarGroup>

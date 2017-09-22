@@ -5,6 +5,7 @@ export default {
   '-': C.SUB,
   '*': C.MUL,
   '/': C.DIV,
+  '+/-': C.CHS,
   '1/x': C.RECIPROCAL,
   'e^x': C.EXP,
   'y^x': C.POW,

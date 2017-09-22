@@ -2,13 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { grey700 } from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
-import SvgIcon from 'material-ui/SvgIcon'
-
-const StepForwardIcon = (props) => (
-  <SvgIcon {...props}>
-    <path d="M5,5V19H8V5M10,5V19L21,12" />
-  </SvgIcon>
-)
+import Redo from 'material-ui/svg-icons/content/redo'
 
 const SingleStepButton = ({ onClick, disabled }) => (
   <IconButton
@@ -17,7 +11,7 @@ const SingleStepButton = ({ onClick, disabled }) => (
     tooltip="step forward"
     tooltipPosition="top-left"
   >
-    <StepForwardIcon color={grey700} />
+    <Redo color={grey700} />
   </IconButton>
 )
 
