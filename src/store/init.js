@@ -13,9 +13,10 @@ export default {
     text: '',
     keyCodes: [],
     ip: 0,
+    stack: [],
     error: false,
     running: false,
     recording: false
-  }
+  },
 }
 

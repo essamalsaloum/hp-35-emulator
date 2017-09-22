@@ -2,35 +2,29 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { grey700 } from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
-import SvgIcon from 'material-ui/SvgIcon'
+import Refresh from 'material-ui/svg-icons/navigation/refresh'
 
-const StepBackwardIcon = (props) => (
-  <SvgIcon {...props}>
-    <path d="M19,5V19H16V5M14,5V19L3,12" />
-  </SvgIcon>
-)
-
-const BackStepButton = ({ onClick, disabled }) => (
+const ReloadButton = ({ onClick, disabled }) => (
   <IconButton
     onClick={onClick}
     disabled={disabled}
-    tooltip="step backward"
+    tooltip="reload"
     tooltipPosition="top-left"
   >
-    <StepBackwardIcon color={grey700} />
+    <Refresh color={grey700} />
   </IconButton>
 )
 
 const noop = () => undefined
 
-BackStepButton.propTypes = {
+ReloadButton.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool
 }
 
-BackStepButton.defaultProps = {
+ReloadButton.defaultProps = {
   onClick: noop,
   disabled: false
 }
 
-export default BackStepButton
+export default ReloadButton

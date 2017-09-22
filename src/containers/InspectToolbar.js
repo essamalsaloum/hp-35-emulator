@@ -3,13 +3,11 @@ import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import RunStopButton from '../components/RunStopButton'
 import SingleStepButton from '../components/SingleStepButton'
-import BackStepButton from '../components/BackStepButton'
+import ReloadButton from '../components/ReloadButton'
 import store from '../store'
 import processor from '../processor'
 
 const DELAY = 500
-
-const updateProgramState = store.setSubState('program')
 
 export default class InspectToolbar extends React.PureComponent {
 
@@ -22,7 +20,6 @@ export default class InspectToolbar extends React.PureComponent {
   constructor() {
     super()
     this.toggleDelayed = this.toggleDelayed.bind(this)
-    this.singleStep = this.singleStep.bind(this)
     this.runStop = this.runStop.bind(this)
   }
 
@@ -31,7 +28,7 @@ export default class InspectToolbar extends React.PureComponent {
       const { keyCodes, running } = state.program
       this.setState({ keyCodes, running })
     })
-    this.loadProgram()
+    this.compileProgram()
   }
 
   componentWillUnmount() {
@@ -39,27 +36,19 @@ export default class InspectToolbar extends React.PureComponent {
   }
 
   toggleDelayed() {
-    this.setState({delayed: !this.state.delayed})
+    this.setState({ delayed: !this.state.delayed })
   }
 
-  loadProgram() {
+  compileProgram() {
     const { program } = store.getState()
-    const { keyCodes, error } = processor.loadProgram(program.text)
+    const { keyCodes, error } = processor.compileProgram(program.text)
     if (!error) {
-      updateProgramState({
-        keyCodes,
-        ip: 0,
-        running: false
-      })
+      processor.loadProgram(keyCodes)
     }
   }
 
-  singleStep() {
-    processor.singleStep()
-  }
-
   runStop() {
-    const {running, delayed} = this.state
+    const { running, delayed } = this.state
     if (running) {
       processor.stopProgram()
     } else {
@@ -72,7 +61,7 @@ export default class InspectToolbar extends React.PureComponent {
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
-        <Toggle
+          <Toggle
             label="Delay"
             labelPosition="right"
             disabled={running}
@@ -82,9 +71,9 @@ export default class InspectToolbar extends React.PureComponent {
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
+          <ReloadButton onClick={() => processor.loadProgram(keyCodes)} disabled={keyCodes.length === 0 || running} />
+          <SingleStepButton onClick={() => processor.singleStep()} disabled={keyCodes.length === 0 || running} />
           <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} running={running} />
-          <BackStepButton disabled={keyCodes.length === 0 || running} />
-          <SingleStepButton onClick={this.singleStep} disabled={keyCodes.length === 0 || running} />
         </ToolbarGroup>
       </Toolbar>
     )

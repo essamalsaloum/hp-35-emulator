@@ -62,7 +62,7 @@ export default class ProgramToolbar extends React.PureComponent {
       return
     }
 
-    const { text, keyCodes, error } = processor.loadProgram(this.state.text)
+    const { text, keyCodes, error } = processor.compileProgram(this.state.text)
 
     if (error) {
       this.updateProgramState({ ...this.props.initialState, text })
@@ -94,7 +94,7 @@ export default class ProgramToolbar extends React.PureComponent {
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
-            label="Recording"
+            label="Record"
             labelPosition="right"
             disabled={running}
             toggled={recording}

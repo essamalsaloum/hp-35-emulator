@@ -26,6 +26,7 @@ class Processor {
 
   listeners = new Set()
   timeoutID = null
+  history = []
 
   subscribe(listener) {
     this.listeners.add(listener)
@@ -60,10 +61,10 @@ class Processor {
   }
 
   /*
-  The  operations Enter, CLX and CLS disable stack lift.
-  C number keyed in after one of these disabling operations writes over the number
-  currently in the X–register. The Y–, Z– and T–registers remain unchanged.
-*/
+    The  operations Enter, CLX and CLS disable stack lift.
+    C number keyed in after one of these disabling operations writes over the number
+    currently in the X–register. The Y–, Z– and T–registers remain unchanged.
+  */
 
   execute(state, keyCode) {
 
@@ -147,14 +148,22 @@ class Processor {
     updateProgramState(interrupted ? { running: false } : { running: false, ip: 0 })
   }
 
+  loadProgram(keyCodes) {
+    updateProgramState({
+      keyCodes,
+      ip: 0,
+      running: false
+    })
+  }
+
   stopProgram() {
-    const {running} = getProgramState()
+    const { running } = getProgramState()
     if (running) {
       if (this.timeoutID !== null) {
         clearTimeout(this.timeoutID)
         this.timeoutID = null
       }
-      updateProgramState({running: false})
+      updateProgramState({ running: false })
     }
   }
 
@@ -167,7 +176,7 @@ class Processor {
     }
   }
 
-  loadMarkDownProgram(text) {
+  compileMarkDownProgram(text) {
     const matches = text.match(/```[\s\S]+?```/g)
     let progText = ''
     if (matches) {
@@ -176,10 +185,10 @@ class Processor {
         return buf
       }, '')
     }
-    return this.loadPlainTextProgram(progText)
+    return this.compilePlainTextProgram(progText)
   }
 
-  loadPlainTextProgram(text) {
+  compilePlainTextProgram(text) {
     const lines = text
       .toLowerCase()
       .split(/\n/)
@@ -212,8 +221,8 @@ class Processor {
 
   }
 
-  loadProgram(text) {
-    return /\s*#/.test(text) ? this.loadMarkDownProgram(text) : this.loadPlainTextProgram(text)
+  compileProgram(text) {
+    return /\s*#/.test(text) ? this.compileMarkDownProgram(text) : this.compilePlainTextProgram(text)
   }
 
 }

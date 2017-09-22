@@ -5,7 +5,12 @@ import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
 
 const DeleteButton = ({ onClick, disabled }) => (
-  <IconButton onClick={onClick} disabled={disabled}>
+  <IconButton
+    onClick={onClick}
+    disabled={disabled}
+    tooltip="clear program"
+    tooltipPosition="top-left"
+  >
     <Delete color={grey700} />
   </IconButton>
 )
