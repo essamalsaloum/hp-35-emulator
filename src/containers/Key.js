@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import store from '../store'
 import C from '../processor/keyCodes'
-import { execute } from '../processor'
+import processor from '../processor'
 import './Key.css'
 
 const shiftKeyModifiers = {
@@ -55,7 +55,7 @@ export default class Key extends React.PureComponent {
     } else {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
-      const newState = execute(store.getState().processor, keyCode)
+      const newState = processor.execute(store.getState().processor, keyCode)
       store.setState({
         processor: { ...newState },
         keypad: { shiftKey: null }

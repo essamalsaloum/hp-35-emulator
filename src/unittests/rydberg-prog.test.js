@@ -1,5 +1,10 @@
 import { expect } from 'chai'
-import { execute, initialState } from '../unittests'
+import processor from '../processor'
+
+const initialState = {
+  stack: [ 0, 0, 0, 0 ],
+  buffer: '0'
+}
 
 const rydbergProg = [
   '9.10938e-31',
@@ -9,7 +14,7 @@ const rydbergProg = [
   'mul',
   '8',
   '8.85419e-12',
-  'square',
+  'sqr',
   'mul',
   '6.62608e-34',
   '3',
@@ -23,7 +28,7 @@ const rydbergProg = [
 describe('processor', () => {
   it('should run the Rydberg program', () => {
     const expectedRydbergConstant = 1.0973781e+7
-    const finalState = rydbergProg.reduce(execute, {...initialState})
+    const finalState = rydbergProg.reduce(processor.execute.bind(processor), {...initialState})
     const [computedRydbergConstant] = finalState.stack
     expect(Math.abs(computedRydbergConstant - expectedRydbergConstant) < 1.0).to.be.true
   })

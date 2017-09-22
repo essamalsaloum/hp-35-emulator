@@ -12,7 +12,7 @@ export default {
   program: {
     text: '',
     keyCodes: [],
-    nextIndex: 0,
+    ip: 0,
     error: false,
     running: false,
     recording: false

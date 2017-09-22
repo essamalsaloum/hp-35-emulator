@@ -1,7 +1,7 @@
 import React from 'react'
 import store from '../store'
-import { execute } from '../processor'
 import mapKeyboardEvent from '../processor/keyboardEventMapper'
+import processor from '../processor'
 import C from '../processor/keyCodes'
 import Key from './Key'
 import './Keypad.css'
@@ -16,7 +16,7 @@ export default class Keypad extends React.PureComponent {
       elem.addEventListener('keyup', ev => {
         const keyCode = mapKeyboardEvent(ev)
         if (keyCode) {
-          this.storeProcessorState(execute(store.getState().processor, keyCode))
+          this.storeProcessorState(processor.execute(store.getState().processor, keyCode))
         }
       })
     }

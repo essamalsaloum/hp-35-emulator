@@ -1,5 +1,6 @@
 import { expect } from 'chai'
-import { C, execute } from '../unittests'
+import processor from '../processor'
+import C from '../processor/keyCodes'
 
 const EPS = 1e-11
 
@@ -13,7 +14,7 @@ describe('processor', () => {
       const state = {
         stack: [78, 0, 0, 0]
       }
-      const newState = execute(state, C.SIN)
+      const newState = processor.execute(state, C.SIN)
       const [x] = newState.stack
       const hpVal = 0.978147600734
       expect(floatEqual(x, hpVal)).to.be.true
@@ -23,7 +24,7 @@ describe('processor', () => {
       const state = {
         stack: [78, 0, 0, 0]
       }
-      const newState = execute(state, C.COS)
+      const newState = processor.execute(state, C.COS)
       const [x] = newState.stack
       const hpVal = 0.207911690818
       expect(floatEqual(x, hpVal)).to.be.true
@@ -33,7 +34,7 @@ describe('processor', () => {
       const state = {
         stack: [78, 0, 0, 0]
       }
-      const newState = execute(state, C.TAN)
+      const newState = processor.execute(state, C.TAN)
       const [x] = newState.stack
       const hpVal = 4.70463010948
       expect(floatEqual(x, hpVal)).to.be.true
@@ -43,7 +44,7 @@ describe('processor', () => {
       const state = {
         stack: [0.978147600734, 0, 0, 0]
       }
-      const newState = execute(state, C.ASIN)
+      const newState = processor.execute(state, C.ASIN)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -53,7 +54,7 @@ describe('processor', () => {
       const state = {
         stack: [0.20791169081, 0, 0, 0]
       }
-      const newState = execute(state, C.ACOS)
+      const newState = processor.execute(state, C.ACOS)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true
@@ -63,7 +64,7 @@ describe('processor', () => {
       const state = {
         stack: [4.70463010948, 0, 0, 0]
       }
-      const newState = execute(state, C.ATAN)
+      const newState = processor.execute(state, C.ATAN)
       const [x] = newState.stack
       const hpVal = 78
       expect(floatEqual(x, hpVal)).to.be.true

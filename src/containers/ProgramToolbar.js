@@ -5,7 +5,7 @@ import Toggle from 'material-ui/Toggle'
 import RunStopButton from '../components/RunStopButton'
 import DeleteButton from '../components/DeleteButton'
 import store from '../store'
-import * as processor from '../processor'
+import processor from '../processor'
 
 export default class ProgramToolbar extends React.PureComponent {
 
@@ -32,7 +32,7 @@ export default class ProgramToolbar extends React.PureComponent {
       const { text, running, recording } = state.program
       this.setState({ text, running, recording })
     })
-    this.updateProgramState({ running: false, nextIndex: 0 })
+    this.updateProgramState({ running: false, ip: 0 })
   }
 
   componentWillUnmount() {
@@ -62,14 +62,14 @@ export default class ProgramToolbar extends React.PureComponent {
       return
     }
 
-    const { text, keyCodes, error } = processor.compile(this.state.text)
+    const { text, keyCodes, error } = processor.loadProgram(this.state.text)
 
     if (error) {
       this.updateProgramState({ ...this.props.initialState, text })
     } else {
       this.updateProgramState({
         keyCodes,
-        nextIndex: 0,
+        ip: 0,
         error: false,
         running: true,
         recording: false
@@ -82,7 +82,7 @@ export default class ProgramToolbar extends React.PureComponent {
     this.updateProgramState({
       text: '',
       keyCodes: [],
-      nextIndex: 0,
+      ip: 0,
       running: false,
       error: false
     })
@@ -102,7 +102,7 @@ export default class ProgramToolbar extends React.PureComponent {
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <DeleteButton onClick={this.clearProgram} disabled={this.noText} />
+          <DeleteButton onClick={this.clearProgram} disabled={this.noText || running} />
           <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
         </ToolbarGroup>
       </Toolbar>

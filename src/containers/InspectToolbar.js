@@ -1,59 +1,90 @@
 import React from 'react'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
+import Toggle from 'material-ui/Toggle'
 import RunStopButton from '../components/RunStopButton'
 import SingleStepButton from '../components/SingleStepButton'
+import BackStepButton from '../components/BackStepButton'
 import store from '../store'
-import * as processor from '../processor'
+import processor from '../processor'
+
+const DELAY = 500
+
+const updateProgramState = store.setSubState('program')
 
 export default class InspectToolbar extends React.PureComponent {
 
-  state = {}
+  state = {
+    delayed: false
+  }
+
   singleStepIterator = null
 
   constructor() {
     super()
-    this.updateProgramState = store.setSubState('program')
+    this.toggleDelayed = this.toggleDelayed.bind(this)
     this.singleStep = this.singleStep.bind(this)
+    this.runStop = this.runStop.bind(this)
   }
 
   componentWillMount() {
     this.subscription = store.subscribe(state => {
-      const { keyCodes } = state.program
-      this.setState({ keyCodes })
+      const { keyCodes, running } = state.program
+      this.setState({ keyCodes, running })
     })
-    this.compile()
+    this.loadProgram()
   }
 
   componentWillUnmount() {
     this.subscription.remove()
   }
 
-  compile() {
+  toggleDelayed() {
+    this.setState({delayed: !this.state.delayed})
+  }
+
+  loadProgram() {
     const { program } = store.getState()
-    const { keyCodes, error } = processor.compile(program.text)
+    const { keyCodes, error } = processor.loadProgram(program.text)
     if (!error) {
-      this.updateProgramState({
+      updateProgramState({
         keyCodes,
-        nextIndex: 0,
+        ip: 0,
         running: false
       })
     }
   }
 
   singleStep() {
-    this.updateProgramState({ running: true })
     processor.singleStep()
   }
 
+  runStop() {
+    const {running, delayed} = this.state
+    if (running) {
+      processor.stopProgram()
+    } else {
+      processor.runToCompletion(delayed ? DELAY : 0)
+    }
+  }
+
   render() {
-    const { keyCodes } = this.state
+    const { keyCodes, running, delayed } = this.state
     return (
       <Toolbar>
-        <ToolbarGroup firstChild={true}>
+        <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
+        <Toggle
+            label="Delay"
+            labelPosition="right"
+            disabled={running}
+            toggled={delayed}
+            onToggle={this.toggleDelayed}
+          />
+
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <RunStopButton onClick={() => processor.runToCompletion(50)} disabled={keyCodes.length === 0} />
-          <SingleStepButton onClick={this.singleStep} disabled={keyCodes.length === 0} />
+          <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} running={running} />
+          <BackStepButton disabled={keyCodes.length === 0 || running} />
+          <SingleStepButton onClick={this.singleStep} disabled={keyCodes.length === 0 || running} />
         </ToolbarGroup>
       </Toolbar>
     )

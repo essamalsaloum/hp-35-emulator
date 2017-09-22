@@ -1,5 +1,6 @@
 import { expect } from 'chai'
-import { C, execute } from '../unittests'
+import processor from '../processor'
+import C from '../processor/keyCodes'
 
 describe('processor', () => {
 
@@ -16,7 +17,7 @@ describe('processor', () => {
         buffer: '0',
         stackLift: false
       }
-      const newState = execute(state, C.CLX)
+      const newState = processor.execute(state, C.CLX)
       expect(newState).to.deep.include(expectState)
     })
 

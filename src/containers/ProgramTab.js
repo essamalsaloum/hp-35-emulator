@@ -2,12 +2,12 @@ import React from 'react'
 import ProgramToolbar from './ProgramToolbar'
 import store from '../store'
 import C from '../processor/keyCodes'
-import * as processor from '../processor'
+import processor from '../processor'
 
 const resetState = {
   text: '',
   keyCodes: [],
-  nextIndex: 0,
+  ip: 0,
   error: false,
   running: false,
   recording: false
@@ -33,12 +33,12 @@ export default class ProgramTab extends React.PureComponent {
 
   state = {}
   subscriptions = []
+  updateProgramState = store.setSubState('program')
 
   constructor() {
     super()
     this.onTextChange = this.onTextChange.bind(this)
     this.onTextUpdate = this.onTextUpdate.bind(this)
-    this.updateProgramState = store.setSubState('program')
   }
 
   componentWillMount() {

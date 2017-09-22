@@ -1,30 +1,7 @@
 import React from 'react'
 import InspectToolbar from './InspectToolbar'
 import store from '../store'
-
-const styles = {
-  container: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  list: {
-    padding: '8px 0',
-    borderStyle: 'none',
-    backgroundColor: '#fafafa',
-    resize: 'none',
-    fontFamily: `'Roboto', sans-serif`,
-    fontSize: 14,
-    flex: 1
-  },
-  line: {
-    padding: '0 8px'
-  },
-  currentLine: {
-    padding: '0 8px',
-    backgroundColor: 'lightgray'
-  }
-}
+import './InspectTab.css'
 
 export default class InspectTab extends React.PureComponent {
 
@@ -37,8 +14,8 @@ export default class InspectTab extends React.PureComponent {
 
   componentWillMount() {
     this.subscription = store.subscribe(state => {
-      const { keyCodes, nextIndex } = state.program
-      this.setState({ keyCodes, nextIndex })
+      const { keyCodes, ip } = state.program
+      this.setState({ keyCodes, ip })
     })
   }
 
@@ -47,8 +24,11 @@ export default class InspectTab extends React.PureComponent {
   }
 
   renderKeyCode(keyCode, id) {
+    const className = id === this.state.ip
+      ? 'InspectTab--list-item-current'
+      : 'InspectTab--list-item'
     return (
-      <div key={id} style={id === this.state.nextIndex ? styles.currentLine : styles.line}>
+      <div key={id} className={className}>
         {keyCode}
       </div>
     )
@@ -56,8 +36,8 @@ export default class InspectTab extends React.PureComponent {
 
   render() {
     return (
-      <div style={styles.container} >
-        <div style={styles.list}>
+      <div className="InspectTab" >
+        <div className="InspectTab--list">
           {this.state.keyCodes.map(this.renderKeyCode)}
         </div>
         <InspectToolbar />

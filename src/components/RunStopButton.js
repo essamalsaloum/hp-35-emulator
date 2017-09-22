@@ -12,7 +12,12 @@ const RunStopButton = ({onClick,  disabled, running }) => {
 
   const icon = running ? <Pause /> : <PlayArrow {...iconProps} />
   return (
-    <IconButton onClick={onClick} disabled={disabled}>
+    <IconButton
+    onClick={onClick}
+    disabled={disabled}
+    tooltip="run to completion"
+    tooltipPosition="top-left"
+    >
       {icon}
     </IconButton>
   )
