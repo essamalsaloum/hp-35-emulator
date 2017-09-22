@@ -14,13 +14,6 @@ const SvgIconButton = ({ path, ...rest }) => (
 
 SvgIconButton.propTypes = {
   path: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool
-}
-
-SvgIconButton.defaultProps = {
-  onClick: () => undefined,
-  disabled: false
 }
 
 export default SvgIconButton

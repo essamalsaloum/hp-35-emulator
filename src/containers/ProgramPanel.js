@@ -2,7 +2,9 @@ import React from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import TabTemplate from '../components/TabTemplate'
 import ProgramTab from './ProgramTab'
+import GitHubTab from './GitHubTab'
 import InspectTab from './InspectTab'
+import store from '../store'
 import './ProgramPanel.css'
 
 // see: https://github.com/callemall/material-ui/issues/2085
@@ -24,6 +26,24 @@ const styles = {
 
 export default class ProgramPanel extends React.PureComponent {
 
+  state = {}
+
+  componentWillMount() {
+    this.subscription = store.subscribe(({ programTab }) => {
+      this.setState({...programTab})
+    })
+  }
+
+  componentWillUnmount() {
+    this.subscription.remove()
+  }
+
+  renderProgramTab() {
+    return this.state.mode === 'program'
+      ? (<ProgramTab />)
+      : (<GitHubTab />)
+  }
+
   render() {
     return (
       <div className="ProgramPanel">
@@ -33,7 +53,7 @@ export default class ProgramPanel extends React.PureComponent {
           tabTemplate={TabTemplate}
         >
           <Tab label="Program">
-            <ProgramTab />
+            {this.renderProgramTab()}
           </Tab>
           <Tab label="Inspect">
             <InspectTab />

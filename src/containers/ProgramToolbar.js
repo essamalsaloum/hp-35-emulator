@@ -5,8 +5,12 @@ import Toggle from 'material-ui/Toggle'
 import RunStopButton from '../components/RunStopButton'
 import DeleteButton from '../components/DeleteButton'
 import GitHubButton from '../components/GitHubButton'
+import * as gitHub from '../cloud/gitHub'
 import store from '../store'
 import processor from '../processor'
+
+const updateProgramState = store.setSubState('program')
+const updateTabProgramState = store.setSubState('programTab')
 
 export default class ProgramToolbar extends React.PureComponent {
 
@@ -25,7 +29,7 @@ export default class ProgramToolbar extends React.PureComponent {
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
     this.clearProgram = this.clearProgram.bind(this)
-    this.updateProgramState = store.setSubState('program')
+    this.loadGitHubTitles = this.loadGitHubTitles.bind(this)
   }
 
   componentWillMount() {
@@ -33,7 +37,7 @@ export default class ProgramToolbar extends React.PureComponent {
       const { text, running, recording } = state.program
       this.setState({ text, running, recording })
     })
-    this.updateProgramState({ running: false, ip: 0 })
+    updateProgramState({ running: false, ip: 0 })
   }
 
   componentWillUnmount() {
@@ -43,13 +47,13 @@ export default class ProgramToolbar extends React.PureComponent {
   toggleRecording(ev, isInputChecked) {
     const recording = isInputChecked
     if (recording) {
-      this.updateProgramState({
+      updateProgramState({
         recording: true,
         text: '',
         keyCodes: []
       })
     } else {
-      this.updateProgramState({
+      updateProgramState({
         recording: false
       })
     }
@@ -57,7 +61,7 @@ export default class ProgramToolbar extends React.PureComponent {
 
   runStop() {
     if (this.state.running) {
-      this.updateProgramState({
+      updateProgramState({
         running: false
       })
       return
@@ -66,9 +70,9 @@ export default class ProgramToolbar extends React.PureComponent {
     const { text, keyCodes, error } = processor.compileProgram(this.state.text)
 
     if (error) {
-      this.updateProgramState({ ...this.props.initialState, text })
+      updateProgramState({ ...this.props.initialState, text })
     } else {
-      this.updateProgramState({
+      updateProgramState({
         keyCodes,
         ip: 0,
         error: false,
@@ -80,13 +84,18 @@ export default class ProgramToolbar extends React.PureComponent {
   }
 
   clearProgram() {
-    this.updateProgramState({
+    updateProgramState({
       text: '',
       keyCodes: [],
       ip: 0,
       running: false,
       error: false
     })
+  }
+
+  loadGitHubTitles() {
+    gitHub.loadProgramList()
+    .then(data => console.log(data))
   }
 
   render() {
@@ -103,7 +112,7 @@ export default class ProgramToolbar extends React.PureComponent {
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <GitHubButton disabled={this.noText || running} />
+          <GitHubButton onClick={() => updateTabProgramState({mode: 'gitHub'})} disabled={running} />
           <DeleteButton onClick={this.clearProgram} disabled={this.noText || running} />
           <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
         </ToolbarGroup>

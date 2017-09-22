@@ -1,0 +1,9 @@
+.GitHubTab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.GitHubTab--list {
+  flex: 1;
+}

@@ -3,6 +3,7 @@ import ProgramToolbar from './ProgramToolbar'
 import store from '../store'
 import C from '../processor/keyCodes'
 import processor from '../processor'
+import './ProgramTab.css'
 
 const resetState = {
   text: '',
@@ -13,22 +14,6 @@ const resetState = {
   recording: false
 }
 
-const styles = {
-  root: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  textarea: {
-    padding: 8,
-    borderStyle: 'none',
-    backgroundColor: '#fafafa',
-    resize: 'none',
-    fontFamily: `'Roboto', sans-serif`,
-    fontSize: 14,
-    flex: 1
-  }
-}
 export default class ProgramTab extends React.PureComponent {
 
   state = {}
@@ -73,15 +58,15 @@ export default class ProgramTab extends React.PureComponent {
 
   render() {
     return (
-      <div style={styles.root}>
+      <div className="ProgramTab">
         <textarea
+          className="ProgramTab--textarea"
           autoCapitalize="none"
           autoComplete="off"
           placeholder={this.state.recording ? '' : 'Enter your program here'}
           spellCheck="false"
           value={this.state.text}
           onChange={this.onTextChange}
-          style={styles.textarea}
         />
         <ProgramToolbar initialState={{ ...resetState }} />
       </div>

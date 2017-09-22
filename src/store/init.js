@@ -18,5 +18,11 @@ export default {
     running: false,
     recording: false
   },
+  gitHub: {
+    programs: []
+  },
+  programTab: {
+    mode: 'program'
+  }
 }
 
