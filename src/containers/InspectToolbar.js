@@ -64,9 +64,9 @@ export default class InspectToolbar extends React.PureComponent {
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
-            label="Delay"
+            label="Slow"
             labelPosition="right"
-            disabled={running}
+            disabled={keyCodes.length === 0 || running}
             toggled={delayed}
             onToggle={this.toggleDelayed}
           />

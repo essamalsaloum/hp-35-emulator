@@ -7,7 +7,10 @@ const REPO_URL = `https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/content
 const mapItems = items => items.reduce((prev, item) => {
   const { name, download_url } = item
   if (name.endsWith('.md')) {
-    prev[name.slice(0, -3)] = download_url
+    prev[name.slice(0, -3)] = {
+      url: download_url,
+      text: ''
+    }
   }
   return prev
 }, {})

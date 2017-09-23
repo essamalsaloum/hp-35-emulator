@@ -33,20 +33,31 @@ export default class GitHubTab extends React.PureComponent {
     this.subscription.remove()
   }
 
-  onClick(url) {
-    loadProgram(url)
-    .then(text => updateProgramState({text}))
-    .then(() => updateProgramTabState({mode: 'program'}))
+  onClick(title) {
+    const { programs } = this.state
+    const { text, url } = programs[title]
+    if (text) {
+      updateProgramState({ text })
+      updateProgramTabState({ mode: 'program' })
+    } else {
+      loadProgram(url)
+        .then(text => {
+          programs[title].text = text
+          updateGitHubState({ programs })
+          updateProgramState({ text })
+          updateProgramTabState({ mode: 'program' })
+        })
+    }
   }
 
   renderList() {
     const { programs } = this.state
     return Object.keys(programs).map(title => (
       <ListItem
-      key={title}
-      primaryText={title}
-      leftIcon={<AvPlayListPlay />}
-      onClick={() => this.onClick(programs[title])}
+        key={title}
+        primaryText={title}
+        leftIcon={<AvPlayListPlay />}
+        onClick={() => this.onClick(title)}
       />
     ))
   }
