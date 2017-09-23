@@ -2,8 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
+import IconButton from 'material-ui/IconButton'
+import Delete from 'material-ui/svg-icons/action/delete'
+import { grey700 } from 'material-ui/styles/colors'
+
 import RunStopButton from '../components/RunStopButton'
-import DeleteButton from '../components/DeleteButton'
 import GitHubButton from '../components/GitHubButton'
 import * as gitHub from '../cloud/gitHub'
 import store from '../store'
@@ -95,7 +98,7 @@ export default class ProgramToolbar extends React.PureComponent {
 
   loadGitHubTitles() {
     gitHub.loadProgramList()
-    .then(data => console.log(data))
+      .then(data => console.log(data))
   }
 
   render() {
@@ -112,8 +115,10 @@ export default class ProgramToolbar extends React.PureComponent {
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <GitHubButton onClick={() => updateTabProgramState({mode: 'gitHub'})} disabled={running} />
-          <DeleteButton onClick={this.clearProgram} disabled={this.noText || running} />
+          <GitHubButton onClick={() => updateTabProgramState({ mode: 'gitHub' })} disabled={running} />
+          <IconButton onClick={this.clearProgram} disabled={this.noText || running} >
+            <Delete color={grey700} />
+          </IconButton>
           <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
         </ToolbarGroup>
       </Toolbar>

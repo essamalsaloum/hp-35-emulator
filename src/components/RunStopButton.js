@@ -5,36 +5,20 @@ import PlayArrow from 'material-ui/svg-icons/av/play-arrow'
 import Pause from 'material-ui/svg-icons/av/pause'
 import { grey700 } from 'material-ui/styles/colors'
 
-const RunStopButton = ({ onClick, disabled, running }) => {
+export default function RunStopButton({ running, ...rest }) {
   const iconProps = {
     color: grey700
   }
 
-  const icon = running ? <Pause /> : <PlayArrow {...iconProps} />
+  const icon = running ? <Pause {...iconProps} /> : <PlayArrow {...iconProps} />
+
   return (
-    <IconButton
-      onClick={onClick}
-      disabled={disabled}
-      tooltip="run"
-      tooltipPosition="top-left"
-    >
+    <IconButton  {...rest}>
       {icon}
     </IconButton>
   )
 }
 
-const noop = () => undefined
-
 RunStopButton.propTypes = {
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool,
-  running: PropTypes.bool
+  running: PropTypes.bool.isRequired
 }
-
-RunStopButton.defaultProps = {
-  onClick: noop,
-  disabled: false,
-  running: false
-}
-
-export default RunStopButton
