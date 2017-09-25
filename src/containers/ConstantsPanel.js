@@ -5,6 +5,8 @@ import processor from '../processor'
 import physicsConstants from '../processor/physicsConstants'
 import './ConstantsPanel.css'
 
+// TODO: add filter text field
+
 const createMarkup = ({ symb, value, unit }) => ({ __html: `${symb} = ${value} ${unit}` })
 
 export default class ConstantPanel extends React.PureComponent {

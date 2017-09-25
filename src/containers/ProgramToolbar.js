@@ -8,7 +8,6 @@ import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
 
 import RunStopButton from '../components/RunStopButton'
-import * as gitHub from '../cloud/gitHub'
 import store from '../store'
 import processor from '../processor'
 
@@ -32,7 +31,6 @@ export default class ProgramToolbar extends React.PureComponent {
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
     this.clearProgram = this.clearProgram.bind(this)
-    this.loadGitHubTitles = this.loadGitHubTitles.bind(this)
   }
 
   componentWillMount() {
@@ -94,11 +92,6 @@ export default class ProgramToolbar extends React.PureComponent {
       running: false,
       error: false
     })
-  }
-
-  loadGitHubTitles() {
-    gitHub.loadProgramList()
-      .then(data => console.log(data))
   }
 
   render() {

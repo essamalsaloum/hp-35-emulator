@@ -189,6 +189,8 @@ class Processor {
   }
 
   compilePlainTextProgram(text) {
+    const instanceAliases = {}
+
     const lines = text
       .toLowerCase()
       .split(/\n/)
@@ -198,11 +200,16 @@ class Processor {
     return lines.reduce((acc, line) => {
       let error = false
       if (!line.startsWith('//')) {
-        line = aliases[line] || line
-        if (isValidKeyCode(line)) {
-          acc.keyCodes.push(line)
+        const tokens = line.split(/\s+/)
+        if (tokens.length === 3 && tokens[0] === 'alias') {
+          instanceAliases[tokens[1]] = tokens[2]
         } else {
-          error = true
+          line = instanceAliases[line] || aliases[line] || line
+          if (isValidKeyCode(line)) {
+            acc.keyCodes.push(line)
+          } else {
+            error = true
+          }
         }
       }
       acc.text += line + '\n'
