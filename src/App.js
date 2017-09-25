@@ -4,8 +4,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo700 } from 'material-ui/styles/colors'
 import store from './store'
+import MainNavigation from './containers/MainNavigation'
 import Display from './containers/Display'
 import Keypad from './containers/Keypad'
+import ConstantsPanel from './containers/ConstantsPanel'
 import ProgramPanel from './containers/ProgramPanel'
 import './App.css'
 
@@ -20,6 +22,11 @@ class App extends React.PureComponent {
 
   static propTypes = {
     test: PropTypes.bool
+  }
+
+  panels = {
+    'keypad': <Keypad className="App--keypad" />,
+    'const': <ConstantsPanel className="App--keypad" />
   }
 
   componentWillMount() {
@@ -38,14 +45,23 @@ class App extends React.PureComponent {
     this.subscription.remove()
   }
 
+  componentDidMount() {
+    const main$ = document.querySelector('.App--main')
+    const height = main$.offsetHeight
+    main$.style.height = height + 'px'
+    console.log(height)
+  }
+
   render() {
+    const {mode} = store.getState().keypad
     // tabIndex needed to allow div to receive focus
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="App">
           <div className="App--main" tabIndex="0">
             <Display />
-            <Keypad />
+            {this.panels[mode]}
+            <MainNavigation />
           </div>
           <ProgramPanel />
         </div>

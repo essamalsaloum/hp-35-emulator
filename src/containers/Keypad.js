@@ -10,15 +10,24 @@ export default class Keypad extends React.PureComponent {
 
   storeProcessorState = store.setSubState('processor')
 
+  keyUpHandler = ev => {
+    const keyCode = mapKeyboardEvent(ev)
+    if (keyCode) {
+      this.storeProcessorState(processor.execute(store.getState().processor, keyCode))
+    }
+  }
+
   componentDidMount() {
     const elem = document.querySelector('.App--main')
     if (elem) {
-      elem.addEventListener('keyup', ev => {
-        const keyCode = mapKeyboardEvent(ev)
-        if (keyCode) {
-          this.storeProcessorState(processor.execute(store.getState().processor, keyCode))
-        }
-      })
+      elem.addEventListener('keyup', this.keyUpHandler)
+    }
+  }
+
+  componentWillUnmount() {
+    const elem = document.querySelector('.App--main')
+    if (elem) {
+      elem.removeEventListener('keyup', this.keyUpHandler)
     }
   }
 
@@ -29,11 +38,11 @@ export default class Keypad extends React.PureComponent {
           <Key label="y<sup>x</sup>" keyCode={C.POW} />
           <Key label="LOG" keyCode={C.LOG} />
           <Key label="LN" keyCode={C.LN} />
-          <Key label="e<sup>x</sup>" topLabel="10<sup>x</sup>" keyCode={C.EXP} />
+          <Key label="e<sup>x</sup>" topLabel="10<sup>𝑥</sup>" keyCode={C.EXP} />
           <Key label="CLR" keyCode={C.CLR} />
         </div>
         <div className="Keypad--row">
-          <Key label="√x" keyCode={C.SQRT} />
+          <Key label="√x" topLabel="xx" keyCode={C.SQRT} />
           <Key label="x<sup>2</sup>" keyCode={C.SQR} />
           <Key label="SIN" bottomLabel="ASIN" keyCode={C.SIN} />
           <Key label="COS" bottomLabel="ACOS" keyCode={C.COS} />
@@ -53,7 +62,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLX" keyCode={C.CLX} />
         </div>
         <div className="Keypad--row">
-          <Key label="C" keyCode={C.CLX} addClass="Key--bold" />
+          <Key label="Const" keyCode={C.CONST} />
           <Key label="7" keyCode={C.D7} addClass="Key--bold" />
           <Key label="8" keyCode={C.D8} addClass="Key--bold" />
           <Key label="9" keyCode={C.D9} addClass="Key--bold" />
@@ -74,7 +83,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="-" keyCode={C.SUB} addClass="Key--bold" />
         </div>
         <div className="Keypad--row">
-          <Key label="C" keyCode={C.CLX} />
+          <Key label="C" keyCode={C.CLX} addClass="Key--bold" />
           <Key label="0" keyCode={C.D0} addClass="Key--bold" />
           <Key label="•" keyCode={C.DOT} addClass="Key--bold" />
           <Key label="π" keyCode={C.PI} addClass="Key--bold" />

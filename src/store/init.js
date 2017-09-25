@@ -7,7 +7,8 @@ export default {
     memory: 0
   },
   keypad: {
-    shiftKey: null
+    shiftKey: null,
+    mode: 'keypad',
   },
   program: {
     text: '',

@@ -5,8 +5,16 @@
 }
 
 .App--main {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   border-radius: 4px;
   border: solid 1px gray;
   padding: 2px;
   width: 320px;
+  background-color: #ECEFF1;
+}
+
+.App--keypad {
+  flex: 1;
 }

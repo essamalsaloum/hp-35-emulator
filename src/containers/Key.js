@@ -13,6 +13,8 @@ const shiftKeyModifiers = {
 }
 
 const createMarkup = label => ({ __html: label })
+const updateKeypadState = store.setSubState('keypad')
+
 
 export default class Key extends React.PureComponent {
 
@@ -21,7 +23,8 @@ export default class Key extends React.PureComponent {
     label: PropTypes.string.isRequired,
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
-    addClass: PropTypes.string
+    addClass: PropTypes.string,
+    onClick: PropTypes.func
   }
 
   static defaultProps = {
@@ -46,6 +49,10 @@ export default class Key extends React.PureComponent {
   }
 
   onClick(keyCode) {
+    if (keyCode === C.CONST) {
+      updateKeypadState({mode: 'const'})
+      return
+    }
     const { shiftKey } = this.state
     if (keyCode === C.SHIFT_UP) {
       this.updateKeypadState({ shiftKey: shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP })

@@ -8,6 +8,7 @@ export default {
   CHS: 'chs',
   CLR: 'clr',
   CLX: 'clx',
+  CONST: 'const',
   COS: 'cos',
   DOT: 'dot',
   D0: 'd0',
