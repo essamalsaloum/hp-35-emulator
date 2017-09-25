@@ -53,7 +53,7 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const {mode} = store.getState().keypad
+    const {mode = 'keypad'} = store.getState().keypad
     // tabIndex needed to allow div to receive focus
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
