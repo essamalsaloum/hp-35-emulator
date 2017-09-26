@@ -1,7 +1,6 @@
 /* eslint react/jsx-key: "off" */
 import React from 'react'
 import PropTypes from 'prop-types'
-// import oldStore from './store'
 import MainNavigation from './containers/MainNavigation'
 import Display from './containers/Display'
 import Keypad from './containers/Keypad'
@@ -23,22 +22,6 @@ class App extends React.PureComponent {
     (<Keypad className="App--keypad" />),
     (<ConstantsPanel className="App--keypad" />)
   ]
-
-  // componentWillMount() {
-  //   this.subscription = oldStore.subscribe(state => {
-  //     this.setState(state)
-  //     if (!this.props.test && process.env.NODE_ENV === 'development') {
-  //       const date = new Date()
-  //       console.group('state ' + date.toLocaleTimeString())
-  //       console.dir(state)
-  //       console.groupEnd()
-  //     }
-  //   })
-  // }
-
-  // componentWillUnmount() {
-  //   this.subscription.remove()
-  // }
 
   componentDidMount() {
     const main$ = document.querySelector('.App--main')
