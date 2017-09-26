@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import store from '../store'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { emitKeyCode } from '../actions/processor'
+import { setShiftKey } from '../actions/shiftKey'
+import { getShiftKey } from '../reducers/shiftKey'
 import C from '../processor/keyCodes'
-import processor from '../processor'
 import './Key.css'
 
 const shiftKeyModifiers = {
@@ -13,10 +16,8 @@ const shiftKeyModifiers = {
 }
 
 const createMarkup = label => ({ __html: label })
-const updateKeypadState = store.setSubState('keypad')
 
-
-export default class Key extends React.PureComponent {
+class Key extends React.PureComponent {
 
   static propTypes = {
     keyCode: PropTypes.string.isRequired,
@@ -24,7 +25,9 @@ export default class Key extends React.PureComponent {
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
     addClass: PropTypes.string,
-    onClick: PropTypes.func
+    emitKeyCode: PropTypes.func,
+    shiftKey: PropTypes.string,
+    setShiftKey: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -32,54 +35,37 @@ export default class Key extends React.PureComponent {
     bottomLabel: '',
   }
 
-  state = {}
-
-  storeProcessorState = store.setSubState('processor')
-  updateKeypadState = store.setSubState('keypad')
-
-  componentWillMount() {
-    this.subscription = store.subscribe(state => {
-      const { shiftKey } = state.keypad
-      this.setState({ shiftKey })
-    })
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
-  }
-
   onClick(keyCode) {
-    if (keyCode === C.CONST) {
-      updateKeypadState({mode: 'const'})
-      return
-    }
-    const { shiftKey } = this.state
+    const { shiftKey } = this.props
     if (keyCode === C.SHIFT_UP) {
-      this.updateKeypadState({ shiftKey: shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP })
+      this.props.setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
     }
     else if (keyCode === C.SHIFT_DOWN) {
-      this.updateKeypadState({ shiftKey: shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN })
+      this.props.setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
     } else {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
-      const newState = processor.execute(store.getState().processor, keyCode)
-      store.setState({
-        processor: { ...newState },
-        keypad: { shiftKey: null }
-      })
+      this.props.emitKeyCode(keyCode)
+      this.props.setShiftKey(null)
     }
   }
 
   renderBottomLabel() {
-    const { bottomLabel } = this.props
-    return bottomLabel !== '' && this.state.shiftKey === C.SHIFT_DOWN ? (<div className="Key--bottomLabel"></div>) : (
+    const { bottomLabel, shiftKey } = this.props
+    return bottomLabel !== '' && shiftKey === C.SHIFT_DOWN ? (<div className="Key--bottomLabel"></div>) : (
       <div className="Key--bottomLabel" dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
     )
   }
 
   render() {
-    const { label, topLabel, bottomLabel, keyCode, addClass } = this.props
-    const { shiftKey } = this.state
+    const {
+      label,
+      topLabel,
+      bottomLabel,
+      keyCode,
+      addClass,
+      shiftKey
+    } = this.props
 
     const decorator = {
       label,
@@ -110,3 +96,15 @@ export default class Key extends React.PureComponent {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    emitKeyCode,
+    setShiftKey
+  }, dispatch)
+
+const mapStateToProps = state => ({
+  shiftKey: getShiftKey(state)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Key)

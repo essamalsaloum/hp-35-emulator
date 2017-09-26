@@ -3,13 +3,16 @@ import aliases from './aliases'
 import { inputInstructions } from './instructions/input'
 import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
-import store from '../store'
+import store from '../reduxStore'
+import { getKeyCodes } from '../reducers/currentProgram'
+import { setProcessorState, setIP, setRunning } from '../actions/processor'
+import { getProcessorState, getIP, getRunning } from '../reducers/processor'
+
 import * as util from './util'
 
 const NUMERIC_CONSTANT_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
 const isValidNumber = num => NUMERIC_CONSTANT_REGEX.test(num)
-const isValidKeyCode = keyCode => isValidNumber(keyCode) || !!instructionSet[keyCode]
 const isCalculatorError = ({ stack }) => isNaN(stack[0]) || !isFinite(stack[0])
 
 const instructionSet = {
@@ -17,10 +20,6 @@ const instructionSet = {
   ...stackInstructions,
   ...mathInstructions
 }
-
-const updateProgramState = store.setSubState('program')
-const getProgramState = () => store.getState().program
-const updateProcessorState = store.setSubState('processor')
 
 class Processor {
 
@@ -123,11 +122,12 @@ class Processor {
   executeNext(delay = 0) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        let { processor } = store.getState()
-        const program = getProgramState()
-        processor = this.execute(processor, program.keyCodes[program.ip])
-        updateProcessorState(processor)
-        updateProgramState({ ip: program.ip + 1 })
+        const state = store.getState()
+        const keyCodes = getKeyCodes(state)
+        let processorState = getProcessorState(state)
+        const { ip } = processorState
+        processorState = this.execute(processorState, keyCodes[ip])
+        store.dispatch(setProcessorState({ ...processorState, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -135,44 +135,35 @@ class Processor {
   }
 
   async runToCompletion(delay = 0) {
-    updateProgramState({ running: true })
-    const { keyCodes } = getProgramState()
+    const keyCodes = getKeyCodes(store.getState())
     let interrupted = false
-    while (getProgramState().ip < keyCodes.length && !interrupted) {
-      if (getProgramState().running) {
+    setRunning()
+    while (getIP(store.getState()) < keyCodes.length && !interrupted) {
+      if (getRunning(store.getState())) {
         await this.executeNext(delay)
       } else {
         interrupted = true
       }
     }
-    updateProgramState(interrupted ? { running: false } : { running: false, ip: 0 })
-  }
-
-  loadProgram(keyCodes) {
-    updateProgramState({
-      keyCodes,
-      ip: 0,
-      running: false
-    })
+    store.dispatch(setRunning(false))
+    if (!interrupted) {
+      store.dispatch(setIP(0))
+    }
   }
 
   stopProgram() {
-    const { running } = getProgramState()
-    if (running) {
-      if (this.timeoutID !== null) {
-        clearTimeout(this.timeoutID)
-        this.timeoutID = null
-      }
-      updateProgramState({ running: false })
+    if (this.timeoutID !== null) {
+      clearTimeout(this.timeoutID)
+      this.timeoutID = null
     }
   }
 
   singleStep() {
-    const { ip, keyCodes } = getProgramState()
-    if (ip < keyCodes.length) {
+    const state = store.getState()
+    if (getIP(state) < getKeyCodes(state).length) {
       this.executeNext()
     } else {
-      updateProgramState({ ip: 0 })
+      setIP(0)
     }
   }
 
@@ -205,7 +196,7 @@ class Processor {
           instanceAliases[tokens[1]] = tokens[2]
         } else {
           line = instanceAliases[line] || aliases[line] || line
-          if (isValidKeyCode(line)) {
+          if (this.isValidKeyCode(line)) {
             acc.keyCodes.push(line)
           } else {
             error = true
@@ -230,6 +221,10 @@ class Processor {
 
   compileProgram(text) {
     return /\s*#/.test(text) ? this.compileMarkDownProgram(text) : this.compilePlainTextProgram(text)
+  }
+
+  isValidKeyCode(keyCode) {
+    return isValidNumber(keyCode) || !!instructionSet[keyCode]
   }
 
 }

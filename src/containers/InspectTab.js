@@ -1,30 +1,25 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { getKeyCodes } from '../reducers/currentProgram'
+import { getIP } from '../reducers/processor'
 import InspectToolbar from './InspectToolbar'
-import store from '../store'
 import './InspectTab.css'
 
-export default class InspectTab extends React.PureComponent {
+class InspectTab extends React.PureComponent {
 
-  state = {}
+  static propTypes = {
+    keyCodes: PropTypes.array,
+    ip: PropTypes.number.isRequired
+  }
 
   constructor(props) {
     super(props)
     this.renderKeyCode = this.renderKeyCode.bind(this)
   }
 
-  componentWillMount() {
-    this.subscription = store.subscribe(state => {
-      const { keyCodes, ip } = state.program
-      this.setState({ keyCodes, ip })
-    })
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
-  }
-
   renderKeyCode(keyCode, id) {
-    const className = id === this.state.ip
+    const className = id === this.props.ip
       ? 'InspectTab--list-item-current'
       : 'InspectTab--list-item'
     return (
@@ -38,7 +33,7 @@ export default class InspectTab extends React.PureComponent {
     return (
       <div className="InspectTab" >
         <div className="InspectTab--list">
-          {this.state.keyCodes.map(this.renderKeyCode)}
+          {this.props.keyCodes.map(this.renderKeyCode)}
         </div>
         <InspectToolbar />
       </div>
@@ -46,3 +41,9 @@ export default class InspectTab extends React.PureComponent {
   }
 }
 
+const mapStateToProps = state => ({
+  keyCodes: getKeyCodes(state),
+  ip: getIP(state)
+})
+
+export default connect(mapStateToProps)(InspectTab)

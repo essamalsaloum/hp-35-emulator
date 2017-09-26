@@ -1,22 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
-import store from '../store'
-import processor from '../processor'
 import physicsConstants from '../processor/physicsConstants'
+import { emitKeyCode } from '../actions/processor'
 import './ConstantsPanel.css'
 
 // TODO: add filter text field
 
 const createMarkup = ({ symb, value, unit }) => ({ __html: `${symb} = ${value} ${unit}` })
 
-export default class ConstantPanel extends React.PureComponent {
+class ConstantsPanel extends React.PureComponent {
 
-  onClick(value) {
-    const newState = processor.execute(store.getState().processor, parseFloat(value))
-    store.setState({
-      processor: { ...newState }
-    })
-
+  static propTypes = {
+    emitKeyCode: PropTypes.func.isRequired
   }
 
   renderList() {
@@ -25,7 +23,7 @@ export default class ConstantPanel extends React.PureComponent {
         key={index}
         primaryText={text}
         secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
-        onClick={() => this.onClick(rest.value)}
+        onClick={() => this.props.emitKeyCode(rest.value)}
       />
     ))
   }
@@ -40,3 +38,10 @@ export default class ConstantPanel extends React.PureComponent {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    emitKeyCode,
+  }, dispatch)
+
+export default connect(null, mapDispatchToProps)(ConstantsPanel)

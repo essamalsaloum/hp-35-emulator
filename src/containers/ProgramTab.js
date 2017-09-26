@@ -1,8 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import store from '../store'
-import C from '../processor/keyCodes'
-import processor from '../processor'
+import { setProgramText } from '../actions/currentProgram'
+import { getProgramText } from '../reducers/currentProgram'
 import './ProgramTab.css'
 
 const resetState = {
@@ -14,7 +17,12 @@ const resetState = {
   recording: false
 }
 
-export default class ProgramTab extends React.PureComponent {
+class ProgramTab extends React.PureComponent {
+
+  static propTypes = {
+    programText: PropTypes.string,
+    setProgramText: PropTypes.func.isRequired
+  }
 
   state = {}
   subscriptions = []
@@ -23,33 +31,10 @@ export default class ProgramTab extends React.PureComponent {
   constructor() {
     super()
     this.onTextChange = this.onTextChange.bind(this)
-    this.onTextUpdate = this.onTextUpdate.bind(this)
-  }
-
-  componentWillMount() {
-    this.subscriptions.push(store.subscribe(state => {
-      const { text, recording } = state.program
-      this.setState({ text, recording })
-    }))
-    this.subscriptions.push(processor.subscribe(keyCode => {
-      const { program } = store.getState()
-      if (program.recording && keyCode !== C.CLR) {
-        const text = program.text + keyCode + '\n'
-        this.updateProgramState({ text })
-      }
-    }))
-  }
-
-  componentWillUnmount() {
-    this.subscriptions.forEach(subscription => subscription.remove())
   }
 
   onTextChange(event) {
-    this.onTextUpdate(event.target.value)
-  }
-
-  onTextUpdate(text) {
-    this.updateProgramState({ text })
+    this.props.setProgramText(event.target.value)
   }
 
   resetState() {
@@ -65,7 +50,7 @@ export default class ProgramTab extends React.PureComponent {
           autoComplete="off"
           placeholder={this.state.recording ? '' : 'Enter your program here'}
           spellCheck="false"
-          value={this.state.text}
+          value={this.props.programText}
           onChange={this.onTextChange}
         />
         <ProgramToolbar initialState={{ ...resetState }} />
@@ -73,3 +58,14 @@ export default class ProgramTab extends React.PureComponent {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    setProgramText,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+  programText: getProgramText(state)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)

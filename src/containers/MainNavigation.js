@@ -1,49 +1,36 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon'
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation'
 import Paper from 'material-ui/Paper'
 import { blueGrey50 as backgroundColor } from 'material-ui/styles/colors'
-import store from '../store'
 
 const keypadIcon = <FontIcon className="fa fa-calculator" style={{opacity: 0.7}}/>
 const constantsIcon = <FontIcon className="fa fa-flask" style={{opacity: 0.7}}/>
 const helpIcon = <FontIcon className="fa fa-info-circle" style={{opacity: 0.7}}/>
 
-const updateKeypadState = store.setSubState('keypad')
-
 export default class MainNavigation extends React.PureComponent {
+
   state = {
-    selectedIndex: 0,
+    selectedIndex: 0
   }
 
-  select = (index) => this.setState({ selectedIndex: index })
-
-  selectKeypad() {
-    this.select(0)
-    updateKeypadState({ mode: 'keypad' })
-  }
-
-  selectConstants() {
-    this.select(1)
-    updateKeypadState({ mode: 'const' })
-  }
-
-  selectHelp() {
-    this.select(2)
-    // updateKeypadState({mode: 'keypad'})
+  static propTypes = {
+    selectedIndex: PropTypes.number.isRequired,
+    onSelect: PropTypes.func.isRequired
   }
 
   render() {
     return (
       <Paper zDepth={1}>
-        <BottomNavigation style={{ backgroundColor }} selectedIndex={this.state.selectedIndex}>
+        <BottomNavigation style={{ backgroundColor }} selectedIndex={this.props.selectedIndex}>
           <BottomNavigationItem
             icon={keypadIcon}
-            onClick={() => this.selectKeypad()}
+            onClick={() => this.props.onSelect(0)}
           />
           <BottomNavigationItem
             icon={constantsIcon}
-            onClick={() => this.selectConstants()}
+            onClick={() => this.props.onSelect(1)}
           />
           <BottomNavigationItem
             icon={helpIcon}

@@ -1,101 +1,74 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
+import { selectGitHubTab } from '../actions/programPanel'
+import { getRunning } from '../reducers/processor'
+import { loadProgram, clearProgram } from '../actions/currentProgram'
+import { getProgramText } from '../reducers/currentProgram'
+import { runToCompletion, stopProgram } from '../actions/processor'
 
 import RunStopButton from '../components/RunStopButton'
-import store from '../store'
 import processor from '../processor'
 
-const updateProgramState = store.setSubState('program')
-const updateTabProgramState = store.setSubState('programTab')
-
-export default class ProgramToolbar extends React.PureComponent {
+class ProgramToolbar extends React.PureComponent {
 
   static propTypes = {
-    initialState: PropTypes.object.isRequired
+    initialState: PropTypes.object.isRequired,
+    selectGitHubTab: PropTypes.func.isRequired,
+    running: PropTypes.bool.isRequired,
+    programText: PropTypes.string,
+    loadProgram: PropTypes.func,
+    clearProgram: PropTypes.func,
+    runToCompletion: PropTypes.func,
+    stopProgram: PropTypes.func
   }
 
   state = {}
-
-  get noText() {
-    return this.state.text.trim() === ''
-  }
 
   constructor(props) {
     super(props)
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
-    this.clearProgram = this.clearProgram.bind(this)
   }
 
-  componentWillMount() {
-    this.subscription = store.subscribe(state => {
-      const { text, running, recording } = state.program
-      this.setState({ text, running, recording })
-    })
-    updateProgramState({ running: false, ip: 0 })
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
+  isEmptyProgram() {
+    return this.props.programText.trim() === ''
   }
 
   toggleRecording(ev, isInputChecked) {
     const recording = isInputChecked
     if (recording) {
-      updateProgramState({
-        recording: true,
-        text: '',
-        keyCodes: []
-      })
-    } else {
-      updateProgramState({
-        recording: false
-      })
+      this.props.clearProgram()
     }
+    this.setState({ recording })
   }
 
   runStop() {
-    if (this.state.running) {
-      updateProgramState({
-        running: false
-      })
-      return
-    }
-
-    const { text, keyCodes, error } = processor.compileProgram(this.state.text)
-
-    if (error) {
-      updateProgramState({ ...this.props.initialState, text })
+    const { loadProgram, running, runToCompletion, stopProgram } = this.props
+    if (running) {
+      stopProgram()
     } else {
-      updateProgramState({
-        keyCodes,
-        ip: 0,
-        error: false,
-        running: true,
-        recording: false
-      })
-      processor.runToCompletion()
+      const { keyCodes, error } = processor.compileProgram(this.props.programText)
+      if (error) {
+        console.log('there as an error')
+      } else {
+        loadProgram(keyCodes)
+        runToCompletion()
+      }
     }
-  }
-
-  clearProgram() {
-    updateProgramState({
-      text: '',
-      keyCodes: [],
-      ip: 0,
-      running: false,
-      error: false
-    })
   }
 
   render() {
-    const { running, recording } = this.state
+    const { recording } = this.state
+    const { running } = this.props
+
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -108,15 +81,31 @@ export default class ProgramToolbar extends React.PureComponent {
           />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => updateTabProgramState({ mode: 'gitHub' })} disabled={running}>
-            <FontIcon className="fa fa-github" color={grey700}/>
+          <IconButton onClick={() => this.props.selectGitHubTab()} disabled={running}>
+            <FontIcon className="fa fa-github" color={grey700} />
           </IconButton>
-          <IconButton onClick={this.clearProgram} disabled={this.noText || running} >
+          <IconButton onClick={this.props.clearProgram} disabled={this.isEmptyProgram() || running} >
             <Delete color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={this.noText} running={running} />
+          <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} running={running} />
         </ToolbarGroup>
       </Toolbar>
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    selectGitHubTab,
+    loadProgram,
+    clearProgram,
+    runToCompletion,
+    stopProgram,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+  running: getRunning(state),
+  programText: getProgramText(state)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramToolbar)

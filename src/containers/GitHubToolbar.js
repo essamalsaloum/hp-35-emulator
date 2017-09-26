@@ -1,20 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import IconButton from 'material-ui/IconButton'
-import store from '../store'
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import { grey700 } from 'material-ui/styles/colors'
 
-const updateProgramTabState = store.setSubState('programTab')
-
-export default function GitHubToolbar() {
+export default function GitHubToolbar(props) {
   return (
     <Toolbar>
       <ToolbarGroup firstChild={true}>
-        <IconButton onClick={() => updateProgramTabState({ mode: 'program' })} >
+        <IconButton onClick={props.onBackClick} >
           <ArrowBack color={grey700} />
         </IconButton>
       </ToolbarGroup>
     </Toolbar >
   )
+}
+
+GitHubToolbar.propTypes = {
+  onBackClick: PropTypes.func.isRequired
 }

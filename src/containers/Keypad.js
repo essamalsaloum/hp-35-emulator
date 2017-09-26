@@ -42,7 +42,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLR" keyCode={C.CLR} />
         </div>
         <div className="Keypad--row">
-          <Key label="√x" topLabel="xx" keyCode={C.SQRT} />
+          <Key label="√x" keyCode={C.SQRT} />
           <Key label="x<sup>2</sup>" keyCode={C.SQR} />
           <Key label="SIN" bottomLabel="ASIN" keyCode={C.SIN} />
           <Key label="COS" bottomLabel="ACOS" keyCode={C.COS} />

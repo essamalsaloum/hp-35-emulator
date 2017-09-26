@@ -1,6 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import {getStack, getBuffer} from '../reducers/processor'
 import math from 'mathjs'
-import store from '../store'
 
 const labels = ['x', 'y', 'z', 't']
 
@@ -17,19 +19,11 @@ const styles = {
   }
 }
 
-export default class Display extends React.PureComponent {
+class Display extends React.PureComponent {
 
-  state = {}
-
-  componentWillMount() {
-    this.subscription = store.subscribe(state => {
-      const { stack, buffer } = state.processor
-      this.setState({ stack, buffer })
-    })
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
+  static propTypes = {
+    stack: PropTypes.array,
+    buffer: PropTypes.string
   }
 
   renderStack(stack, buffer) {
@@ -48,7 +42,7 @@ export default class Display extends React.PureComponent {
   }
 
   render() {
-    const { stack, buffer } = this.state
+    const { stack, buffer } = this.props
     return (
       <div style={styles.root}>
         {this.renderStack(stack, buffer)}
@@ -56,3 +50,10 @@ export default class Display extends React.PureComponent {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  stack: getStack(state),
+  buffer: getBuffer(state)
+})
+
+export default connect(mapStateToProps)(Display)

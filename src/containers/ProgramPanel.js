@@ -1,10 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import TabTemplate from '../components/TabTemplate'
 import ProgramTab from './ProgramTab'
 import GitHubTab from './GitHubTab'
 import InspectTab from './InspectTab'
-import store from '../store'
+import { getSelectedProgramPanel } from '../reducers/programPanel'
 import './ProgramPanel.css'
 
 // see: https://github.com/callemall/material-ui/issues/2085
@@ -24,22 +26,14 @@ const styles = {
   }
 }
 
-export default class ProgramPanel extends React.PureComponent {
+class ProgramPanel extends React.PureComponent {
 
-  state = {}
-
-  componentWillMount() {
-    this.subscription = store.subscribe(({ programTab }) => {
-      this.setState({...programTab})
-    })
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
+  static propTypes = {
+    selectedPanel: PropTypes.string
   }
 
   renderProgramTab() {
-    return this.state.mode === 'program'
+    return this.props.selectedPanel === 'program'
       ? (<ProgramTab />)
       : (<GitHubTab />)
   }
@@ -63,3 +57,9 @@ export default class ProgramPanel extends React.PureComponent {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  selectedPanel: getSelectedProgramPanel(state)
+})
+
+export default connect(mapStateToProps)(ProgramPanel)

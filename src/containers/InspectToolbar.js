@@ -1,4 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { loadProgram } from '../actions/currentProgram'
+import { getKeyCodes, getProgramText } from '../reducers/currentProgram'
+import { getRunning } from '../reducers/processor'
+import { singleStep, runToCompletion, stopProgram, setIP } from '../actions/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import { grey700 } from 'material-ui/styles/colors'
@@ -6,18 +13,26 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import store from '../store'
 import processor from '../processor'
 
 const DELAY = 500
 
-export default class InspectToolbar extends React.PureComponent {
+class InspectToolbar extends React.PureComponent {
+
+  static propTypes = {
+    programText: PropTypes.string.isRequired,
+    keyCodes: PropTypes.array.isRequired,
+    running: PropTypes.bool.isRequired,
+    loadProgram: PropTypes.func.isRequired,
+    singleStep: PropTypes.func.isRequired,
+    runToCompletion: PropTypes.func.isRequired,
+    stopProgram: PropTypes.func.isRequired,
+    setIP: PropTypes.func.isRequired,
+  }
 
   state = {
     delayed: false
   }
-
-  singleStepIterator = null
 
   constructor() {
     super()
@@ -26,40 +41,29 @@ export default class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(state => {
-      const { keyCodes, running } = state.program
-      this.setState({ keyCodes, running })
-    })
-    this.compileProgram()
+    const { programText, loadProgram } = this.props
+    const { keyCodes, error } = processor.compileProgram(programText)
+    if (!error) {
+      loadProgram(keyCodes)
+    }
   }
-
-  componentWillUnmount() {
-    this.subscription.remove()
-  }
-
   toggleDelayed() {
     this.setState({ delayed: !this.state.delayed })
   }
 
-  compileProgram() {
-    const { program } = store.getState()
-    const { keyCodes, error } = processor.compileProgram(program.text)
-    if (!error) {
-      processor.loadProgram(keyCodes)
-    }
-  }
-
   runStop() {
-    const { running, delayed } = this.state
+    const { delayed } = this.state
+    const { running, runToCompletion, stopProgram } = this.props
     if (running) {
-      processor.stopProgram()
+      stopProgram()
     } else {
-      processor.runToCompletion(delayed ? DELAY : 0)
+      runToCompletion(delayed ? DELAY : 0)
     }
   }
 
   render() {
-    const { keyCodes, running, delayed } = this.state
+    const { delayed } = this.state
+    const { keyCodes, running, singleStep, setIP } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -73,10 +77,10 @@ export default class InspectToolbar extends React.PureComponent {
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => processor.loadProgram(keyCodes)} disabled={keyCodes.length === 0 || running} >
+          <IconButton onClick={() => setIP(0)} disabled={keyCodes.length === 0 || running} >
             <Refresh color={grey700} />
           </IconButton>
-          <IconButton onClick={() => processor.singleStep()} disabled={keyCodes.length === 0 || running} >
+          <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || running} >
             <Redo color={grey700} />
           </IconButton>
           <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} running={running} />
@@ -85,3 +89,20 @@ export default class InspectToolbar extends React.PureComponent {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    loadProgram,
+    singleStep,
+    runToCompletion,
+    stopProgram,
+    setIP,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+  running: getRunning(state),
+  keyCodes: getKeyCodes(state),
+  programText: getProgramText(state),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(InspectToolbar)
