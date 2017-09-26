@@ -5,9 +5,9 @@ import Paper from 'material-ui/Paper'
 import { blueGrey50 as backgroundColor } from 'material-ui/styles/colors'
 import store from '../store'
 
-const keypadIcon = <FontIcon className="fa fa-keyboard-o" />
-const constantsIcon = <FontIcon className="fa fa-balance-scale" />
-const helpIcon = <FontIcon className="fa fa-info-circle" />
+const keypadIcon = <FontIcon className="fa fa-calculator" style={{opacity: 0.7}}/>
+const constantsIcon = <FontIcon className="fa fa-flask" style={{opacity: 0.7}}/>
+const helpIcon = <FontIcon className="fa fa-info-circle" style={{opacity: 0.7}}/>
 
 const updateKeypadState = store.setSubState('keypad')
 
@@ -38,17 +38,14 @@ export default class MainNavigation extends React.PureComponent {
       <Paper zDepth={1}>
         <BottomNavigation style={{ backgroundColor }} selectedIndex={this.state.selectedIndex}>
           <BottomNavigationItem
-            label="Keypad"
             icon={keypadIcon}
             onClick={() => this.selectKeypad()}
           />
           <BottomNavigationItem
-            label="Constants"
             icon={constantsIcon}
             onClick={() => this.selectConstants()}
           />
           <BottomNavigationItem
-            label="Help"
             icon={helpIcon}
             onClick={() => undefined}
           />
