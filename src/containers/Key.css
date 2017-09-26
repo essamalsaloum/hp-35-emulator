@@ -29,6 +29,10 @@
     color: #EF6C00;
 }
 
+.Key--keyCode-div, .Key--keyCode-mul, .Key--keyCode-sub, .Key--keyCode-add {
+  font-size: 1.25em;
+}
+
 .Key--keyCode-enter {
     width: 110px;
 }

@@ -35,32 +35,32 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLX" keyCode={C.CLX} />
         </div>
         <div className="Keypad--row">
-          <Key label="Const" keyCode={C.CONST} />
+          <Key label="?" keyCode={C.CONST} addClass="Key--bold"/>
           <Key label="7" keyCode={C.D7} addClass="Key--bold" />
           <Key label="8" keyCode={C.D8} addClass="Key--bold" />
           <Key label="9" keyCode={C.D9} addClass="Key--bold" />
-          <Key label="÷" keyCode={C.DIV} addClass="Key--bold" />
+          <Key label="÷" keyCode={C.DIV} />
         </div>
         <div className="Keypad--row">
           <Key label="f" keyCode={C.SHIFT_UP} addClass="Key--bold" />
           <Key label="4" keyCode={C.D4} addClass="Key--bold" />
           <Key label="5" keyCode={C.D5} addClass="Key--bold" />
           <Key label="6" keyCode={C.D6} addClass="Key--bold" />
-          <Key label="×" keyCode={C.MUL} addClass="Key--bold" />
+          <Key label="×" keyCode={C.MUL} />
         </div>
         <div className="Keypad--row">
           <Key label="g" keyCode={C.SHIFT_DOWN} addClass="Key--bold" />
           <Key label="1" keyCode={C.D1} addClass="Key--bold" />
           <Key label="2" keyCode={C.D2} addClass="Key--bold" />
           <Key label="3" keyCode={C.D3} addClass="Key--bold" />
-          <Key label="-" keyCode={C.SUB} addClass="Key--bold" />
+          <Key label="-" keyCode={C.SUB} />
         </div>
         <div className="Keypad--row">
           <Key label="C" keyCode={C.CLX} addClass="Key--bold" />
           <Key label="0" keyCode={C.D0} addClass="Key--bold" />
           <Key label="•" keyCode={C.DOT} addClass="Key--bold" />
           <Key label="π" keyCode={C.PI} addClass="Key--bold" />
-          <Key label="+" keyCode={C.ADD} addClass="Key--bold" />
+          <Key label="+" keyCode={C.ADD} />
         </div>
       </div>
     )
