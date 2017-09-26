@@ -6,8 +6,6 @@ import { selectProgramTab } from '../actions/programPanel'
 import { fetchProgramList, fetchProgramText } from '../actions/programs'
 import { setProgramText } from '../actions/currentProgram'
 import { getPrograms } from '../reducers/programs'
-
-import store from '../store'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
 import GitHubToolbar from './GitHubToolbar'
@@ -24,19 +22,10 @@ class GitHubTab extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = store.subscribe(({ github }) => {
-      const { programs } = github
-      this.setState({ programs })
-    })
-
     const { programs } = this.props
     if (!programs) {
       this.props.fetchProgramList()
     }
-  }
-
-  componentWillUnmount() {
-    this.subscription.remove()
   }
 
   onClick(name) {

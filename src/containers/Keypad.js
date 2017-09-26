@@ -1,36 +1,9 @@
 import React from 'react'
-import store from '../store'
-import mapKeyboardEvent from '../processor/keyboardEventMapper'
-import processor from '../processor'
 import C from '../processor/keyCodes'
 import Key from './Key'
 import './Keypad.css'
 
 export default class Keypad extends React.PureComponent {
-
-  storeProcessorState = store.setSubState('processor')
-
-  keyUpHandler = ev => {
-    const keyCode = mapKeyboardEvent(ev)
-    if (keyCode) {
-      this.storeProcessorState(processor.execute(store.getState().processor, keyCode))
-    }
-  }
-
-  componentDidMount() {
-    const elem = document.querySelector('.App--main')
-    if (elem) {
-      elem.addEventListener('keyup', this.keyUpHandler)
-    }
-  }
-
-  componentWillUnmount() {
-    const elem = document.querySelector('.App--main')
-    if (elem) {
-      elem.removeEventListener('keyup', this.keyUpHandler)
-    }
-  }
-
   render() {
     return (
       <div className="Keypad">

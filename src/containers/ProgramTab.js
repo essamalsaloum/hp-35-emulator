@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
-import store from '../store'
 import { setProgramText } from '../actions/currentProgram'
 import { getProgramText } from '../reducers/currentProgram'
 import './ProgramTab.css'
@@ -26,7 +25,6 @@ class ProgramTab extends React.PureComponent {
 
   state = {}
   subscriptions = []
-  updateProgramState = store.setSubState('program')
 
   constructor() {
     super()

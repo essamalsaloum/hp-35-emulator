@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import { emitKeyCode } from '../actions/processor'
 import { setShiftKey } from '../actions/shiftKey'
 import { getShiftKey } from '../reducers/shiftKey'
@@ -33,6 +34,28 @@ class Key extends React.PureComponent {
   static defaultProps = {
     topLabel: '',
     bottomLabel: '',
+  }
+
+  keyUpHandler = ev => {
+    const keyCode = mapKeyboardEvent(ev)
+    if (keyCode) {
+      this.props.setShiftKey(null)
+      this.props.emitKeyCode(keyCode)
+    }
+  }
+
+  componentDidMount() {
+    const elem = document.querySelector('.App--main')
+    if (elem) {
+      elem.addEventListener('keyup', this.keyUpHandler)
+    }
+  }
+
+  componentWillUnmount() {
+    const elem = document.querySelector('.App--main')
+    if (elem) {
+      elem.removeEventListener('keyup', this.keyUpHandler)
+    }
   }
 
   onClick(keyCode) {
