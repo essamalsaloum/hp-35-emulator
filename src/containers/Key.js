@@ -69,7 +69,9 @@ class Key extends React.PureComponent {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
       this.props.emitKeyCode(keyCode)
-      this.props.setShiftKey(null)
+      if (shiftKey) {
+        this.props.setShiftKey(null)
+      }
     }
   }
 
