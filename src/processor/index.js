@@ -5,8 +5,8 @@ import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
 import store from '../reduxStore'
 import { getKeyCodes } from '../reducers/currentProgram'
-import { setProcessorState, setIP, setRunning } from '../actions/processor'
-import { getProcessorState, getIP, getRunning } from '../reducers/processor'
+import { setProcessorState } from '../actions/processor'
+import { getProcessorState } from '../reducers/processor'
 
 import * as util from './util'
 
@@ -134,36 +134,10 @@ class Processor {
     })
   }
 
-  async runToCompletion(delay = 0) {
-    const keyCodes = getKeyCodes(store.getState())
-    let interrupted = false
-    setRunning()
-    while (getIP(store.getState()) < keyCodes.length && !interrupted) {
-      if (getRunning(store.getState())) {
-        await this.executeNext(delay)
-      } else {
-        interrupted = true
-      }
-    }
-    store.dispatch(setRunning(false))
-    if (!interrupted) {
-      store.dispatch(setIP(0))
-    }
-  }
-
   stopProgram() {
     if (this.timeoutID !== null) {
       clearTimeout(this.timeoutID)
       this.timeoutID = null
-    }
-  }
-
-  singleStep() {
-    const state = store.getState()
-    if (getIP(state) < getKeyCodes(state).length) {
-      this.executeNext()
-    } else {
-      setIP(0)
     }
   }
 
