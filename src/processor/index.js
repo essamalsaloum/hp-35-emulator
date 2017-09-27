@@ -4,9 +4,8 @@ import { inputInstructions } from './instructions/input'
 import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
 import store from '../reduxStore'
-import { keyCodesSelector } from '../reducers/currentProgram'
-import { setProcessorState } from '../actions/processor'
-import { processorStateSelector } from '../reducers/processor'
+import { keyCodesSelector } from '../modules/program'
+import { setProcessorState, processorStateSelector } from '../modules/processor'
 
 import * as util from './util'
 

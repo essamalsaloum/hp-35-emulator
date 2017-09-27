@@ -2,10 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { loadProgram } from '../actions/currentProgram'
-import { keyCodesSelector, programTextSelector } from '../reducers/currentProgram'
-import { runningSelector, delayedSelector } from '../reducers/processor'
-import { singleStep, runToCompletion, stopProgram, setIP, setDelayed } from '../actions/processor'
+import { loadKeyCodes, keyCodesSelector, programTextSelector } from '../modules/program'
+import { singleStep, runToCompletion, stopProgram, setIP, setDelayed, runningSelector, delayedSelector } from '../modules/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import { grey700 } from 'material-ui/styles/colors'
@@ -21,7 +19,7 @@ class InspectToolbar extends React.PureComponent {
     programText: PropTypes.string.isRequired,
     keyCodes: PropTypes.array.isRequired,
     running: PropTypes.bool.isRequired,
-    loadProgram: PropTypes.func.isRequired,
+    loadKeyCodes: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
     runToCompletion: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
@@ -37,10 +35,10 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadProgram } = this.props
+    const { programText, loadKeyCodes } = this.props
     const { keyCodes, error } = processor.compileProgram(programText)
     if (!error) {
-      loadProgram(keyCodes)
+      loadKeyCodes(keyCodes)
     }
   }
 
@@ -86,7 +84,7 @@ class InspectToolbar extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    loadProgram,
+    loadKeyCodes,
     singleStep,
     runToCompletion,
     stopProgram,

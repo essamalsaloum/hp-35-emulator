@@ -1,8 +1,12 @@
-import { SET_SHIFT_KEY } from '../actions/actionTypes'
+import { createAction } from 'redux-actions'
+
+const SET = 'rpnext/shiftKey/SET'
+
+export const setShiftKey = createAction(SET)
 
 export default function reduce(state = null, { type, payload }) {
   switch (type) {
-    case SET_SHIFT_KEY:
+    case SET:
       return payload
     default:
       return state

@@ -2,10 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { selectProgramTab } from '../actions/programPanel'
-import { fetchProgramList, fetchProgramText } from '../actions/programs'
-import { setGitHubProgramText } from '../actions/currentProgram'
-import { programsSelector } from '../reducers/programs'
+import { selectProgramTab } from '../modules/programPanel'
+import { fetchProgramList, fetchProgramText, programsSelector } from '../modules/programs'
+import { setGitHubText } from '../modules/program'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
 import GitHubToolbar from './GitHubToolbar'
@@ -18,7 +17,7 @@ class GitHubTab extends React.PureComponent {
     fetchProgramList: PropTypes.func,
     fetchProgramText: PropTypes.func,
     selectProgramTab: PropTypes.func,
-    setGitHubProgramText: PropTypes.func
+    setGitHubText: PropTypes.func
   }
 
   componentWillMount() {
@@ -32,7 +31,7 @@ class GitHubTab extends React.PureComponent {
     const { programs } = this.props
     const { text } = programs[name]
     if (text) {
-      this.props.setGitHubProgramText(text)
+      this.props.setGitHubText(text)
       this.props.selectProgramTab()
     } else {
       this.props.fetchProgramText(name)
@@ -75,7 +74,7 @@ const mapDispatchToProps = dispatch =>
     fetchProgramList,
     fetchProgramText,
     selectProgramTab,
-    setGitHubProgramText
+    setGitHubText
   }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(GitHubTab)

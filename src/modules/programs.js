@@ -1,12 +1,10 @@
 import axios from 'axios'
 import { createAction } from 'redux-actions'
+import {setGitHubText} from '../modules/program'
+import {selectProgramTab} from '../modules/programPanel'
 
-import {
-  FETCH_GITHUB_PROGRAM_LIST,
-  FETCH_GITHUB_PROGRAM_TEXT,
-  SET_GITHUB_PROGRAM_TEXT,
-  SELECT_PROGRAM_TAB,
-} from './actionTypes'
+const FETCH_GITHUB_PROGRAM_LIST = 'rpnext/programs/FETCH_GITHUB_PROGRAM_LIST'
+const FETCH_GITHUB_PROGRAM_TEXT = 'rpnext/programs/FETCH_GITHUB_PROGRAM_TEXT'
 
 const REPO_USER = 'remarcmij'
 const REPO_NAME = 'calculator-programs'
@@ -46,10 +44,34 @@ export const fetchProgramText = name => (dispatch, getState) => {
         name: name,
         text: res.data
       }))
-      dispatch(createAction(SET_GITHUB_PROGRAM_TEXT)(res.data))
-      dispatch(createAction(SELECT_PROGRAM_TAB)())
+      dispatch(setGitHubText(res.data))
+      dispatch(selectProgramTab())
     })
     .catch(err => {
       dispatch(createAction(FETCH_GITHUB_PROGRAM_TEXT)(err))
     })
 }
+
+const fetchProgramListFulfilled = (state, action) => {
+  const programs = action.payload
+  return { ...state, ...programs }
+}
+
+const fetchProgramTextFulfilled = (state, action) => {
+  const { name, text } = action.payload
+  const program = { ...state[name], text }
+  return { ...state, [name]: program }
+}
+
+export default function reduce(state = null, action) {
+  switch (action.type) {
+    case FETCH_GITHUB_PROGRAM_LIST:
+      return fetchProgramListFulfilled(state, action)
+    case FETCH_GITHUB_PROGRAM_TEXT:
+      return fetchProgramTextFulfilled(state, action)
+    default:
+      return state
+  }
+}
+
+export const programsSelector = state => state.programs

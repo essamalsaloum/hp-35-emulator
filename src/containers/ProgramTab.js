@@ -5,8 +5,7 @@ import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
-import { setProgramText } from '../actions/currentProgram'
-import { programTextSelector, fromGitHubSelector } from '../reducers/currentProgram'
+import { setProgramText, programTextSelector, fromGitHubSelector } from '../modules/program'
 import './ProgramTab.css'
 
 const resetState = {

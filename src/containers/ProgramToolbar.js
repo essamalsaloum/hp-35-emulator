@@ -8,11 +8,9 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
-import { selectGitHubTab } from '../actions/programPanel'
-import { runningSelector } from '../reducers/processor'
-import { loadProgram, clearProgram } from '../actions/currentProgram'
-import { programTextSelector, fromGitHubSelector } from '../reducers/currentProgram'
-import { runToCompletion, stopProgram } from '../actions/processor'
+import { selectGitHubTab } from '../modules/programPanel'
+import { loadKeyCodes, clearProgram, programTextSelector, fromGitHubSelector } from '../modules/program'
+import { runToCompletion, stopProgram, runningSelector } from '../modules/processor'
 
 import RunStopButton from '../components/RunStopButton'
 import processor from '../processor'
@@ -24,7 +22,7 @@ class ProgramToolbar extends React.PureComponent {
     selectGitHubTab: PropTypes.func.isRequired,
     running: PropTypes.bool.isRequired,
     programText: PropTypes.string,
-    loadProgram: PropTypes.func,
+    loadKeyCodes: PropTypes.func,
     clearProgram: PropTypes.func,
     runToCompletion: PropTypes.func,
     stopProgram: PropTypes.func,
@@ -54,7 +52,7 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { loadProgram, running, runToCompletion, stopProgram } = this.props
+    const { loadKeyCodes, running, runToCompletion, stopProgram } = this.props
     if (running) {
       stopProgram()
     } else {
@@ -62,7 +60,7 @@ class ProgramToolbar extends React.PureComponent {
       if (error) {
         console.log('there as an error')
       } else {
-        loadProgram(keyCodes)
+        loadKeyCodes(keyCodes)
         runToCompletion()
       }
     }
@@ -109,7 +107,7 @@ class ProgramToolbar extends React.PureComponent {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     selectGitHubTab,
-    loadProgram,
+    loadKeyCodes,
     clearProgram,
     runToCompletion,
     stopProgram,

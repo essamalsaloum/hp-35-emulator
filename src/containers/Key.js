@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import mapKeyboardEvent from '../processor/keyboardEventMapper'
-import { emitKeyCode } from '../actions/processor'
-import { setShiftKey } from '../actions/shiftKey'
-import { shiftKeySelector } from '../reducers/shiftKey'
+import { injectKeyCode } from '../modules/processor'
+import { setShiftKey, shiftKeySelector } from '../modules/shiftKey'
 import C from '../processor/keyCodes'
 import './Key.css'
 
@@ -26,7 +25,7 @@ class Key extends React.PureComponent {
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
     addClass: PropTypes.string,
-    emitKeyCode: PropTypes.func,
+    injectKeyCode: PropTypes.func,
     shiftKey: PropTypes.string,
     setShiftKey: PropTypes.func.isRequired
   }
@@ -40,7 +39,7 @@ class Key extends React.PureComponent {
     const keyCode = mapKeyboardEvent(ev)
     if (keyCode) {
       this.props.setShiftKey(null)
-      this.props.emitKeyCode(keyCode)
+      this.props.injectKeyCode(keyCode)
     }
   }
 
@@ -68,7 +67,7 @@ class Key extends React.PureComponent {
     } else {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
-      this.props.emitKeyCode(keyCode)
+      this.props.injectKeyCode(keyCode)
       if (shiftKey) {
         this.props.setShiftKey(null)
       }
@@ -76,7 +75,7 @@ class Key extends React.PureComponent {
   }
 
   renderBottomLabel() {
-    const { bottomLabel, shiftKey } = this.props
+    const { shiftKey, bottomLabel } = this.props
     return bottomLabel !== '' && shiftKey === C.SHIFT_DOWN ? (<div className="Key--bottomLabel"></div>) : (
       <div className="Key--bottomLabel" dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
     )
@@ -91,7 +90,6 @@ class Key extends React.PureComponent {
       addClass,
       shiftKey
     } = this.props
-
     const decorator = {
       label,
       shiftKey: ''
@@ -124,8 +122,8 @@ class Key extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    emitKeyCode,
-    setShiftKey
+    injectKeyCode,
+    setShiftKey,
   }, dispatch)
 
 const mapStateToProps = state => ({
