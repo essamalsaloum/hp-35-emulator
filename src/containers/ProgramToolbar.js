@@ -31,7 +31,9 @@ class ProgramToolbar extends React.PureComponent {
     fromGitHub: PropTypes.bool.isRequired,
   }
 
-  state = {}
+  state = {
+    recording: false
+  }
 
   constructor(props) {
     super(props)
@@ -66,20 +68,29 @@ class ProgramToolbar extends React.PureComponent {
     }
   }
 
-  render() {
+  // to avoid a console warning
+  renderToggle() {
     const { recording } = this.state
     const { running, fromGitHub } = this.props
+    if (running || fromGitHub) {
+      return null
+    } else {
+      return (<Toggle
+        label="Record"
+        labelPosition="right"
+        disabled={running || fromGitHub}
+        toggled={recording}
+        onToggle={this.toggleRecording}
+      />)
+    }
+  }
 
+  render() {
+    const { running } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
-          <Toggle
-            label="Record"
-            labelPosition="right"
-            disabled={running || fromGitHub}
-            toggled={recording}
-            onToggle={this.toggleRecording}
-          />
+          {this.renderToggle()}
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
           <IconButton onClick={() => this.props.selectGitHubTab()} disabled={running}>
