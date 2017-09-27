@@ -14,5 +14,4 @@ export default (state = 'program', { type }) => {
   }
 }
 
-
-export const getSelectedProgramPanel = state => state.programPanel
+export const programPanelSelector = state => state.programPanel

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import { emitKeyCode } from '../actions/processor'
 import { setShiftKey } from '../actions/shiftKey'
-import { getShiftKey } from '../reducers/shiftKey'
+import { shiftKeySelector } from '../reducers/shiftKey'
 import C from '../processor/keyCodes'
 import './Key.css'
 
@@ -129,7 +129,7 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  shiftKey: getShiftKey(state)
+  shiftKey: shiftKeySelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Key)

@@ -9,4 +9,4 @@ export default function reduce(state = null, { type, payload }) {
   }
 }
 
-export const getShiftKey = state => state.shiftKey
+export const shiftKeySelector = state => state.shiftKey

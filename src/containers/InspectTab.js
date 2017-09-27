@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getKeyCodes } from '../reducers/currentProgram'
-import { getIP } from '../reducers/processor'
+import { keyCodesSelector } from '../reducers/currentProgram'
+import { ipSelector } from '../reducers/processor'
 import InspectToolbar from './InspectToolbar'
 import './InspectTab.css'
 
@@ -42,8 +42,8 @@ class InspectTab extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  keyCodes: getKeyCodes(state),
-  ip: getIP(state)
+  keyCodes: keyCodesSelector(state),
+  ip: ipSelector(state)
 })
 
 export default connect(mapStateToProps)(InspectTab)

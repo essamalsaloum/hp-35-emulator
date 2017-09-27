@@ -6,7 +6,7 @@ import TabTemplate from '../components/TabTemplate'
 import ProgramTab from './ProgramTab'
 import GitHubTab from './GitHubTab'
 import InspectTab from './InspectTab'
-import { getSelectedProgramPanel } from '../reducers/programPanel'
+import { programPanelSelector } from '../reducers/programPanel'
 import './ProgramPanel.css'
 
 // see: https://github.com/callemall/material-ui/issues/2085
@@ -59,7 +59,7 @@ class ProgramPanel extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  selectedPanel: getSelectedProgramPanel(state)
+  selectedPanel: programPanelSelector(state)
 })
 
 export default connect(mapStateToProps)(ProgramPanel)

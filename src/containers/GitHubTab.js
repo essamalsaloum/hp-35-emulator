@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { selectProgramTab } from '../actions/programPanel'
 import { fetchProgramList, fetchProgramText } from '../actions/programs'
 import { setGitHubProgramText } from '../actions/currentProgram'
-import { getPrograms } from '../reducers/programs'
+import { programsSelector } from '../reducers/programs'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
 import GitHubToolbar from './GitHubToolbar'
@@ -67,7 +67,7 @@ class GitHubTab extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  programs: getPrograms(state)
+  programs: programsSelector(state)
 })
 
 const mapDispatchToProps = dispatch =>

@@ -1,13 +1,13 @@
-import { 
-  EMIT_KEYCODE, 
-  SET_PROCESSOR_STATE, 
-  SET_IP, 
-  SET_RUNNING, 
-  SET_DELAYED 
+import {
+  EMIT_KEYCODE,
+  SET_PROCESSOR_STATE,
+  SET_IP,
+  SET_RUNNING,
+  SET_DELAYED
 } from './actionTypes'
-import { getKeyCodes } from '../reducers/currentProgram'
-import { getRunning } from '../reducers/processor'
-import { getIP, getDelayed } from '../reducers/processor'
+import { keyCodesSelector } from '../reducers/currentProgram'
+import { runningSelector } from '../reducers/processor'
+import { ipSelector, delayedSelector } from '../reducers/processor'
 import processor from '../processor'
 
 const DELAY = 500
@@ -15,12 +15,12 @@ const DELAY = 500
 export const emitKeyCode = keyCode => ({ type: EMIT_KEYCODE, payload: keyCode })
 
 export const runToCompletion = () => async (dispatch, getState) => {
-  const keyCodes = getKeyCodes(getState())
+  const keyCodes = keyCodesSelector(getState())
   let interrupted = false
   dispatch(setRunning(true))
-  while (getIP(getState()) < keyCodes.length && !interrupted) {
-    if (getRunning(getState())) {
-      await processor.executeNext(getDelayed(getState()) ? DELAY : 0)
+  while (ipSelector(getState()) < keyCodes.length && !interrupted) {
+    if (runningSelector(getState())) {
+      await processor.executeNext(delayedSelector(getState()) ? DELAY : 0)
     } else {
       interrupted = true
     }
@@ -32,7 +32,7 @@ export const runToCompletion = () => async (dispatch, getState) => {
 }
 
 export const singleStep = () => (dispatch, getState) => {
-  if (getIP(getState()) < getKeyCodes(getState()).length) {
+  if (ipSelector(getState()) < keyCodesSelector(getState()).length) {
     processor.executeNext()
   } else {
     dispatch(setIP(0))

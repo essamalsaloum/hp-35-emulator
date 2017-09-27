@@ -1,6 +1,6 @@
 import {
-  FETCH_GITHUB_PROGRAM_LIST_FULFILLED,
-  FETCH_GITHUB_PROGRAM_TEXT_FULFILLED,
+  FETCH_GITHUB_PROGRAM_LIST,
+  FETCH_GITHUB_PROGRAM_TEXT,
 } from '../actions/actionTypes'
 
 const fetchProgramListFulfilled = (state, action) => {
@@ -16,13 +16,13 @@ const fetchProgramTextFulfilled = (state, action) => {
 
 export default function reduce(state = null, action) {
   switch (action.type) {
-    case FETCH_GITHUB_PROGRAM_LIST_FULFILLED:
+    case FETCH_GITHUB_PROGRAM_LIST:
       return fetchProgramListFulfilled(state, action)
-    case FETCH_GITHUB_PROGRAM_TEXT_FULFILLED:
+    case FETCH_GITHUB_PROGRAM_TEXT:
       return fetchProgramTextFulfilled(state, action)
     default:
       return state
   }
 }
 
-export const getPrograms = state => state.programs
+export const programsSelector = state => state.programs

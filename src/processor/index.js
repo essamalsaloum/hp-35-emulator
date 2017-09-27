@@ -4,9 +4,9 @@ import { inputInstructions } from './instructions/input'
 import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
 import store from '../reduxStore'
-import { getKeyCodes } from '../reducers/currentProgram'
+import { keyCodesSelector } from '../reducers/currentProgram'
 import { setProcessorState } from '../actions/processor'
-import { getProcessorState } from '../reducers/processor'
+import { processorStateSelector } from '../reducers/processor'
 
 import * as util from './util'
 
@@ -123,8 +123,8 @@ class Processor {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
         const state = store.getState()
-        const keyCodes = getKeyCodes(state)
-        let processorState = getProcessorState(state)
+        const keyCodes = keyCodesSelector(state)
+        let processorState = processorStateSelector(state)
         const { ip } = processorState
         processorState = this.execute(processorState, keyCodes[ip])
         store.dispatch(setProcessorState({ ...processorState, ip: ip + 1 }))

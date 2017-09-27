@@ -35,12 +35,9 @@ export default function reduce(state = initialState, { type, payload }) {
   }
 }
 
-export const getProcessorState = state => state.processor
-export const getStack = state => state.processor.stack
-export const getBuffer = state => state.processor.buffer
-export const getStackLift = state => state.processor.stackLift
-export const getEntry = state => state.processor.entry
-export const getMemory = state => state.processor.memory
-export const getIP = state => state.processor.ip
-export const getRunning = state => state.processor.running
-export const getDelayed = state => state.processor.delayed
+export const processorStateSelector = state => state.processor
+export const stackSelector = state => state.processor.stack
+export const bufferSelector = state => state.processor.buffer
+export const ipSelector = state => state.processor.ip
+export const runningSelector = state => state.processor.running
+export const delayedSelector = state => state.processor.delayed

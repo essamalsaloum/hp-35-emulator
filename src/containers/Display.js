@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {getStack, getBuffer} from '../reducers/processor'
+import {stackSelector, bufferSelector} from '../reducers/processor'
 import math from 'mathjs'
 import './Display.css'
 
@@ -36,8 +36,8 @@ class Display extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  stack: getStack(state),
-  buffer: getBuffer(state)
+  stack: stackSelector(state),
+  buffer: bufferSelector(state)
 })
 
 export default connect(mapStateToProps)(Display)

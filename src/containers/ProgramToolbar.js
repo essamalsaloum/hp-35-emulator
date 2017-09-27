@@ -9,9 +9,9 @@ import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../actions/programPanel'
-import { getRunning } from '../reducers/processor'
+import { runningSelector } from '../reducers/processor'
 import { loadProgram, clearProgram } from '../actions/currentProgram'
-import { getProgramText, getFromGitHub } from '../reducers/currentProgram'
+import { programTextSelector, fromGitHubSelector } from '../reducers/currentProgram'
 import { runToCompletion, stopProgram } from '../actions/processor'
 
 import RunStopButton from '../components/RunStopButton'
@@ -116,9 +116,9 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  running: getRunning(state),
-  programText: getProgramText(state),
-  fromGitHub: getFromGitHub(state)
+  running: runningSelector(state),
+  programText: programTextSelector(state),
+  fromGitHub: fromGitHubSelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramToolbar)

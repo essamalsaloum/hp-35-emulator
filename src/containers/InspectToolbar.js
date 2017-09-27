@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loadProgram } from '../actions/currentProgram'
-import { getKeyCodes, getProgramText } from '../reducers/currentProgram'
-import { getRunning, getDelayed } from '../reducers/processor'
+import { keyCodesSelector, programTextSelector } from '../reducers/currentProgram'
+import { runningSelector, delayedSelector } from '../reducers/processor'
 import { singleStep, runToCompletion, stopProgram, setIP, setDelayed } from '../actions/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
@@ -95,10 +95,10 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  running: getRunning(state),
-  delayed: getDelayed(state),
-  keyCodes: getKeyCodes(state),
-  programText: getProgramText(state),
+  running: runningSelector(state),
+  delayed: delayedSelector(state),
+  keyCodes: keyCodesSelector(state),
+  programText: programTextSelector(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InspectToolbar)

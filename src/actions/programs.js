@@ -1,10 +1,9 @@
 import axios from 'axios'
+import { createAction } from 'redux-actions'
 
 import {
-  FETCH_GITHUB_PROGRAM_LIST_FULFILLED,
-  // FETCH_GITHUB_PROGRAM_LIST_ERROR,
-  FETCH_GITHUB_PROGRAM_TEXT_FULFILLED,
-  // FETCH_GITHUB_PROGRAM_TEXT_ERROR,
+  FETCH_GITHUB_PROGRAM_LIST,
+  FETCH_GITHUB_PROGRAM_TEXT,
   SET_GITHUB_PROGRAM_TEXT,
   SELECT_PROGRAM_TAB,
 } from './actionTypes'
@@ -31,10 +30,10 @@ export const fetchProgramList = () => dispatch => {
           }
           return prev
         }, {})
-      dispatch({
-        type: FETCH_GITHUB_PROGRAM_LIST_FULFILLED,
-        payload: programs
-      })
+      dispatch(createAction(FETCH_GITHUB_PROGRAM_LIST)(programs))
+    })
+    .catch(err => {
+      dispatch(createAction(FETCH_GITHUB_PROGRAM_LIST)(err))
     })
 }
 
@@ -43,17 +42,14 @@ export const fetchProgramText = name => (dispatch, getState) => {
   const url = programs[name].url
   axios.get(url, { headers })
     .then(res => {
-      dispatch({
-        type: FETCH_GITHUB_PROGRAM_TEXT_FULFILLED,
-        payload: {
-          name: name,
-          text: res.data
-        }
-      })
-      dispatch({
-        type: SET_GITHUB_PROGRAM_TEXT,
-        payload: res.data
-      })
-      dispatch({ type: SELECT_PROGRAM_TAB })
+      dispatch(createAction(FETCH_GITHUB_PROGRAM_TEXT)({
+        name: name,
+        text: res.data
+      }))
+      dispatch(createAction(SET_GITHUB_PROGRAM_TEXT)(res.data))
+      dispatch(createAction(SELECT_PROGRAM_TAB)())
+    })
+    .catch(err => {
+      dispatch(createAction(FETCH_GITHUB_PROGRAM_TEXT)(err))
     })
 }

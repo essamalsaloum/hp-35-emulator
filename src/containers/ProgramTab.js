@@ -6,7 +6,7 @@ import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
 import { setProgramText } from '../actions/currentProgram'
-import { getProgramText, getFromGitHub } from '../reducers/currentProgram'
+import { programTextSelector, fromGitHubSelector } from '../reducers/currentProgram'
 import './ProgramTab.css'
 
 const resetState = {
@@ -84,8 +84,8 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  programText: getProgramText(state),
-  fromGitHub: getFromGitHub(state),
+  programText: programTextSelector(state),
+  fromGitHub: fromGitHubSelector(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)

@@ -26,6 +26,6 @@ export default (state = initialState, { type, payload }) => {
   }
 }
 
-export const getProgramText = state => state.currentProgram.text
-export const getKeyCodes = state => state.currentProgram.keyCodes
-export const getFromGitHub = state => state.currentProgram.fromGitHub
+export const programTextSelector = state => state.currentProgram.text
+export const keyCodesSelector = state => state.currentProgram.keyCodes
+export const fromGitHubSelector = state => state.currentProgram.fromGitHub
