@@ -47,6 +47,7 @@ class InspectToolbar extends React.PureComponent {
       loadProgram(keyCodes)
     }
   }
+
   toggleDelayed() {
     this.setState({ delayed: !this.state.delayed })
   }
@@ -70,7 +71,7 @@ class InspectToolbar extends React.PureComponent {
           <Toggle
             label="Slow"
             labelPosition="right"
-            disabled={keyCodes.length === 0 || running}
+            disabled={running}
             toggled={delayed}
             onToggle={this.toggleDelayed}
           />
