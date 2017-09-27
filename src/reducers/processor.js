@@ -1,4 +1,10 @@
-import { EMIT_KEYCODE, SET_PROCESSOR_STATE, SET_IP, SET_RUNNING } from '../actions/actionTypes'
+import {
+  EMIT_KEYCODE,
+  SET_PROCESSOR_STATE,
+  SET_IP,
+  SET_RUNNING,
+  SET_DELAYED
+} from '../actions/actionTypes'
 import processor from '../processor'
 
 const initialState = {
@@ -8,7 +14,8 @@ const initialState = {
   entry: true,
   memory: 0,
   ip: 0,
-  running: false
+  running: false,
+  delayed: false
 }
 
 export default function reduce(state = initialState, { type, payload }) {
@@ -20,7 +27,9 @@ export default function reduce(state = initialState, { type, payload }) {
     case SET_IP:
       return { ...state, ip: payload }
     case SET_RUNNING:
-      return {...state, running: payload}
+      return { ...state, running: payload }
+    case SET_DELAYED:
+      return { ...state, delayed: payload }
     default:
       return state
   }
@@ -34,3 +43,4 @@ export const getEntry = state => state.processor.entry
 export const getMemory = state => state.processor.memory
 export const getIP = state => state.processor.ip
 export const getRunning = state => state.processor.running
+export const getDelayed = state => state.processor.delayed

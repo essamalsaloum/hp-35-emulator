@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loadProgram } from '../actions/currentProgram'
 import { getKeyCodes, getProgramText } from '../reducers/currentProgram'
-import { getRunning } from '../reducers/processor'
-import { singleStep, runToCompletion, stopProgram, setIP } from '../actions/processor'
+import { getRunning, getDelayed } from '../reducers/processor'
+import { singleStep, runToCompletion, stopProgram, setIP, setDelayed } from '../actions/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import { grey700 } from 'material-ui/styles/colors'
@@ -14,8 +14,6 @@ import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
 import processor from '../processor'
-
-const DELAY = 500
 
 class InspectToolbar extends React.PureComponent {
 
@@ -28,10 +26,8 @@ class InspectToolbar extends React.PureComponent {
     runToCompletion: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
     setIP: PropTypes.func.isRequired,
-  }
-
-  state = {
-    delayed: false
+    delayed: PropTypes.bool.isRequired,
+    setDelayed: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -49,29 +45,26 @@ class InspectToolbar extends React.PureComponent {
   }
 
   toggleDelayed() {
-    this.setState({ delayed: !this.state.delayed })
+    this.props.setDelayed(!this.props.delayed)
   }
 
   runStop() {
-    const { delayed } = this.state
     const { running, runToCompletion, stopProgram } = this.props
     if (running) {
       stopProgram()
     } else {
-      runToCompletion(delayed ? DELAY : 0)
+      runToCompletion()
     }
   }
 
   render() {
-    const { delayed } = this.state
-    const { keyCodes, running, singleStep, setIP } = this.props
+    const { keyCodes, running, singleStep, setIP, delayed } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
             label="Slow"
             labelPosition="right"
-            disabled={running}
             toggled={delayed}
             onToggle={this.toggleDelayed}
           />
@@ -98,10 +91,12 @@ const mapDispatchToProps = dispatch =>
     runToCompletion,
     stopProgram,
     setIP,
+    setDelayed,
   }, dispatch)
 
 const mapStateToProps = state => ({
   running: getRunning(state),
+  delayed: getDelayed(state),
   keyCodes: getKeyCodes(state),
   programText: getProgramText(state),
 })
