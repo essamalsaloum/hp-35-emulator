@@ -9,3 +9,7 @@
 .Display--row {
   margin: 0 8px;
 }
+
+.Display--row:nth-child(-n+3) {
+  color: #888;
+}
