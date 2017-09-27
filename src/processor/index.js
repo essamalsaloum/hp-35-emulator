@@ -34,9 +34,11 @@ class Processor {
   }
 
   notify(keyCode) {
-    for (const listener of this.listeners) {
-      listener(keyCode)
-    }
+    setTimeout(() => {
+      for (const listener of this.listeners) {
+        listener(keyCode)
+      }
+    })
   }
 
   liftStack(state) {

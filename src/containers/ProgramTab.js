@@ -5,7 +5,9 @@ import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
-import { setProgramText, programTextSelector, fromGitHubSelector } from '../modules/program'
+import { setProgramText, programTextSelector, fromGitHubSelector, recordingSelector } from '../modules/program'
+import C from '../processor/keyCodes'
+import processor from '../processor'
 import './ProgramTab.css'
 
 const resetState = {
@@ -22,11 +24,8 @@ class ProgramTab extends React.PureComponent {
   static propTypes = {
     programText: PropTypes.string,
     setProgramText: PropTypes.func.isRequired,
-    fromGitHub: PropTypes.bool.isRequired
-  }
-
-  state = {
-    recording: false
+    fromGitHub: PropTypes.bool.isRequired,
+    recording: PropTypes.bool.isRequired,
   }
 
   subscriptions = []
@@ -34,6 +33,19 @@ class ProgramTab extends React.PureComponent {
   constructor() {
     super()
     this.onTextChange = this.onTextChange.bind(this)
+  }
+
+  componentWillMount() {
+    this.subscription = processor.subscribe(keyCode => {
+      if (this.props.recording && keyCode !== C.CLR) {
+        const text =this.props.programText + keyCode + '\n'
+        this.props.setProgramText(text)
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    this.subscription.remove()
   }
 
   onTextChange(event) {
@@ -45,8 +57,7 @@ class ProgramTab extends React.PureComponent {
   }
 
   renderProgramText() {
-    const { recording } = this.state
-    const { programText, fromGitHub } = this.props
+    const { programText, fromGitHub, recording } = this.props
 
     if (fromGitHub) {
       return (
@@ -85,6 +96,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   programText: programTextSelector(state),
   fromGitHub: fromGitHubSelector(state),
+  recording: recordingSelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)

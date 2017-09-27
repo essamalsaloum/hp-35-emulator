@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../modules/programPanel'
-import { loadKeyCodes, clearProgram, programTextSelector, fromGitHubSelector } from '../modules/program'
+import { loadKeyCodes, clearProgram, programTextSelector, fromGitHubSelector, setRecording, recordingSelector } from '../modules/program'
 import { runToCompletion, stopProgram, runningSelector } from '../modules/processor'
 
 import RunStopButton from '../components/RunStopButton'
@@ -27,10 +27,8 @@ class ProgramToolbar extends React.PureComponent {
     runToCompletion: PropTypes.func,
     stopProgram: PropTypes.func,
     fromGitHub: PropTypes.bool.isRequired,
-  }
-
-  state = {
-    recording: false
+    setRecording: PropTypes.func.isRequired,
+    recording: PropTypes.bool.isRequired
   }
 
   constructor(props) {
@@ -48,11 +46,12 @@ class ProgramToolbar extends React.PureComponent {
     if (recording) {
       this.props.clearProgram()
     }
-    this.setState({ recording })
+    this.props.setRecording(recording)
   }
 
   runStop() {
-    const { loadKeyCodes, running, runToCompletion, stopProgram } = this.props
+    const { loadKeyCodes, running, runToCompletion, stopProgram, setRecording } = this.props
+    setRecording(false)
     if (running) {
       stopProgram()
     } else {
@@ -68,8 +67,7 @@ class ProgramToolbar extends React.PureComponent {
 
   // to avoid a console warning
   renderToggle() {
-    const { recording } = this.state
-    const { running, fromGitHub } = this.props
+    const { running, fromGitHub, recording } = this.props
     if (running || fromGitHub) {
       return null
     } else {
@@ -111,12 +109,14 @@ const mapDispatchToProps = dispatch =>
     clearProgram,
     runToCompletion,
     stopProgram,
+    setRecording,
   }, dispatch)
 
 const mapStateToProps = state => ({
   running: runningSelector(state),
   programText: programTextSelector(state),
-  fromGitHub: fromGitHubSelector(state)
+  fromGitHub: fromGitHubSelector(state),
+  recording: recordingSelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramToolbar)
