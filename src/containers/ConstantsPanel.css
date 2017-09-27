@@ -5,13 +5,5 @@
   flex-direction: column;
   border-radius: 4px;
   background-color: #fff;
-}
-
-.ConstantsPanel--list {
-  flex: 1;
-  overflow-y: scroll;
-}
-
-.ConstantsPanel--toolbar {
-
+  overflow-y: auto;
 }

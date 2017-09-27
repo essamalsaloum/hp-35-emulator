@@ -30,11 +30,9 @@ class ConstantsPanel extends React.PureComponent {
 
   render() {
     return (
-      <div className="ConstantsPanel">
-        <List className="ConstantsPanel--list">
-          {this.renderList()}
-        </List>
-      </div>
+      <List className="ConstantsPanel">
+        {this.renderList()}
+      </List>
     )
   }
 }

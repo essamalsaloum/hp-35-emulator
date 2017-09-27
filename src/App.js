@@ -19,25 +19,27 @@ class App extends React.PureComponent {
   }
 
   panels = [
-    (<Keypad className="App--keypad" />),
-    (<ConstantsPanel className="App--keypad" />)
+    (<Keypad />),
+    (<ConstantsPanel />)
   ]
 
   componentDidMount() {
     setTimeout(() => {
+      // const height = this.appMain.offsetHeight + 'px'
+      // this.appMain.style.height = height
       const main$ = document.querySelector('.App--main')
       const height = main$.offsetHeight + 'px'
       main$.style.height = height
       const programPanel$ = document.querySelector('.ProgramPanel')
       programPanel$.style.height = height
-    }, 250)
+    }, 100)
   }
 
   render() {
     // tabIndex needed to allow div to receive focus
     return (
       <div className="App">
-        <div className="App--main" tabIndex="0">
+        <div className="App--main" tabIndex="0" ref={c => this.appMain = c}>
           <Display />
           {this.panels[this.state.selectedIndex]}
           <MainNavigation onSelect={selectedIndex => this.setState({ selectedIndex })} selectedIndex={this.state.selectedIndex} />

@@ -13,7 +13,9 @@ export default class ProgramTextMarkdown extends React.PureComponent {
 
   render() {
     return (
-      <div className="ProgramTextMarkdown markdown-body" dangerouslySetInnerHTML={{ __html: this.mdText }} />
+      <div className="ProgramTextMarkdown">
+        <div className="markdown-body" dangerouslySetInnerHTML={{ __html: this.mdText }} />
+      </div>
     )
   }
 }

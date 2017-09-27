@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {getStack, getBuffer} from '../reducers/processor'
 import math from 'mathjs'
+import './Display.css'
 
 const labels = ['x', 'y', 'z', 't']
 
@@ -29,12 +30,12 @@ class Display extends React.PureComponent {
   renderStack(stack, buffer) {
     return stack.map((register, index) => {
       const value = index === 0 ? buffer : math.format(register, { precision: 14 })
-      const style = { ...styles.displayRow }
-      if (index > 0) {
-        style.color = '#808080'
-      }
+      // const style = { ...styles.displayRow }
+      // if (index > 0) {
+      //   style.color = '#808080'
+      // }
       return (
-        <div key={index} style={style}>
+        <div key={index} className="Display--row">
           {`${labels[index]}: ${value}`}
         </div>
       )
@@ -44,7 +45,7 @@ class Display extends React.PureComponent {
   render() {
     const { stack, buffer } = this.props
     return (
-      <div style={styles.root}>
+      <div className="Display">
         {this.renderStack(stack, buffer)}
       </div>
     )
