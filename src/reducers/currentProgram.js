@@ -2,11 +2,13 @@ import {
   CLEAR_PROGRAM,
   SET_PROGRAM_TEXT,
   LOAD_PROGRAM,
+  SET_GITHUB_PROGRAM_TEXT,
 } from '../actions/actionTypes'
 
 const initialState = {
   text: '',
-  keyCodes: []
+  keyCodes: [],
+  fromGitHub: false
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -17,6 +19,8 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, text: payload }
     case LOAD_PROGRAM:
       return { ...state, keyCodes: payload }
+    case SET_GITHUB_PROGRAM_TEXT:
+      return { ...state, text: payload, fromGitHub: true }
     default:
       return state
   }
@@ -24,3 +28,4 @@ export default (state = initialState, { type, payload }) => {
 
 export const getProgramText = state => state.currentProgram.text
 export const getKeyCodes = state => state.currentProgram.keyCodes
+export const getFromGitHub = state => state.currentProgram.fromGitHub

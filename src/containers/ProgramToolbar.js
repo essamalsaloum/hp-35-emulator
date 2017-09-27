@@ -11,7 +11,7 @@ import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../actions/programPanel'
 import { getRunning } from '../reducers/processor'
 import { loadProgram, clearProgram } from '../actions/currentProgram'
-import { getProgramText } from '../reducers/currentProgram'
+import { getProgramText, getFromGitHub } from '../reducers/currentProgram'
 import { runToCompletion, stopProgram } from '../actions/processor'
 
 import RunStopButton from '../components/RunStopButton'
@@ -27,7 +27,8 @@ class ProgramToolbar extends React.PureComponent {
     loadProgram: PropTypes.func,
     clearProgram: PropTypes.func,
     runToCompletion: PropTypes.func,
-    stopProgram: PropTypes.func
+    stopProgram: PropTypes.func,
+    fromGitHub: PropTypes.bool.isRequired,
   }
 
   state = {}
@@ -67,7 +68,7 @@ class ProgramToolbar extends React.PureComponent {
 
   render() {
     const { recording } = this.state
-    const { running } = this.props
+    const { running, fromGitHub } = this.props
 
     return (
       <Toolbar>
@@ -75,7 +76,7 @@ class ProgramToolbar extends React.PureComponent {
           <Toggle
             label="Record"
             labelPosition="right"
-            disabled={running}
+            disabled={running || fromGitHub}
             toggled={recording}
             onToggle={this.toggleRecording}
           />
@@ -105,7 +106,8 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   running: getRunning(state),
-  programText: getProgramText(state)
+  programText: getProgramText(state),
+  fromGitHub: getFromGitHub(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramToolbar)

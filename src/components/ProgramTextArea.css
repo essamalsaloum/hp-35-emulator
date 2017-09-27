@@ -1,0 +1,9 @@
+.ProgramTextArea {
+  padding: 8px;
+  border-style: none;
+  background-color: #fafafa;
+  resize: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  flex: 1;
+}

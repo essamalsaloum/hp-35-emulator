@@ -5,7 +5,7 @@ import {
   // FETCH_GITHUB_PROGRAM_LIST_ERROR,
   FETCH_GITHUB_PROGRAM_TEXT_FULFILLED,
   // FETCH_GITHUB_PROGRAM_TEXT_ERROR,
-  SET_PROGRAM_TEXT,
+  SET_GITHUB_PROGRAM_TEXT,
   SELECT_PROGRAM_TAB,
 } from './actionTypes'
 
@@ -51,7 +51,7 @@ export const fetchProgramText = name => (dispatch, getState) => {
         }
       })
       dispatch({
-        type: SET_PROGRAM_TEXT,
+        type: SET_GITHUB_PROGRAM_TEXT,
         payload: res.data
       })
       dispatch({ type: SELECT_PROGRAM_TAB })

@@ -26,8 +26,10 @@ class App extends React.PureComponent {
   componentDidMount() {
     setTimeout(() => {
       const main$ = document.querySelector('.App--main')
-      const height = main$.offsetHeight
-      main$.style.height = height + 'px'
+      const height = main$.offsetHeight + 'px'
+      main$.style.height = height
+      const programPanel$ = document.querySelector('.ProgramPanel')
+      programPanel$.style.height = height
     }, 250)
   }
 

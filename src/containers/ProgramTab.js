@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
+import ProgramTextArea from '../components/ProgramTextArea'
+import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
 import { setProgramText } from '../actions/currentProgram'
-import { getProgramText } from '../reducers/currentProgram'
+import { getProgramText, getFromGitHub } from '../reducers/currentProgram'
 import './ProgramTab.css'
 
 const resetState = {
@@ -20,10 +22,14 @@ class ProgramTab extends React.PureComponent {
 
   static propTypes = {
     programText: PropTypes.string,
-    setProgramText: PropTypes.func.isRequired
+    setProgramText: PropTypes.func.isRequired,
+    fromGitHub: PropTypes.bool.isRequired
   }
 
-  state = {}
+  state = {
+    recording: false
+  }
+
   subscriptions = []
 
   constructor() {
@@ -39,19 +45,34 @@ class ProgramTab extends React.PureComponent {
     this.updateProgramState({ ...resetState })
   }
 
+  renderProgramText() {
+    const { recording } = this.state
+    const { programText, fromGitHub } = this.props
+
+    if (fromGitHub) {
+      return (
+        <ProgramTextMarkdown
+          programText={programText}
+        />
+      )
+    } else {
+      return (
+        <ProgramTextArea
+          programText={programText}
+          onTextChange={this.onTextChange}
+          recording={recording}
+        />
+      )
+    }
+  }
+
   render() {
     return (
       <div className="ProgramTab">
-        <textarea
-          className="ProgramTab--textarea"
-          autoCapitalize="none"
-          autoComplete="off"
-          placeholder={this.state.recording ? '' : 'Enter your program here'}
-          spellCheck="false"
-          value={this.props.programText}
-          onChange={this.onTextChange}
+        {this.renderProgramText()}
+        <ProgramToolbar
+          initialState={{ ...resetState }}
         />
-        <ProgramToolbar initialState={{ ...resetState }} />
       </div>
     )
   }
@@ -63,7 +84,8 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  programText: getProgramText(state)
+  programText: getProgramText(state),
+  fromGitHub: getFromGitHub(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)
