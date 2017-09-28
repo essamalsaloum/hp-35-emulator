@@ -6,9 +6,7 @@ import {selectProgramTab} from '../ducks/programPanel'
 const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
 const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'
 
-const REPO_USER = 'remarcmij'
-const REPO_NAME = 'calculator-programs'
-const REPO_URL = `https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/contents/programs`
+const REPO_URL = `https://api.github.com/repos/RPNext35/rpnext35-programs/contents/programs`
 
 const headers = {
   Accept: 'application/vnd.github.v3+json'
