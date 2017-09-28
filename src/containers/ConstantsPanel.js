@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
 import physicsConstants from '../processor/physicsConstants'
-import { injectKeyCode } from '../modules/processor'
+import { injectKeyCode } from '../ducks/processor'
 import './ConstantsPanel.css'
 
 // TODO: add filter text field

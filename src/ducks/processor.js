@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions'
-import { keyCodesSelector } from '../modules/program'
+import { keyCodesSelector } from '../ducks/program'
 import processor from '../processor'
 
 const INJECT_KEYCODE = 'rpnext/processor/INJECT_KEYCODE'

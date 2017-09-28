@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { keyCodesSelector } from '../modules/program'
-import { ipSelector } from '../modules/processor'
+import { keyCodesSelector } from '../ducks/program'
+import { ipSelector } from '../ducks/processor'
 import InspectToolbar from './InspectToolbar'
 import './InspectTab.css'
 

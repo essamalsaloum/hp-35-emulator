@@ -3,8 +3,8 @@ import { createAction } from 'redux-actions'
 import {setMarkdownText} from '../ducks/program'
 import {selectProgramTab} from '../ducks/programPanel'
 
-const FETCH_GITHUB_PROGRAM_LIST = 'rpnext/programs/FETCH_GITHUB_PROGRAM_LIST'
-const FETCH_GITHUB_PROGRAM_TEXT = 'rpnext/programs/FETCH_GITHUB_PROGRAM_TEXT'
+const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
+const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'
 
 const REPO_USER = 'remarcmij'
 const REPO_NAME = 'calculator-programs'
@@ -28,10 +28,10 @@ export const fetchProgramList = () => dispatch => {
           }
           return prev
         }, {})
-      dispatch(createAction(FETCH_GITHUB_PROGRAM_LIST)(programs))
+      dispatch(createAction(FETCH_GITHUB_LIST)(programs))
     })
     .catch(err => {
-      dispatch(createAction(FETCH_GITHUB_PROGRAM_LIST)(err))
+      dispatch(createAction(FETCH_GITHUB_LIST)(err))
     })
 }
 
@@ -40,7 +40,7 @@ export const fetchProgramText = name => (dispatch, getState) => {
   const url = programs[name].url
   axios.get(url, { headers })
     .then(res => {
-      dispatch(createAction(FETCH_GITHUB_PROGRAM_TEXT)({
+      dispatch(createAction(FETCH_GITHUB_CONTENT)({
         name: name,
         text: res.data
       }))
@@ -48,7 +48,7 @@ export const fetchProgramText = name => (dispatch, getState) => {
       dispatch(selectProgramTab())
     })
     .catch(err => {
-      dispatch(createAction(FETCH_GITHUB_PROGRAM_TEXT)(err))
+      dispatch(createAction(FETCH_GITHUB_CONTENT)(err))
     })
 }
 
@@ -65,9 +65,9 @@ const fetchProgramTextFulfilled = (state, action) => {
 
 export default function reduce(state = null, action) {
   switch (action.type) {
-    case FETCH_GITHUB_PROGRAM_LIST:
+    case FETCH_GITHUB_LIST:
       return fetchProgramListFulfilled(state, action)
-    case FETCH_GITHUB_PROGRAM_TEXT:
+    case FETCH_GITHUB_CONTENT:
       return fetchProgramTextFulfilled(state, action)
     default:
       return state

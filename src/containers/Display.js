@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {stackSelector, bufferSelector} from '../modules/processor'
+import {stackSelector, bufferSelector} from '../ducks/processor'
 import math from 'mathjs'
 import './Display.css'
 

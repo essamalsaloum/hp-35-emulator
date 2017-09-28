@@ -6,7 +6,7 @@ import TabTemplate from '../components/TabTemplate'
 import ProgramTab from './ProgramTab'
 import GitHubTab from './GitHubTab'
 import InspectTab from './InspectTab'
-import { programPanelSelector } from '../modules/programPanel'
+import { programPanelSelector } from '../ducks/programPanel'
 import './ProgramPanel.css'
 
 // see: https://github.com/callemall/material-ui/issues/2085

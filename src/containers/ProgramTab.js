@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
-import { setProgramText, programTextSelector, fromGitHubSelector, recordingSelector } from '../modules/program'
+import { setProgramText, programTextSelector, isMarkdownSelector, recordingSelector } from '../ducks/program'
 import C from '../processor/keyCodes'
 import processor from '../processor'
 import './ProgramTab.css'
@@ -24,7 +24,7 @@ class ProgramTab extends React.PureComponent {
   static propTypes = {
     programText: PropTypes.string,
     setProgramText: PropTypes.func.isRequired,
-    fromGitHub: PropTypes.bool.isRequired,
+    isMarkdown: PropTypes.bool.isRequired,
     recording: PropTypes.bool.isRequired,
   }
 
@@ -57,9 +57,9 @@ class ProgramTab extends React.PureComponent {
   }
 
   renderProgramText() {
-    const { programText, fromGitHub, recording } = this.props
+    const { programText, isMarkdown, recording } = this.props
 
-    if (fromGitHub) {
+    if (isMarkdown) {
       return (
         <ProgramTextMarkdown
           programText={programText}
@@ -95,7 +95,7 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   programText: programTextSelector(state),
-  fromGitHub: fromGitHubSelector(state),
+  isMarkdown: isMarkdownSelector(state),
   recording: recordingSelector(state)
 })
 

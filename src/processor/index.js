@@ -4,8 +4,8 @@ import { inputInstructions } from './instructions/input'
 import { stackInstructions } from './instructions/stack'
 import { mathInstructions } from './instructions/math'
 import store from '../reduxStore'
-import { keyCodesSelector } from '../modules/program'
-import { setProcessorState, processorStateSelector } from '../modules/processor'
+import { keyCodesSelector } from '../ducks/program'
+import { setProcessorState, processorStateSelector } from '../ducks/processor'
 
 import * as util from './util'
 

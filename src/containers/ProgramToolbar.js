@@ -8,9 +8,9 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import { grey700 } from 'material-ui/styles/colors'
-import { selectGitHubTab } from '../modules/programPanel'
-import { loadKeyCodes, clearProgram, programTextSelector, fromGitHubSelector, setRecording, recordingSelector } from '../modules/program'
-import { runToCompletion, stopProgram, runningSelector } from '../modules/processor'
+import { selectGitHubTab } from '../ducks/programPanel'
+import { loadKeyCodes, clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
+import { runToCompletion, stopProgram, runningSelector } from '../ducks/processor'
 
 import RunStopButton from '../components/RunStopButton'
 import processor from '../processor'
@@ -26,7 +26,7 @@ class ProgramToolbar extends React.PureComponent {
     clearProgram: PropTypes.func,
     runToCompletion: PropTypes.func,
     stopProgram: PropTypes.func,
-    fromGitHub: PropTypes.bool.isRequired,
+    isMarkdown: PropTypes.bool.isRequired,
     setRecording: PropTypes.func.isRequired,
     recording: PropTypes.bool.isRequired
   }
@@ -67,14 +67,14 @@ class ProgramToolbar extends React.PureComponent {
 
   // to avoid a console warning
   renderToggle() {
-    const { running, fromGitHub, recording } = this.props
-    if (running || fromGitHub) {
+    const { running, isMarkdown, recording } = this.props
+    if (running || isMarkdown) {
       return null
     } else {
       return (<Toggle
         label="Record"
         labelPosition="right"
-        disabled={running || fromGitHub}
+        disabled={running || isMarkdown}
         toggled={recording}
         onToggle={this.toggleRecording}
       />)
@@ -115,7 +115,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   running: runningSelector(state),
   programText: programTextSelector(state),
-  fromGitHub: fromGitHubSelector(state),
+  isMarkdown: isMarkdownSelector(state),
   recording: recordingSelector(state)
 })
 

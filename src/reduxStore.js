@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import ReduxThink from 'redux-thunk'
 
-import { rootReducer } from './modules'
+import { rootReducer } from './ducks'
 
 const configureStore = () => {
   const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
