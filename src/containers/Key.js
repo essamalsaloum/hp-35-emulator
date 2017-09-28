@@ -23,7 +23,7 @@ class Key extends React.PureComponent {
     label: PropTypes.string.isRequired,
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
-    addClass: PropTypes.string,
+    labelClass: PropTypes.string,
     injectKeyCode: PropTypes.func,
     shiftKey: PropTypes.string,
     setShiftKey: PropTypes.func.isRequired
@@ -32,7 +32,7 @@ class Key extends React.PureComponent {
   static defaultProps = {
     topLabel: '',
     bottomLabel: '',
-    addClass: ''
+    labelClass: ''
   }
 
   onClick(keyCode) {
@@ -72,7 +72,7 @@ class Key extends React.PureComponent {
       topLabel,
       bottomLabel,
       keyCode,
-      addClass,
+      labelClass,
       shiftKey
     } = this.props
     const decorator = {
@@ -98,7 +98,7 @@ class Key extends React.PureComponent {
         >
           <div className="Key--label-container">
             {this.renderTopLabel()}
-            <div className={`Key--label-main Key--label-keyCode-${keyCode} ${addClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
+            <div className={`Key--label-main Key--label-keyCode-${keyCode} ${labelClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
             {this.renderBottomLabel()}
           </div>
         </button>

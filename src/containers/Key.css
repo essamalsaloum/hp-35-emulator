@@ -21,6 +21,10 @@
     font-weight: bold;
 }
 
+.Key--small-caps {
+  font-variant: small-caps;
+}
+
 .Key--button-keyCode-shiftUp {
     color: #2E7D32;
 }
@@ -34,7 +38,9 @@
 }
 
 .Key--label-main {
-  font-size: 15px;
+  line-height: 1.3rem;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 .Key--label-top {
@@ -45,9 +51,9 @@
 }
 
 .Key--label-bottom {
-    height: 1em;
-    line-height: 1em;
-    font-size: 11px;
+    height: 0.7rem;
+    line-height: 0.7rem;
+    font-size: 0.7rem;
     color: #EF6C00;
 }
 
@@ -58,6 +64,10 @@
     font-size: 20px;
 }
 
+.Key--label-small {
+  font-size: 1rem;
+}
+
 .Key--inverse-shiftUp {
     background-color: #2E7D32;
     color: #fff;
@@ -66,4 +76,9 @@
 .Key--inverse-shiftDown {
     background-color: #EF6C00;
     color: #fff;
+}
+
+sup {
+  vertical-align: super;
+  font-size: small;
 }
