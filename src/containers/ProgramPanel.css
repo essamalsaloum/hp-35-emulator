@@ -3,13 +3,14 @@
     flex-flow: column;
     border-radius: 4px;
     border: solid 1px gray;
-    width: 320px;
     padding: 2px;
     box-sizing: border-box;
 }
 
-@media (min-width: 600px) {
-  .ProgramPanel {
-    display: flex;
-  }
+@media (min-width: 481px) {
+    .ProgramPanel {
+        display: flex;
+        width: 375px;
+        height: 600px;
+    }
 }

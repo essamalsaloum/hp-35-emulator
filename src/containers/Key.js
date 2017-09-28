@@ -33,6 +33,7 @@ class Key extends React.PureComponent {
   static defaultProps = {
     topLabel: '',
     bottomLabel: '',
+    addClass: ''
   }
 
   keyUpHandler = ev => {
@@ -74,10 +75,17 @@ class Key extends React.PureComponent {
     }
   }
 
+  renderTopLabel() {
+    const { shiftKey, topLabel } = this.props
+    return shiftKey ? (<div className="Key--label-top"></div>) : (
+      <div className="Key--label-top" dangerouslySetInnerHTML={createMarkup(topLabel)}></div>
+    )
+  }
+
   renderBottomLabel() {
     const { shiftKey, bottomLabel } = this.props
-    return bottomLabel !== '' && shiftKey === C.SHIFT_DOWN ? (<div className="Key--bottomLabel"></div>) : (
-      <div className="Key--bottomLabel" dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
+    return shiftKey ? (<div className="Key--label-bottom"></div>) : (
+      <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(bottomLabel)}></div>
     )
   }
 
@@ -103,17 +111,19 @@ class Key extends React.PureComponent {
     }
 
     return (
-      <div>
-        <div className="Key--topLabel" dangerouslySetInnerHTML={createMarkup(topLabel)}></div>
+      <div className={`Key Key--keyCode-${keyCode}`}>
         <button
           type="button"
-          className={`Key ${addClass} Key--keyCode-${keyCode} Key--inverse-${decorator.shiftKey}`}
+          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-keyCode-${keyCode}`}
           onClick={() => this.onClick(keyCode)}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}
         >
-          <div className={`Key--inverse-${decorator.shiftKey}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
-          {this.renderBottomLabel()}
+          <div className="Key--label-container">
+            {this.renderTopLabel()}
+            <div className={`Key--label-main Key--label-keyCode-${keyCode} ${addClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
+            {this.renderBottomLabel()}
+          </div>
         </button>
       </div>
     )

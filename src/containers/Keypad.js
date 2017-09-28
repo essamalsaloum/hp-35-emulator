@@ -8,22 +8,22 @@ export default class Keypad extends React.PureComponent {
     return (
       <div className="Keypad">
         <div className="Keypad--row">
-          <Key label="y<sup>x</sup>" keyCode={C.POW} />
+          <Key label="𝑦<sup>𝑥</sup>" keyCode={C.POW} />
           <Key label="LOG" keyCode={C.LOG} />
           <Key label="LN" keyCode={C.LN} />
-          <Key label="e<sup>x</sup>" topLabel="10<sup>𝑥</sup>" keyCode={C.EXP} />
+          <Key label="𝑒<sup>𝑥</sup>" topLabel="10<sup>𝑥</sup>" keyCode={C.EXP} />
           <Key label="CLR" keyCode={C.CLR} />
         </div>
         <div className="Keypad--row">
-          <Key label="√x" keyCode={C.SQRT} />
-          <Key label="x<sup>2</sup>" keyCode={C.SQR} />
+          <Key label="√𝑥" keyCode={C.SQRT} />
+          <Key label="𝑥²" keyCode={C.SQR} />
           <Key label="SIN" bottomLabel="ASIN" keyCode={C.SIN} />
           <Key label="COS" bottomLabel="ACOS" keyCode={C.COS} />
           <Key label="TAN" bottomLabel="ATAN" keyCode={C.TAN} />
         </div>
         <div className="Keypad--row">
-          <Key label="1/x" keyCode={C.RECIPROCAL} />
-          <Key label="x↔︎y" keyCode={C.SWAP} />
+          <Key label="1/𝑥" keyCode={C.RECIPROCAL} />
+          <Key label="𝑥↔︎𝑦" keyCode={C.SWAP} />
           <Key label="R↓" keyCode={C.ROLL_DOWN} />
           <Key label="STO" keyCode={C.STO} />
           <Key label="RCL" keyCode={C.RCL} />
