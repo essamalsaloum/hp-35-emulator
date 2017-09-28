@@ -1,9 +1,49 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import C from '../processor/keyCodes'
 import Key from './Key'
+import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
+import { injectKeyCode } from '../ducks/processor'
+import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import './Keypad.css'
 
-export default class Keypad extends React.PureComponent {
+class Keypad extends React.PureComponent {
+
+  static propTypes = {
+    injectKeyCode: PropTypes.func,
+    setShiftKey: PropTypes.func.isRequired,
+    shiftKey: PropTypes.string
+  }
+
+  keyUpHandler = ev => {
+    const {shiftKey, setShiftKey, injectKeyCode} = this.props
+    ev.preventDefault()
+    ev.stopPropagation()
+    const keyCode = mapKeyboardEvent(ev)
+    if (keyCode) {
+      if (shiftKey) {
+        setShiftKey(null)
+      }
+      injectKeyCode(keyCode)
+    }
+  }
+
+  componentDidMount() {
+    const elem = document.querySelector('.CalculatorPanel')
+    if (elem) {
+      elem.addEventListener('keyup', this.keyUpHandler)
+    }
+  }
+
+  componentWillUnmount() {
+    const elem = document.querySelector('.CalculatorPanel')
+    if (elem) {
+      elem.removeEventListener('keyup', this.keyUpHandler)
+    }
+  }
+
   render() {
     return (
       <div className="Keypad">
@@ -35,7 +75,7 @@ export default class Keypad extends React.PureComponent {
           <Key label="CLX" keyCode={C.CLX} />
         </div>
         <div className="Keypad--row">
-          <Key label="?" keyCode={C.CONST} addClass="Key--bold"/>
+          <Key label="?" keyCode={C.CONST} addClass="Key--bold" />
           <Key label="7" keyCode={C.D7} addClass="Key--bold" />
           <Key label="8" keyCode={C.D8} addClass="Key--bold" />
           <Key label="9" keyCode={C.D9} addClass="Key--bold" />
@@ -66,3 +106,15 @@ export default class Keypad extends React.PureComponent {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({
+    injectKeyCode,
+    setShiftKey,
+  }, dispatch)
+
+const mapStateToProps = state => ({
+  shiftKey: shiftKeySelector(state)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Keypad)

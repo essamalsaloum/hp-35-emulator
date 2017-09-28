@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import { injectKeyCode } from '../ducks/processor'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
 import C from '../processor/keyCodes'
@@ -36,41 +35,19 @@ class Key extends React.PureComponent {
     addClass: ''
   }
 
-  keyUpHandler = ev => {
-    const keyCode = mapKeyboardEvent(ev)
-    if (keyCode) {
-      this.props.setShiftKey(null)
-      this.props.injectKeyCode(keyCode)
-    }
-  }
-
-  componentDidMount() {
-    const elem = document.querySelector('.App--main')
-    if (elem) {
-      elem.addEventListener('keyup', this.keyUpHandler)
-    }
-  }
-
-  componentWillUnmount() {
-    const elem = document.querySelector('.App--main')
-    if (elem) {
-      elem.removeEventListener('keyup', this.keyUpHandler)
-    }
-  }
-
   onClick(keyCode) {
-    const { shiftKey } = this.props
+    const { shiftKey, setShiftKey, injectKeyCode } = this.props
     if (keyCode === C.SHIFT_UP) {
-      this.props.setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
+      setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
     }
     else if (keyCode === C.SHIFT_DOWN) {
-      this.props.setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
+      setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
     } else {
       const keyMap = shiftKeyModifiers[keyCode]
       keyCode = (keyMap && keyMap[shiftKey]) || keyCode
-      this.props.injectKeyCode(keyCode)
+      injectKeyCode(keyCode)
       if (shiftKey) {
-        this.props.setShiftKey(null)
+        setShiftKey(null)
       }
     }
   }
