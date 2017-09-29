@@ -12,13 +12,14 @@ import RunStopButton from '../components/RunStopButton'
 import compileProgram from '../processor/compiler'
 import { programTextSelector } from '../ducks/program'
 import {
-  loadKeyCodes,
+  loadProgram,
   keyCodesSelector,
   singleStep,
   startProgram,
   stopProgram,
-  setIP,
+  resetIP,
   setDelayed,
+  clearDelayed,
   runningSelector,
   delayedSelector
 } from '../processor/reducer'
@@ -29,13 +30,14 @@ class InspectToolbar extends React.PureComponent {
     programText: PropTypes.string.isRequired,
     keyCodes: PropTypes.array.isRequired,
     running: PropTypes.bool.isRequired,
-    loadKeyCodes: PropTypes.func.isRequired,
+    loadProgram: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
     startProgram: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
-    setIP: PropTypes.func.isRequired,
+    resetIP: PropTypes.func.isRequired,
     delayed: PropTypes.bool.isRequired,
     setDelayed: PropTypes.func.isRequired,
+    clearDelayed: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -45,15 +47,19 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadKeyCodes } = this.props
+    const { programText, loadProgram } = this.props
     const { keyCodes, error } = compileProgram(programText)
     if (!error) {
-      loadKeyCodes(keyCodes)
+      loadProgram(keyCodes)
     }
   }
 
   toggleDelayed() {
-    this.props.setDelayed(!this.props.delayed)
+    if (this.props.delayed) {
+      this.props.clearDelayed()
+    } else {
+      this.props.setDelayed()
+    }
   }
 
   runStop() {
@@ -66,7 +72,7 @@ class InspectToolbar extends React.PureComponent {
   }
 
   render() {
-    const { keyCodes, running, singleStep, setIP, delayed } = this.props
+    const { keyCodes, running, singleStep, resetIP, delayed } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -79,7 +85,7 @@ class InspectToolbar extends React.PureComponent {
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => setIP(0)} disabled={keyCodes.length === 0 || running} >
+          <IconButton onClick={() => resetIP()} disabled={keyCodes.length === 0 || running} >
             <Refresh color={grey700} />
           </IconButton>
           <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || running} >
@@ -94,12 +100,13 @@ class InspectToolbar extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    loadKeyCodes,
+    loadProgram,
     singleStep,
     startProgram,
     stopProgram,
-    setIP,
+    resetIP,
     setDelayed,
+    clearDelayed
   }, dispatch)
 
 const mapStateToProps = state => ({

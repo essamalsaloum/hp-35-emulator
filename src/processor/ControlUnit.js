@@ -63,7 +63,7 @@ export default class ControlUnit {
     }
     dispatch(reducer.setStopping())
     if (!interrupted) {
-      dispatch(reducer.setIP(0))
+      dispatch(reducer.resetIP())
     }
   }
 

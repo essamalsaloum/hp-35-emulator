@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
 import { clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { loadKeyCodes, startProgram, stopProgram, runningSelector } from '../processor/reducer'
+import { loadProgram, startProgram, stopProgram, runningSelector } from '../processor/reducer'
 
 import compileProgram from '../processor/compiler'
 
@@ -23,7 +23,7 @@ class ProgramToolbar extends React.PureComponent {
     selectGitHubTab: PropTypes.func.isRequired,
     running: PropTypes.bool.isRequired,
     programText: PropTypes.string,
-    loadKeyCodes: PropTypes.func,
+    loadProgram: PropTypes.func,
     clearProgram: PropTypes.func,
     startProgram: PropTypes.func,
     stopProgram: PropTypes.func,
@@ -51,7 +51,7 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { loadKeyCodes, running, startProgram, stopProgram, setRecording, recording } = this.props
+    const { loadProgram, running, startProgram, stopProgram, setRecording, recording } = this.props
     if (recording) {
       setRecording(false)
     }
@@ -62,7 +62,7 @@ class ProgramToolbar extends React.PureComponent {
       if (error) {
         console.log(error.message)
       } else {
-        loadKeyCodes(keyCodes)
+        loadProgram(keyCodes)
         startProgram()
       }
     }
@@ -108,7 +108,7 @@ class ProgramToolbar extends React.PureComponent {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     selectGitHubTab,
-    loadKeyCodes,
+    loadProgram,
     clearProgram,
     startProgram,
     stopProgram,
