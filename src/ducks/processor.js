@@ -38,12 +38,11 @@ export const stopProgram = () => (dispatch) => {
 
 const initialState = {
   stack: [0, 0, 0, 0],
-  buffer: '0',
   stackLift: false,
-  entry: true,
   memory: 0,
   ip: 0,
-  error: null,
+  entry: true,
+  buffer: '0',
   running: false,
   delayed: false
 }

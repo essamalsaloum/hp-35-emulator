@@ -23,11 +23,11 @@ export default class ControlUnit {
       this.timeoutID = setTimeout(() => {
         const state = store.getState()
         const keyCodes = keyCodesSelector(state)
-        let aluState = processorStateSelector(state)
-        const { ip } = aluState
+        let procState = processorStateSelector(state)
+        const { ip } = procState
         const keyCode = keyCodes[ip]
-        aluState = this.execute(aluState, keyCode)
-        store.dispatch(setProcessorState({ ...aluState, ip: ip + 1 }))
+        procState = this.execute(procState, keyCode)
+        store.dispatch(setProcessorState({ ...procState, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -54,23 +54,20 @@ export default class ControlUnit {
     }
 
     if (isValidNumber(keyCode)) {
-      return this.enterNumber(state, parseFloat(keyCode))
+      const [x, y, z] = state.stack
+      const num = parseFloat(keyCode)
+      return {
+        ...state,
+        stack: [num, x, y, z],
+        buffer: formatNumber(num),
+        stackLift: true,
+        entry: false
+      }
     }
 
     return this.alu.getOpcodes().has(keyCode)
       ? this.aluExecute(state, keyCode)
       : this.inputExecute(state, keyCode)
-  }
-
-  enterNumber = (state, num) => {
-    const [x, y, z] = state.stack
-    return {
-      ...state,
-      stack: [num, x, y, z],
-      buffer: formatNumber(num),
-      entry: false,
-      stackLift: true
-    }
   }
 
   aluExecute(state, keyCode) {
