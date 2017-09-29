@@ -2,31 +2,21 @@ import { createAction } from 'redux-actions'
 import { keyCodesSelector } from '../ducks/program'
 import processor from '../processor'
 
-const INJECT_KEYCODE = 'rpnext/processor/INJECT_KEYCODE'
+const EXECUTE_KEYCODE = 'rpnext/processor/EXECUTE_KEYCODE'
 const SET_RUNNING = 'rpnext/processor/SET_RUNNING'
 const SET_DELAYED = 'rpnext/processor/SET_DELAYED'
 const SET_IP = 'rpnext/processor/SET_IP'
 const SET_STATE = 'rpnext/processor/SET_STATE'
 
-const DELAY = 500
-
-export const injectKeyCode = createAction(INJECT_KEYCODE)
+export const executeKeyCode = createAction(EXECUTE_KEYCODE)
 export const setRunning = createAction(SET_RUNNING)
 export const setDelayed = createAction(SET_DELAYED)
 export const setIP = createAction(SET_IP)
 export const setProcessorState = createAction(SET_STATE)
 
-export const runToCompletion = () => async (dispatch, getState) => {
-  const keyCodes = keyCodesSelector(getState())
-  let interrupted = false
+export const runToCompletion = () => async (dispatch) => {
   dispatch(setRunning(true))
-  while (ipSelector(getState()) < keyCodes.length && !interrupted) {
-    if (runningSelector(getState())) {
-      await processor.executeNext(delayedSelector(getState()) ? DELAY : 0)
-    } else {
-      interrupted = true
-    }
-  }
+  const interrupted = await processor.runProgram()
   dispatch(setRunning(false))
   if (!interrupted) {
     dispatch(setIP(0))
@@ -53,13 +43,14 @@ const initialState = {
   entry: true,
   memory: 0,
   ip: 0,
+  error: null,
   running: false,
   delayed: false
 }
 
 export default function reduce(state = initialState, { type, payload }) {
   switch (type) {
-    case INJECT_KEYCODE:
+    case EXECUTE_KEYCODE:
       return { ...state, ...processor.execute(state, payload) }
     case SET_STATE:
       return payload

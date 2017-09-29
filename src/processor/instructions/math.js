@@ -1,6 +1,5 @@
 import C from '../keyCodes'
 import math from 'mathjs'
-import * as util from '../../processor/util'
 
 const degreesToRadians = degrees => degrees * math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / math.PI
@@ -17,14 +16,14 @@ const arithmetic = {
   [C.ADD]: (x, y) => y + x,
   [C.SUB]: (x, y) => y - x,
   [C.MUL]: (x, y) => y * x,
-  [C.DIV]: (x, y) => y / x,
-  [C.RECIPROCAL]: x => 1 / x
+  [C.DIV]: (x, y) => x === 0 ? new Error('division by 0') : y / x,
+  [C.RECIPROCAL]: x => x === 0 ? new Error('division by 0') :1 / x
 }
 
 const transcendental = {
-  [C.ACOS]: x => radiansToDegrees(math.acos(x)),
+  [C.ACOS]: x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.acos(x)),
   [C.ALOG]: x => math.pow(10, x),
-  [C.ASIN]: x => radiansToDegrees(math.asin(x)),
+  [C.ASIN]: x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.asin(x)),
   [C.ATAN]: x => radiansToDegrees(math.atan(x)),
   [C.COS]: x => math.cos(degreesToRadians(degrees360(x))),
   [C.EXP]: x => math.exp(x),
@@ -34,7 +33,7 @@ const transcendental = {
   [C.ROOT]: (x, y) => math.pow(y, 1 / x),
   [C.SIN]: x => math.sin(degreesToRadians(degrees360(x))),
   [C.SQR]: x => x * x,
-  [C.SQRT]: x => math.sqrt(x),
+  [C.SQRT]: x =>x < 0 ? new Error('√(negative)') : math.sqrt(x),
   [C.TAN]: x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
 }
 
@@ -44,24 +43,16 @@ const funcs = {
 }
 
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
-
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-const compute = keyCode => state => {
-  const { stack } = state
-  const func = funcs[keyCode]
-  if (!func) {
-    console.error(`math: not implemented [${keyCode}]`)
-    return state
+const compute = opCode => state => {
+  let { stack } = state
+  const fn = funcs[opCode]
+  if (!fn) {
+    throw new Error(`math: not implemented [${opCode}]`)
   }
-
-  const newStack = func.length === 2 ? dyadicFn(stack, func) : monadicFn(stack, func)
-
-  return {
-    ...state,
-    stack: newStack,
-    buffer: util.formatNumber(newStack[0])
-  }
+  stack = fn.length === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
+  return { ...state,  stack }
 }
 
 export const mathInstructions = Object.keys(funcs).reduce((prev, keyCode) => {

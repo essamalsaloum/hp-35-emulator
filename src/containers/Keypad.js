@@ -5,20 +5,20 @@ import { bindActionCreators } from 'redux'
 import C from '../processor/keyCodes'
 import Key from './Key'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
-import { injectKeyCode } from '../ducks/processor'
+import { executeKeyCode } from '../ducks/processor'
 import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import './Keypad.css'
 
 class Keypad extends React.PureComponent {
 
   static propTypes = {
-    injectKeyCode: PropTypes.func,
+    executeKeyCode: PropTypes.func,
     setShiftKey: PropTypes.func.isRequired,
     shiftKey: PropTypes.string
   }
 
   keyUpHandler = ev => {
-    const { shiftKey, setShiftKey, injectKeyCode } = this.props
+    const { shiftKey, setShiftKey, executeKeyCode } = this.props
     ev.preventDefault()
     ev.stopPropagation()
     const keyCode = mapKeyboardEvent(ev)
@@ -26,7 +26,7 @@ class Keypad extends React.PureComponent {
       if (shiftKey) {
         setShiftKey(null)
       }
-      injectKeyCode(keyCode)
+      executeKeyCode(keyCode)
     }
   }
 
@@ -109,7 +109,7 @@ class Keypad extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    injectKeyCode,
+    executeKeyCode,
     setShiftKey,
   }, dispatch)
 

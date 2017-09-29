@@ -50,14 +50,16 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { loadKeyCodes, running, runToCompletion, stopProgram, setRecording } = this.props
-    setRecording(false)
+    const { loadKeyCodes, running, runToCompletion, stopProgram, setRecording, recording } = this.props
+    if (recording) {
+      setRecording(false)
+    }
     if (running) {
       stopProgram()
     } else {
       const { keyCodes, error } = processor.compileProgram(this.props.programText)
       if (error) {
-        console.log('there as an error')
+        console.log(error.message)
       } else {
         loadKeyCodes(keyCodes)
         runToCompletion()

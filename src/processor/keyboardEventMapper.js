@@ -18,6 +18,7 @@ const keyToKeyCode = {
   '*': C.MUL,
   '/': C.DIV,
   '±': C.CHS,
+  'e': C.EEX,
   Enter: C.ENTER,
   Backspace: C.CLX
 }
