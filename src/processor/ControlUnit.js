@@ -1,8 +1,8 @@
+import C from './keyCodes'
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
-import { keyCodesSelector, updateProcessorState, processorStateSelector } from '../ducks/processor'
-import { ipSelector, runningSelector, delayedSelector, setRunning, setStopping, setIP } from '../ducks/processor'
+import * as reducer from './reducer'
 import { formatNumber } from './util'
 
 const DELAY = 500
@@ -21,20 +21,49 @@ export default class ControlUnit {
 
   validOpCodes = new Set([...Object.keys(this.instructionSet), ...this.alu.getOpcodes()])
 
+  listeners = new Set()
+
+  subscribe(listener) {
+    this.listeners.add(listener)
+    return {
+      remove: () => this.listeners.delete(listener)
+    }
+  }
+
+  notify(keyCode) {
+    setTimeout(() => {
+      for (const listener of this.listeners) {
+        listener(keyCode)
+      }
+    })
+  }
+
+  notifyRecorder(newState, state, keyCode) {
+    const [x] = newState.stack
+    if (!(x instanceof Error || newState.entry)) {
+      if (state.entry) {
+        this.notify(formatNumber(state.stack[0]))
+      }
+      if (keyCode !== C.ENTER) {
+        this.notify(keyCode)
+      }
+    }
+  }
+
   async startProgram(dispatch, getState) {
-    const keyCodes = keyCodesSelector(getState())
+    const keyCodes = reducer.keyCodesSelector(getState())
     let interrupted = false
-    dispatch(setRunning())
-    while (ipSelector(getState()) < keyCodes.length && !interrupted) {
-      if (runningSelector(getState())) {
-        await this.executeNext(dispatch, getState, delayedSelector(getState()) ? DELAY : 0)
+    dispatch(reducer.setRunning())
+    while (reducer.ipSelector(getState()) < keyCodes.length && !interrupted) {
+      if (reducer.runningSelector(getState())) {
+        await this.executeNext(dispatch, getState, reducer.delayedSelector(getState()) ? DELAY : 0)
       } else {
         interrupted = true
       }
     }
-    dispatch(setStopping())
+    dispatch(reducer.setStopping())
     if (!interrupted) {
-      dispatch(setIP(0))
+      dispatch(reducer.setIP(0))
     }
   }
 
@@ -43,17 +72,18 @@ export default class ControlUnit {
       clearTimeout(this.timeoutID)
       this.timeoutID = null
     }
-    dispatch(setStopping())
+    dispatch(reducer.setStopping())
   }
 
   executeNext(dispatch, getState, delay) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        const keyCodes = keyCodesSelector(getState())
-        const ip = ipSelector(getState())
+        const keyCodes = reducer.keyCodesSelector(getState())
+        const ip = reducer.ipSelector(getState())
         const keyCode = keyCodes[ip]
-        const procState = this.execute(processorStateSelector(getState()), keyCode)
-        dispatch(updateProcessorState({ ...procState, ip: ip + 1 }))
+        let processor = reducer.processorStateSelector(getState())
+        processor = this.execute(processor, keyCode)
+        dispatch(reducer.updateProcessorState({ ...processor, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -84,9 +114,13 @@ export default class ControlUnit {
       }
     }
 
-    return this.alu.getOpcodes().has(keyCode)
+    const newState = this.alu.getOpcodes().has(keyCode)
       ? this.aluExecute(state, keyCode)
       : this.inputExecute(state, keyCode)
+
+    this.notifyRecorder(newState, state, keyCode)
+
+    return newState
   }
 
   aluExecute(state, keyCode) {

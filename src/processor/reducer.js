@@ -10,12 +10,13 @@ const UPDATE_STATE = 'rpnext/processor/UPDATE_STATE'
 const LOAD_KEYCODES = 'rpnext/processor/LOAD_KEYCODES'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
-export const setRunning = createAction(SET_RUNNING)
-export const setStopping = createAction(SET_STOPPING)
 export const setDelayed = createAction(SET_DELAYED)
 export const setIP = createAction(SET_IP)
-export const updateProcessorState = createAction(UPDATE_STATE)
 export const loadKeyCodes = createAction(LOAD_KEYCODES)
+
+export const setRunning = createAction(SET_RUNNING)
+export const setStopping = createAction(SET_STOPPING)
+export const updateProcessorState = createAction(UPDATE_STATE)
 
 export const startProgram = () => (dispatch, getState) => {
   processor.startProgram(dispatch, getState)

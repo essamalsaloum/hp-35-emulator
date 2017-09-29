@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import C from '../processor/keyCodes'
 import Key from './Key'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
-import { executeKeyCode } from '../ducks/processor'
+import { executeKeyCode } from '../processor/reducer'
 import mapKeyboardEvent from '../processor/keyboardEventMapper'
 import './Keypad.css'
 

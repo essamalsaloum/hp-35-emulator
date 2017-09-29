@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import processor from './processor'
+import processor from '../processor/reducer'
 import programPanel from './programPanel'
 import programs from './programs'
 import program from './program'

@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
 import { clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { loadKeyCodes, startProgram, stopProgram, runningSelector } from '../ducks/processor'
+import { loadKeyCodes, startProgram, stopProgram, runningSelector } from '../processor/reducer'
 
 import compileProgram from '../processor/compiler'
 

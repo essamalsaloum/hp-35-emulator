@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { programTextSelector } from '../ducks/program'
-import { loadKeyCodes, keyCodesSelector, singleStep, startProgram, stopProgram, setIP, setDelayed, runningSelector, delayedSelector } from '../ducks/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import { grey700 } from 'material-ui/styles/colors'
@@ -12,6 +10,18 @@ import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
 import compileProgram from '../processor/compiler'
+import { programTextSelector } from '../ducks/program'
+import {
+  loadKeyCodes,
+  keyCodesSelector,
+  singleStep,
+  startProgram,
+  stopProgram,
+  setIP,
+  setDelayed,
+  runningSelector,
+  delayedSelector
+} from '../processor/reducer'
 
 class InspectToolbar extends React.PureComponent {
 

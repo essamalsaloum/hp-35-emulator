@@ -1,2 +1,2 @@
-import Processor from './Processor'
-export default new Processor()
+import ControlUnit from './ControlUnit'
+export default new ControlUnit()

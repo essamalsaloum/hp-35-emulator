@@ -36,7 +36,7 @@ function compilePlainTextProgram(text) {
         instanceAliases[tokens[1]] = tokens[2]
       } else {
         line = instanceAliases[line] || aliases[line] || line
-        if (processor.controlUnit.isValidKeyCode(line)) {
+        if (processor.isValidKeyCode(line)) {
           acc.keyCodes.push(line)
         } else {
           error = true
