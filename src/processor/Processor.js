@@ -1,11 +1,6 @@
-import store from '../reduxStore'
 import C from './keyCodes'
 import ControlUnit from './ControlUnit'
 import {formatNumber} from './util'
-import {keyCodesSelector} from '../ducks/program'
-import {ipSelector, runningSelector, delayedSelector, setRunning, setStopping, setIP} from '../ducks/processor'
-
-const DELAY = 500
 
 export default class Processor {
   controlUnit = new ControlUnit()
@@ -26,30 +21,16 @@ export default class Processor {
     })
   }
 
-  async startProgram() {
-    const keyCodes = keyCodesSelector(store.getState())
-    let interrupted = false
-    store.dispatch(setRunning())
-    while (ipSelector(store.getState()) < keyCodes.length && !interrupted) {
-      if (runningSelector(store.getState())) {
-        await this.executeNext(delayedSelector(store.getState()) ? DELAY : 0)
-      } else {
-        interrupted = true
-      }
-    }
-    store.dispatch(setStopping())
-    if (!interrupted) {
-      store.dispatch(setIP(0))
-    }
+  startProgram(state, dispatch) {
+    return this.controlUnit.startProgram(state, dispatch)
   }
 
-  stopProgram() {
-    this.controlUnit.stopProgram()
-    store.dispatch(setStopping())
+  stopProgram(dispatch) {
+    this.controlUnit.stopProgram(dispatch)
   }
 
-  executeNext(delay = 0) {
-    return this.controlUnit.executeNext(store, delay)
+  executeNext(dispatch, state, delay = 0) {
+    return this.controlUnit.executeNext(dispatch, state, delay)
   }
 
   execute(state, keyCode) {

@@ -1,10 +1,11 @@
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
-
-import { keyCodesSelector } from '../ducks/program'
-import { updateProcessorState, processorStateSelector } from '../ducks/processor'
+import { keyCodesSelector, updateProcessorState, processorStateSelector } from '../ducks/processor'
+import { ipSelector, runningSelector, delayedSelector, setRunning, setStopping, setIP } from '../ducks/processor'
 import { formatNumber } from './util'
+
+const DELAY = 500
 
 const NUMERIC_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 const isValidNumber = num => NUMERIC_REGEX.test(num)
@@ -20,27 +21,43 @@ export default class ControlUnit {
 
   validOpCodes = new Set([...Object.keys(this.instructionSet), ...this.alu.getOpcodes()])
 
-  executeNext(store, delay) {
-    return new Promise(resolve => {
-      this.timeoutID = setTimeout(() => {
-        const state = store.getState()
-        const keyCodes = keyCodesSelector(state)
-        let procState = processorStateSelector(state)
-        const { ip } = procState
-        const keyCode = keyCodes[ip]
-        procState = this.execute(procState, keyCode)
-        store.dispatch(updateProcessorState({ ...procState, ip: ip + 1 }))
-        this.timeoutID = null
-        resolve()
-      }, delay)
-    })
+  async startProgram(dispatch, getState) {
+    const keyCodes = keyCodesSelector(getState())
+    let interrupted = false
+    dispatch(setRunning())
+    while (ipSelector(getState()) < keyCodes.length && !interrupted) {
+      if (runningSelector(getState())) {
+        await this.executeNext(dispatch, getState, delayedSelector(getState()) ? DELAY : 0)
+      } else {
+        interrupted = true
+      }
+    }
+    dispatch(setStopping())
+    if (!interrupted) {
+      dispatch(setIP(0))
+    }
   }
 
-  stopProgram() {
+  stopProgram(dispatch) {
     if (this.timeoutID !== null) {
       clearTimeout(this.timeoutID)
       this.timeoutID = null
     }
+    dispatch(setStopping())
+  }
+
+  executeNext(dispatch, getState, delay) {
+    return new Promise(resolve => {
+      this.timeoutID = setTimeout(() => {
+        const keyCodes = keyCodesSelector(getState())
+        const ip = ipSelector(getState())
+        const keyCode = keyCodes[ip]
+        const procState = this.execute(processorStateSelector(getState()), keyCode)
+        dispatch(updateProcessorState({ ...procState, ip: ip + 1 }))
+        this.timeoutID = null
+        resolve()
+      }, delay)
+    })
   }
 
   execute(state, keyCode) {

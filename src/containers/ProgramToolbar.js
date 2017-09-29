@@ -10,8 +10,8 @@ import Delete from 'material-ui/svg-icons/action/delete'
 import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
-import { loadKeyCodes, clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { startProgram, stopProgram, runningSelector } from '../ducks/processor'
+import { clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
+import { loadKeyCodes, startProgram, stopProgram, runningSelector } from '../ducks/processor'
 
 import compileProgram from '../processor/compiler'
 
