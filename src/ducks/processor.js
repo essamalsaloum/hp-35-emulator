@@ -47,7 +47,7 @@ const initialState = {
   delayed: false
 }
 
-export default function reduce(state = initialState, { type, payload }) {
+export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case EXECUTE_KEYCODE:
       return { ...state, ...processor.execute(state, payload) }

@@ -1,13 +1,11 @@
-import { stackInstructions } from './instructions/stack'
-import { mathInstructions } from './instructions/math'
-
-const isCalculatorError = ({ stack }) => isNaN(stack[0]) || !isFinite(stack[0])
+import stack from './instructions/stack'
+import math from './instructions/math'
 
 export default class ALU {
 
   instructionSet = {
-    ...stackInstructions,
-    ...mathInstructions
+    ...stack,
+    ...math
   }
 
   getOpcodes() {
@@ -23,40 +21,14 @@ export default class ALU {
   }
 
   execute(state, opCode) {
-    if (isCalculatorError(state)) {
-      const [, y, z, t] = state.stack
-      return {
-        stack: [0, y, z, t],
-        buffer: '0',
-        running: false,
-        stackLift: false,
-        entry: false
-      }
-    }
-
     const instruction = this.instructionSet[opCode]
     if (!instruction) {
       throw new Error(`alu: not implemented [${opCode}]`)
     }
-
-    const { entry, stackLift, fn } = instruction
-
-    if (entry) {
-      state = state.stackLift === true ? this.liftStack(state) : state
-    }
-
-    const newState = fn(state)
-
-    const errorState = isCalculatorError(newState) ? {
-      buffer: 'arithmetic error',
-      running: false
-    } : {}
-
+    const { stackLift, fn } = instruction
     return {
-      ...newState,
-      entry: entry !== null ? entry : state.entry,
-      stackLift: stackLift !== null ? stackLift : state.stackLift,
-      ...errorState
+      ...fn(state),
+      stackLift: stackLift !== null ? stackLift : state.stackLift
     }
   }
 }

@@ -1,5 +1,7 @@
 import ALU from './ALU'
-import { inputInstructions } from './instructions/input'
+import input from './instructions/input'
+import memory from './instructions/memory'
+
 import { keyCodesSelector } from '../ducks/program'
 import { setProcessorState, processorStateSelector } from '../ducks/processor'
 import { formatNumber } from './util'
@@ -13,7 +15,8 @@ export default class ControlUnit {
   timeoutID = null
 
   instructionSet = {
-    ...inputInstructions,
+    ...input,
+    ...memory
   }
 
   validOpCodes = new Set([...Object.keys(this.instructionSet), ...this.alu.getOpcodes()])
@@ -74,7 +77,7 @@ export default class ControlUnit {
     const newState = this.alu.execute(state, keyCode)
     const [x] = newState.stack
     const buffer = x instanceof Error ? x.message : formatNumber(x)
-    return { ...newState, buffer }
+    return { ...newState, buffer, entry: false }
   }
 
   inputExecute(state, keyCode) {

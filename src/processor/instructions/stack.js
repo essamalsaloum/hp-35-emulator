@@ -58,12 +58,12 @@ const recallMem = state => {
   }
 }
 
-export const stackInstructions = {
-  [C.ENTER]: { entry: false, stackLift: false, fn: enter },
-  [C.CLX]: { entry: false, stackLift: false, fn: clx },
-  [C.CLR]: { entry: false, stackLift: false, fn: clr },
-  [C.SWAP]: { entry: false, stackLift: true, fn: swap },
-  [C.ROLL_DOWN]: { entry: false, stackLift: true, fn: rollDown },
-  [C.STO]: { entry: false, stackLift: true, fn: storeMem },
-  [C.RCL]: { entry: false, stackLift: true, fn: recallMem }
+export default {
+  [C.ENTER]: { stackLift: false, fn: enter },
+  [C.CLX]: { stackLift: false, fn: clx },
+  [C.CLR]: { stackLift: false, fn: clr },
+  [C.SWAP]: { stackLift: true, fn: swap },
+  [C.ROLL_DOWN]: { stackLift: true, fn: rollDown },
+  [C.STO]: { stackLift: true, fn: storeMem },
+  [C.RCL]: { stackLift: true, fn: recallMem },
 }

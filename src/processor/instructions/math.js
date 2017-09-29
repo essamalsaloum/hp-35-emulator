@@ -55,7 +55,7 @@ const compute = opCode => state => {
   return { ...state,  stack }
 }
 
-export const mathInstructions = Object.keys(funcs).reduce((prev, keyCode) => {
-  prev[keyCode] = { entry: false, stackLift: true, fn: compute(keyCode) }
+export default Object.keys(funcs).reduce((prev, keyCode) => {
+  prev[keyCode] = { stackLift: true, fn: compute(keyCode) }
   return prev
 }, {})

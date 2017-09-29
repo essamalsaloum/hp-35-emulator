@@ -104,7 +104,7 @@ const pi = state => {
   }
 }
 
-export const inputInstructions = {
+export default {
   [C.CHS]: { entry: null, stackLift: null, fn: changeSign },
   [C.DOT]: { entry: true, stackLift: false, fn: decimal },
   [C.D0]: { entry: true, stackLift: false, fn: digit('0') },
