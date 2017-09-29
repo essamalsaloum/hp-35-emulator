@@ -7,13 +7,14 @@ import Toggle from 'material-ui/Toggle'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
+import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
 import { loadKeyCodes, clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { runToCompletion, stopProgram, runningSelector } from '../ducks/processor'
+import { startProgram, stopProgram, runningSelector } from '../ducks/processor'
 
-import RunStopButton from '../components/RunStopButton'
-import processor from '../processor'
+import compileProgram from '../processor/compiler'
+
 
 class ProgramToolbar extends React.PureComponent {
 
@@ -24,7 +25,7 @@ class ProgramToolbar extends React.PureComponent {
     programText: PropTypes.string,
     loadKeyCodes: PropTypes.func,
     clearProgram: PropTypes.func,
-    runToCompletion: PropTypes.func,
+    startProgram: PropTypes.func,
     stopProgram: PropTypes.func,
     isMarkdown: PropTypes.bool.isRequired,
     setRecording: PropTypes.func.isRequired,
@@ -50,19 +51,19 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { loadKeyCodes, running, runToCompletion, stopProgram, setRecording, recording } = this.props
+    const { loadKeyCodes, running, startProgram, stopProgram, setRecording, recording } = this.props
     if (recording) {
       setRecording(false)
     }
     if (running) {
       stopProgram()
     } else {
-      const { keyCodes, error } = processor.compileProgram(this.props.programText)
+      const { keyCodes, error } = compileProgram(this.props.programText)
       if (error) {
         console.log(error.message)
       } else {
         loadKeyCodes(keyCodes)
-        runToCompletion()
+        startProgram()
       }
     }
   }
@@ -109,7 +110,7 @@ const mapDispatchToProps = dispatch =>
     selectGitHubTab,
     loadKeyCodes,
     clearProgram,
-    runToCompletion,
+    startProgram,
     stopProgram,
     setRecording,
   }, dispatch)

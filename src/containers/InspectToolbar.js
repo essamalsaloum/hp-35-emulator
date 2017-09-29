@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loadKeyCodes, keyCodesSelector, programTextSelector } from '../ducks/program'
-import { singleStep, runToCompletion, stopProgram, setIP, setDelayed, runningSelector, delayedSelector } from '../ducks/processor'
+import { singleStep, startProgram, stopProgram, setIP, setDelayed, runningSelector, delayedSelector } from '../ducks/processor'
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Toggle from 'material-ui/Toggle'
 import { grey700 } from 'material-ui/styles/colors'
@@ -11,7 +11,7 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import processor from '../processor'
+import compileProgram from '../processor/compiler'
 
 class InspectToolbar extends React.PureComponent {
 
@@ -21,7 +21,7 @@ class InspectToolbar extends React.PureComponent {
     running: PropTypes.bool.isRequired,
     loadKeyCodes: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
-    runToCompletion: PropTypes.func.isRequired,
+    startProgram: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
     setIP: PropTypes.func.isRequired,
     delayed: PropTypes.bool.isRequired,
@@ -36,7 +36,7 @@ class InspectToolbar extends React.PureComponent {
 
   componentWillMount() {
     const { programText, loadKeyCodes } = this.props
-    const { keyCodes, error } = processor.compileProgram(programText)
+    const { keyCodes, error } = compileProgram(programText)
     if (!error) {
       loadKeyCodes(keyCodes)
     }
@@ -47,11 +47,11 @@ class InspectToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { running, runToCompletion, stopProgram } = this.props
+    const { running, startProgram, stopProgram } = this.props
     if (running) {
       stopProgram()
     } else {
-      runToCompletion()
+      startProgram()
     }
   }
 
@@ -86,7 +86,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     loadKeyCodes,
     singleStep,
-    runToCompletion,
+    startProgram,
     stopProgram,
     setIP,
     setDelayed,

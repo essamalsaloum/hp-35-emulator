@@ -3,14 +3,13 @@ import input from './instructions/input'
 import memory from './instructions/memory'
 
 import { keyCodesSelector } from '../ducks/program'
-import { setProcessorState, processorStateSelector } from '../ducks/processor'
+import { updateProcessorState, processorStateSelector } from '../ducks/processor'
 import { formatNumber } from './util'
 
 const NUMERIC_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 const isValidNumber = num => NUMERIC_REGEX.test(num)
 
 export default class ControlUnit {
-
   alu = new ALU()
   timeoutID = null
 
@@ -30,7 +29,7 @@ export default class ControlUnit {
         const { ip } = procState
         const keyCode = keyCodes[ip]
         procState = this.execute(procState, keyCode)
-        store.dispatch(setProcessorState({ ...procState, ip: ip + 1 }))
+        store.dispatch(updateProcessorState({ ...procState, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -49,9 +48,9 @@ export default class ControlUnit {
     if (x instanceof Error) {
       return {
         stack: [0, y, z, t],
+        stackLift: false,
         buffer: '0',
         running: false,
-        stackLift: false,
         entry: false
       }
     }
@@ -62,8 +61,8 @@ export default class ControlUnit {
       return {
         ...state,
         stack: [num, x, y, z],
-        buffer: formatNumber(num),
         stackLift: true,
+        buffer: formatNumber(num),
         entry: false
       }
     }
@@ -102,5 +101,4 @@ export default class ControlUnit {
   isValidKeyCode(keyCode) {
     return isValidNumber(keyCode) || this.validOpCodes.has(keyCode)
   }
-
 }

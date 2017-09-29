@@ -3,24 +3,25 @@ import { keyCodesSelector } from '../ducks/program'
 import processor from '../processor'
 
 const EXECUTE_KEYCODE = 'rpnext/processor/EXECUTE_KEYCODE'
-const SET_RUNNING = 'rpnext/processor/SET_RUNNING'
+const SET_RUNNING = 'rpnext/processor/RUNNING'
+const SET_STOPPING = 'rpnext/processor/STOPPING'
 const SET_DELAYED = 'rpnext/processor/SET_DELAYED'
 const SET_IP = 'rpnext/processor/SET_IP'
-const SET_STATE = 'rpnext/processor/SET_STATE'
+const UPDATE_STATE = 'rpnext/processor/UPDATE_STATE'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
 export const setRunning = createAction(SET_RUNNING)
+export const setStopping = createAction(SET_STOPPING)
 export const setDelayed = createAction(SET_DELAYED)
 export const setIP = createAction(SET_IP)
-export const setProcessorState = createAction(SET_STATE)
+export const updateProcessorState = createAction(UPDATE_STATE)
 
-export const runToCompletion = () => async (dispatch) => {
-  dispatch(setRunning(true))
-  const interrupted = await processor.runProgram()
-  dispatch(setRunning(false))
-  if (!interrupted) {
-    dispatch(setIP(0))
-  }
+export const startProgram = () => () => {
+  processor.startProgram()
+}
+
+export const stopProgram = () => () => {
+  processor.stopProgram()
 }
 
 export const singleStep = () => (dispatch, getState) => {
@@ -29,11 +30,6 @@ export const singleStep = () => (dispatch, getState) => {
   } else {
     dispatch(setIP(0))
   }
-}
-
-export const stopProgram = () => (dispatch) => {
-  processor.stopProgram()
-  dispatch(setRunning(false))
 }
 
 const initialState = {
@@ -47,16 +43,22 @@ const initialState = {
   delayed: false
 }
 
+function alu(state, payload) {
+  return { ...state, ...processor.execute(state, payload) }
+}
+
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case EXECUTE_KEYCODE:
-      return { ...state, ...processor.execute(state, payload) }
-    case SET_STATE:
+      return { ...state, ...alu(state, payload) }
+    case UPDATE_STATE:
       return payload
     case SET_IP:
       return { ...state, ip: payload }
     case SET_RUNNING:
-      return { ...state, running: payload }
+      return { ...state, running: true }
+    case SET_STOPPING:
+      return { ...state, running: false }
     case SET_DELAYED:
       return { ...state, delayed: payload }
     default:
