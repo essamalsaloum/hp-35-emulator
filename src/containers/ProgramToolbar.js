@@ -10,11 +10,9 @@ import Delete from 'material-ui/svg-icons/action/delete'
 import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
-import { clearProgram, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
+import { clearProgram, setProgramText, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
 import { loadProgram, startProgram, stopProgram, runningSelector } from '../processor/reducer'
-
-import compileProgram from '../processor/compiler'
-
+import { compile, extractProgramText } from '../processor/compiler'
 
 class ProgramToolbar extends React.PureComponent {
 
@@ -25,6 +23,7 @@ class ProgramToolbar extends React.PureComponent {
     programText: PropTypes.string,
     loadProgram: PropTypes.func,
     clearProgram: PropTypes.func,
+    setProgramText: PropTypes.func,
     startProgram: PropTypes.func,
     stopProgram: PropTypes.func,
     isMarkdown: PropTypes.bool.isRequired,
@@ -36,6 +35,7 @@ class ProgramToolbar extends React.PureComponent {
     super(props)
     this.toggleRecording = this.toggleRecording.bind(this)
     this.runStop = this.runStop.bind(this)
+    this.extractProgram = this.extractProgram.bind(this)
   }
 
   isEmptyProgram() {
@@ -51,14 +51,23 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { loadProgram, running, startProgram, stopProgram, setRecording, recording } = this.props
+    const {
+      programText,
+      loadProgram,
+      running,
+      startProgram,
+      stopProgram,
+      setRecording,
+      recording,
+      isMarkdown
+    } = this.props
     if (recording) {
       setRecording(false)
     }
     if (running) {
       stopProgram()
     } else {
-      const { keyCodes, error } = compileProgram(this.props.programText)
+      const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
         console.log(error.message)
       } else {
@@ -84,18 +93,38 @@ class ProgramToolbar extends React.PureComponent {
     }
   }
 
+  renderEditButton() {
+    const { isMarkdown, running } = this.props
+    if (!isMarkdown) {
+      return null
+    } else {
+      return (
+        <IconButton onClick={this.extractProgram} disabled={running}>
+          <FontIcon className="fa fa-pencil" color={grey700} />
+        </IconButton>
+      )
+    }
+  }
+
+  extractProgram() {
+    const {programText, setProgramText} = this.props
+    const text = extractProgramText(programText)
+    setProgramText(text)
+  }
+
   render() {
-    const { running } = this.props
+    const { running, clearProgram, selectGitHubTab } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           {this.renderToggle()}
+          {this.renderEditButton()}
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => this.props.selectGitHubTab()} disabled={running}>
+          <IconButton onClick={() => selectGitHubTab()} disabled={running}>
             <FontIcon className="fa fa-github" color={grey700} />
           </IconButton>
-          <IconButton onClick={this.props.clearProgram} disabled={this.isEmptyProgram() || running} >
+          <IconButton onClick={clearProgram} disabled={this.isEmptyProgram() || running} >
             <Delete color={grey700} />
           </IconButton>
           <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} running={running} />
@@ -110,6 +139,7 @@ const mapDispatchToProps = dispatch =>
     selectGitHubTab,
     loadProgram,
     clearProgram,
+    setProgramText,
     startProgram,
     stopProgram,
     setRecording,

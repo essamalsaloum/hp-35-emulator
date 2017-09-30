@@ -9,8 +9,8 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import compileProgram from '../processor/compiler'
-import { programTextSelector } from '../ducks/program'
+import {compile} from '../processor/compiler'
+import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadProgram,
   keyCodesSelector,
@@ -38,6 +38,7 @@ class InspectToolbar extends React.PureComponent {
     delayed: PropTypes.bool.isRequired,
     setDelayed: PropTypes.func.isRequired,
     clearDelayed: PropTypes.func.isRequired,
+    isMarkdown: PropTypes.bool.isRequired,
   }
 
   constructor() {
@@ -47,8 +48,8 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadProgram } = this.props
-    const { keyCodes, error } = compileProgram(programText)
+    const { programText, loadProgram, isMarkdown } = this.props
+    const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
     if (!error) {
       loadProgram(keyCodes)
     }
@@ -114,6 +115,7 @@ const mapStateToProps = state => ({
   delayed: delayedSelector(state),
   keyCodes: keyCodesSelector(state),
   programText: programTextSelector(state),
+  isMarkdown: isMarkdownSelector(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InspectToolbar)

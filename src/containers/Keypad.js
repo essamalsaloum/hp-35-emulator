@@ -48,22 +48,22 @@ class Keypad extends React.PureComponent {
     return (
       <div className="Keypad">
         <div className="Keypad--row">
-          <Key label="𝑦<sup>𝑥</sup>" keyCode={C.POW} />
+          <Key label="y<sup>x</sup>" keyCode={C.POW} />
           <Key label="LOG" keyCode={C.LOG} labelClass="Key--label-small"/>
           <Key label="LN" keyCode={C.LN} labelClass="Key--label-small"/>
-          <Key label="𝑒<sup>𝑥</sup>" topLabel="10<sup>𝑥</sup>" keyCode={C.EXP} />
+          <Key label="e<sup>x</sup>" topLabel="10<sup>x</sup>" keyCode={C.EXP} />
           <Key label="CLR" keyCode={C.CLR} labelClass="Key--label-small"/>
         </div>
         <div className="Keypad--row">
-          <Key label="√𝑥" keyCode={C.SQRT} />
-          <Key label="𝑥<sup>2</sup" keyCode={C.SQR} />
+          <Key label="√x" keyCode={C.SQRT} />
+          <Key label="x<sup>2</sup" keyCode={C.SQR} />
           <Key label="SIN" bottomLabel="ASIN" keyCode={C.SIN} labelClass="Key--label-small" />
           <Key label="COS" bottomLabel="ACOS" keyCode={C.COS} labelClass="Key--label-small" />
           <Key label="TAN" bottomLabel="ATAN" keyCode={C.TAN} labelClass="Key--label-small" />
         </div>
         <div className="Keypad--row">
-          <Key label="<small>1</small>/𝑥" keyCode={C.RECIPROCAL} />
-          <Key label="𝑥↔︎𝑦" keyCode={C.SWAP} />
+          <Key label="<small>1</small>/x" keyCode={C.RECIPROCAL} />
+          <Key label="x↔︎y" keyCode={C.SWAP} />
           <Key label="R↓" keyCode={C.ROLL_DOWN} labelClass="Key--label-small"/>
           <Key label="STO" keyCode={C.STO} labelClass="Key--label-small" />
           <Key label="RCL" keyCode={C.RCL} labelClass="Key--label-small" />

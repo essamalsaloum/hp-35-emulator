@@ -21,7 +21,7 @@ export default (state = initialState, { type, payload }) => {
     case CLEAR:
       return { ...initialState }
     case SET_TEXT:
-      return { ...state, text: payload }
+      return { ...state, text: payload, isMarkdown: false }
     case SET_MARKDOWN:
       return { ...state, text: payload, isMarkdown: true, recording: false }
     case SET_RECORDING:

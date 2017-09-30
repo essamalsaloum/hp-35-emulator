@@ -1,22 +1,27 @@
 import aliases from './aliases'
 import processor from './index'
 
-export default function compileProgram(text) {
-  return /^\s*```/gm.test(text)
+export function compile(text, mode = 'text') {
+  return mode === 'markdown'
     ? compileMarkDownProgram(text)
     : compilePlainTextProgram(text)
 }
 
 function compileMarkDownProgram(text) {
-  const matches = text.match(/^```[\s\S]+?```/gm)
-  let progText = ''
-  if (matches) {
-    progText = matches.reduce((buf, match) => {
-      buf += match.slice(3, -3) + '\n'
-      return buf
-    }, '')
+  if (!/^\s*```txt/gm.test(text)) {
+    console.log('invalid file format')
+    return
   }
+  const progText = extractProgramText(text)
   return compilePlainTextProgram(progText)
+}
+
+export function extractProgramText(text) {
+  const matches = text.match(/^```txt[\s\S]+?```/gm)
+  return matches.reduce((buf, match) => {
+    buf += match.slice(6, -3) + '\n'
+    return buf
+  }, '').trim()
 }
 
 function compilePlainTextProgram(text) {
@@ -28,7 +33,7 @@ function compilePlainTextProgram(text) {
     .map(line => line.trim())
     .filter(line => line !== '' && !line.startsWith('^'))
 
-  return lines.reduce((acc, line) => {
+  return lines.reduce((prev, line) => {
     let error = false
     if (!line.startsWith('//')) {
       const tokens = line.split(/\s+/)
@@ -37,17 +42,17 @@ function compilePlainTextProgram(text) {
       } else {
         line = instanceAliases[line] || aliases[line] || line
         if (processor.isValidKeyCode(line)) {
-          acc.keyCodes.push(line)
+          prev.keyCodes.push(line)
         } else {
           error = true
         }
       }
     }
-    acc.text += line + '\n'
-    if (error && !acc.error) {
-      acc.error = new Error(`error: ${line}`)
+    prev.text += line + '\n'
+    if (error && !prev.error) {
+      prev.error = new Error(`error: ${line}`)
     }
-    return acc
+    return prev
   }, {
       text: '',
       keyCodes: [],
