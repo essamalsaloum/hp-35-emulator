@@ -50,7 +50,9 @@ class InspectToolbar extends React.PureComponent {
   componentWillMount() {
     const { programText, loadProgram, isMarkdown } = this.props
     const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
-    if (!error) {
+    if (error) {
+      console.log(error.message)
+    } else {
       loadProgram(keyCodes)
     }
   }

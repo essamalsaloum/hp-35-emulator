@@ -34,30 +34,48 @@ function compilePlainTextProgram(text) {
     .filter(line => line !== '' && !line.startsWith('^'))
 
   return lines.reduce((prev, line) => {
-    let error = false
+    let error = null
     if (!line.startsWith('//')) {
-      const tokens = line.split(/\s+/)
-      if (tokens.length === 3 && tokens[0] === 'alias') {
-        instanceAliases[tokens[1]] = tokens[2]
-      } else {
-        line = instanceAliases[line] || aliases[line] || line
-        if (processor.isValidKeyCode(line)) {
-          prev.keyCodes.push(line)
-        } else {
-          error = true
-        }
-      }
+      error = compileLine(line, instanceAliases, prev.keyCodes)
     }
-    prev.text += line + '\n'
     if (error && !prev.error) {
-      prev.error = new Error(`error: ${line}`)
+      prev.error = error
     }
     return prev
-  }, {
-      text: '',
-      keyCodes: [],
-      error: null
-    })
-
+  }, { keyCodes: [], error: null })
 }
 
+function compileLine(line, instanceAliases, keyCodes) {
+  const tokens = line.split(/\s+/)
+  const iter = tokens[Symbol.iterator]()
+
+  let item = iter.next()
+  while (!item.done) {
+    if (item.value === 'alias') {
+      item = iter.next()
+      if (item.done) {
+        return new Error('expected alias name')
+      } else {
+        const aliasName = item.value
+        item = iter.next()
+        if (item.done) {
+          return new Error('expected alias value')
+        }
+        else {
+          instanceAliases[aliasName] = item.value
+          item = iter.next()
+        }
+      }
+    } else {
+      const { value } = item
+      const keyCode = instanceAliases[value] || aliases[value] || value
+      if (!processor.isValidKeyCode(keyCode)) {
+        return new Error(`syntax error: '${keyCode}'`)
+      }
+      keyCodes.push(keyCode)
+      item = iter.next()
+    }
+  }
+
+  return null
+}

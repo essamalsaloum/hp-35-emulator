@@ -69,7 +69,7 @@ class ProgramToolbar extends React.PureComponent {
     } else {
       const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
-        console.log(error.message)
+        console.error(error.message)
       } else {
         loadProgram(keyCodes)
         startProgram()
