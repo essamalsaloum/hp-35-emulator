@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
 import { clearProgram, setProgramText, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { loadProgram, startProgram, stopProgram, runningSelector } from '../processor/reducer'
+import { loadProgram, startProgram, stopProgram, runningSelector, clearDelayed } from '../processor/reducer'
 import { compile, extractProgramText } from '../processor/compiler'
 
 class ProgramToolbar extends React.PureComponent {
@@ -29,7 +29,8 @@ class ProgramToolbar extends React.PureComponent {
     stopProgram: PropTypes.func,
     isMarkdown: PropTypes.bool.isRequired,
     setRecording: PropTypes.func.isRequired,
-    recording: PropTypes.bool.isRequired
+    recording: PropTypes.bool.isRequired,
+    clearDelayed: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -61,7 +62,8 @@ class ProgramToolbar extends React.PureComponent {
       setRecording,
       recording,
       isMarkdown,
-      setError
+      setError,
+      clearDelayed
     } = this.props
     if (recording) {
       setRecording(false)
@@ -69,6 +71,7 @@ class ProgramToolbar extends React.PureComponent {
     if (running) {
       stopProgram()
     } else {
+      clearDelayed()
       const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
         setError(error)
@@ -146,6 +149,7 @@ const mapDispatchToProps = dispatch =>
     startProgram,
     stopProgram,
     setRecording,
+    clearDelayed
   }, dispatch)
 
 const mapStateToProps = state => ({
