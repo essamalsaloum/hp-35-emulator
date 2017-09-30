@@ -25,7 +25,10 @@ export function extractProgramText(text) {
 }
 
 function compilePlainTextProgram(text) {
-  const instanceAliases = {}
+  const aliasMap = Object.keys(aliases).reduce((prev, name) => {
+    prev[name] = [aliases[name]]
+    return prev
+  }, {})
 
   const lines = text
     .toLowerCase()
@@ -36,7 +39,7 @@ function compilePlainTextProgram(text) {
   return lines.reduce((prev, line) => {
     let error = null
     if (!line.startsWith('//')) {
-      error = compileLine(line, instanceAliases, prev.keyCodes)
+      error = compileLine(line, aliasMap, prev.keyCodes)
     }
     if (error && !prev.error) {
       prev.error = error
@@ -45,7 +48,7 @@ function compilePlainTextProgram(text) {
   }, { keyCodes: [], error: null })
 }
 
-function compileLine(line, instanceAliases, keyCodes) {
+function compileLine(line, aliasMap, keyCodes) {
   const tokens = line.split(/\s+/)
   const iter = tokens[Symbol.iterator]()
 
@@ -56,26 +59,41 @@ function compileLine(line, instanceAliases, keyCodes) {
       if (item.done) {
         return new Error('expected alias name')
       } else {
-        const aliasName = item.value
+        const name = item.value
         item = iter.next()
         if (item.done) {
           return new Error('expected alias value')
         }
         else {
-          instanceAliases[aliasName] = item.value
+          const tokens = [item.value]
           item = iter.next()
+          while (!item.done) {
+            tokens.push(item.value)
+            item = iter.next()
+          }
+          aliasMap[name] = tokens
         }
       }
     } else {
       const { value } = item
-      const keyCode = instanceAliases[value] || aliases[value] || value
-      if (!processor.isValidKeyCode(keyCode)) {
-        return new Error(`syntax error: '${keyCode}'`)
-      }
-      keyCodes.push(keyCode)
+      const tokens = expandAlias(value, aliasMap)
+      tokens.forEach(token => {
+        if (!processor.isValidKeyCode(token)) {
+          return new Error(`syntax error: '${token}'`)
+        }
+        keyCodes.push(token)
+      })
       item = iter.next()
     }
   }
-
   return null
+}
+
+function expandAlias(token, aliasMap, tokens = []) {
+  if (aliasMap.hasOwnProperty(token)) {
+    aliasMap[token].forEach(t => expandAlias(t, aliasMap, tokens))
+  } else {
+    tokens.push(token)
+  }
+  return tokens
 }
