@@ -3,3 +3,9 @@
   display: flex;
   flex-direction: column;
 }
+
+.ProgramTab--error {
+  padding: 8px;
+  color: red;
+  font-size: 0.8rem;
+}

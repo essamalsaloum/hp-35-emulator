@@ -1,6 +1,9 @@
 import aliases from './aliases'
 import processor from './index'
+import { Tokenizer, TokenType } from './Tokenizer'
 
+const CONTEXT_TRUNCATE_AT = 50
+const isBlankOrComment = line => line === '' || /^\s*\/\//.test(line)
 export function compile(text, mode = 'text') {
   return mode === 'markdown'
     ? compileMarkDownProgram(text)
@@ -24,69 +27,78 @@ export function extractProgramText(text) {
   }, '').trim()
 }
 
+const removeBlankAndCommentLines = text =>
+  text
+    .split(/\n/)
+    .map(line => line.trim())
+    .filter(line => !isBlankOrComment(line))
+    .join('\n')
+
 function compilePlainTextProgram(text) {
+  const keyCodes = []
   const aliasMap = Object.keys(aliases).reduce((prev, name) => {
     prev[name] = [aliases[name]]
     return prev
   }, {})
 
-  const lines = text
-    .toLowerCase()
-    .split(/\n/)
-    .map(line => line.trim())
-    .filter(line => line !== '' && !line.startsWith('^'))
+  text = removeBlankAndCommentLines(text)
+  const tokenizer = new Tokenizer(text)
 
-  return lines.reduce((prev, line) => {
-    let error = null
-    if (!line.startsWith('//')) {
-      error = compileLine(line, aliasMap, prev.keyCodes)
-    }
-    if (error && !prev.error) {
-      prev.error = error
-    }
-    return prev
-  }, { keyCodes: [], error: null })
-}
-
-function compileLine(line, aliasMap, keyCodes) {
-  const tokens = line.split(/\s+/)
-  const iter = tokens[Symbol.iterator]()
-
-  let item = iter.next()
-  while (!item.done) {
-    if (item.value === 'alias') {
-      item = iter.next()
-      if (item.done) {
-        return new Error('expected alias name')
-      } else {
-        const name = item.value
-        item = iter.next()
-        if (item.done) {
-          return new Error('expected alias value')
+  let node = tokenizer.next()
+  while (!node.done) {
+    if (node.value.type === TokenType.token) {
+      if (node.value.text === 'alias') {
+        node = tokenizer.next()
+        if (node.done) {
+          return createUnexpectedEndError()
         }
-        else {
-          const tokens = [item.value]
-          item = iter.next()
-          while (!item.done) {
-            tokens.push(item.value)
-            item = iter.next()
+        if (node.value.type !== TokenType.token) {
+          return createError(`expected alias name`, node.value.context)
+        }
+        const aliasName = node.value.text
+        node = tokenizer.next()
+        if (node.done) {
+          return createUnexpectedEndError()
+        }
+        if (node.value.type !== TokenType.equalSign) {
+          return createError(`expected '='`, node.value.context)
+        }
+        node = tokenizer.next()
+        if (node.done) {
+          return createUnexpectedEndError()
+        }
+        if (node.value.type !== TokenType.leftBrace) {
+          return createError(`expected '{'`, node.value.context)
+        }
+        node = tokenizer.next()
+        const aliasTokens = []
+        while (!node.done && node.value.type !== TokenType.rightBrace) {
+          if (node.value.type !== TokenType.token) {
+            return createError(`unexpected: '${node.value.text}'`, node.value.context)
           }
-          aliasMap[name] = tokens
+          aliasTokens.push(node.value.text)
+          node = tokenizer.next()
         }
+        if (node.done) {
+          return createError(`missing '}'`, 'end of program')
+        }
+        aliasMap[aliasName] = aliasTokens
+        node = tokenizer.next()
+      } else {
+        const tokens = expandAlias(node.value.text, aliasMap)
+        for (const token of tokens) {
+          if (!processor.isValidKeyCode(token)) {
+            return createError(`syntax error: '${token}'`, node.value.context)
+          }
+          keyCodes.push(token)
+        }
+        node = tokenizer.next()
       }
     } else {
-      const { value } = item
-      const tokens = expandAlias(value, aliasMap)
-      tokens.forEach(token => {
-        if (!processor.isValidKeyCode(token)) {
-          return new Error(`syntax error: '${token}'`)
-        }
-        keyCodes.push(token)
-      })
-      item = iter.next()
+      return createError(`unexpected: '${node.value.text}'`, node.value.context)
     }
   }
-  return null
+  return { error: null, keyCodes }
 }
 
 function expandAlias(token, aliasMap, tokens = []) {
@@ -96,4 +108,19 @@ function expandAlias(token, aliasMap, tokens = []) {
     tokens.push(token)
   }
   return tokens
+}
+
+function createError(message, context = 'end of program') {
+  if (context.length > CONTEXT_TRUNCATE_AT) {
+    if (/\s/.test(context[CONTEXT_TRUNCATE_AT])) {
+      context = context.slice(0, 50)
+    } else {
+      context = context.slice(0, 50) + '...'
+    }
+  }
+  return { error: new Error(`${message} near: ${context}`) }
+}
+
+function createUnexpectedEndError() {
+  return { error: new Error('unexpected end of program') }
 }

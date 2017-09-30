@@ -21,6 +21,10 @@ const resetState = {
 
 class ProgramTab extends React.PureComponent {
 
+  state = {
+    error: null
+  }
+
   static propTypes = {
     programText: PropTypes.string,
     setProgramText: PropTypes.func.isRequired,
@@ -38,7 +42,7 @@ class ProgramTab extends React.PureComponent {
   componentWillMount() {
     this.subscription = processor.subscribe(keyCode => {
       if (this.props.recording && keyCode !== C.CLR) {
-        const text =this.props.programText + keyCode + '\n'
+        const text = this.props.programText + keyCode + '\n'
         this.props.setProgramText(text)
       }
     })
@@ -54,6 +58,20 @@ class ProgramTab extends React.PureComponent {
 
   resetState() {
     this.updateProgramState({ ...resetState })
+  }
+
+  renderError() {
+    const { error } = this.state
+    if (!error) {
+      return null
+    }
+    return (
+      <div className="ProgramTab--error">
+        {error.message.split('\n').map((line, index) => (
+          <div key={index}>{line}</div>)
+        )}
+      </div>
+    )
   }
 
   renderProgramText() {
@@ -80,8 +98,10 @@ class ProgramTab extends React.PureComponent {
     return (
       <div className="ProgramTab">
         {this.renderProgramText()}
+        {this.renderError()}
         <ProgramToolbar
           initialState={{ ...resetState }}
+          setError={error => this.setState({ error })}
         />
       </div>
     )

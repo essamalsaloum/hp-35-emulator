@@ -18,6 +18,7 @@ class ProgramToolbar extends React.PureComponent {
 
   static propTypes = {
     initialState: PropTypes.object.isRequired,
+    setError: PropTypes.func.isRequired,
     selectGitHubTab: PropTypes.func.isRequired,
     running: PropTypes.bool.isRequired,
     programText: PropTypes.string,
@@ -59,7 +60,8 @@ class ProgramToolbar extends React.PureComponent {
       stopProgram,
       setRecording,
       recording,
-      isMarkdown
+      isMarkdown,
+      setError
     } = this.props
     if (recording) {
       setRecording(false)
@@ -69,8 +71,9 @@ class ProgramToolbar extends React.PureComponent {
     } else {
       const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
-        console.error(error.message)
+        setError(error)
       } else {
+        setError(null)
         loadProgram(keyCodes)
         startProgram()
       }
