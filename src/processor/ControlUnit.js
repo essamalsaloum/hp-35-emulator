@@ -2,8 +2,18 @@ import C from './keyCodes'
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
-import * as reducer from './reducer'
 import { formatNumber } from './util'
+import {
+  keyCodesSelector,
+  ipSelector,
+  resetIP,
+  runFlagSelector,
+  setRunFlag,
+  clearRunFlag,
+  processorStateSelector,
+  updateProcessorState,
+  delayedSelector,
+} from './reducer'
 
 const DELAY = 500
 
@@ -51,19 +61,24 @@ export default class ControlUnit {
   }
 
   async startProgram(dispatch, getState) {
-    const keyCodes = reducer.keyCodesSelector(getState())
+    const keyCodes = keyCodesSelector(getState())
     let interrupted = false
-    dispatch(reducer.setRunning())
-    while (reducer.ipSelector(getState()) < keyCodes.length && !interrupted) {
-      if (reducer.runningSelector(getState())) {
-        await this.executeNext(dispatch, getState, reducer.delayedSelector(getState()) ? DELAY : 0)
+    dispatch(setRunFlag())
+    while (ipSelector(getState()) < keyCodes.length && !interrupted) {
+      if (runFlagSelector(getState())) {
+        await this.executeNext(dispatch, getState, delayedSelector(getState()) ? DELAY : 0)
+        const [x] = processorStateSelector(getState()).stack
+        // TODO: fix issue  if trying to continue after error
+        if (x instanceof Error) {
+          interrupted = true
+        }
       } else {
         interrupted = true
       }
     }
-    dispatch(reducer.setStopping())
+    dispatch(clearRunFlag())
     if (!interrupted) {
-      dispatch(reducer.resetIP())
+      dispatch(resetIP())
     }
   }
 
@@ -72,18 +87,18 @@ export default class ControlUnit {
       clearTimeout(this.timeoutID)
       this.timeoutID = null
     }
-    dispatch(reducer.setStopping())
+    dispatch(clearRunFlag())
   }
 
   executeNext(dispatch, getState, delay) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        const keyCodes = reducer.keyCodesSelector(getState())
-        const ip = reducer.ipSelector(getState())
+        const keyCodes = keyCodesSelector(getState())
+        const ip = ipSelector(getState())
         const keyCode = keyCodes[ip]
-        let processor = reducer.processorStateSelector(getState())
+        let processor = processorStateSelector(getState())
         processor = this.execute(processor, keyCode)
-        dispatch(reducer.updateProcessorState({ ...processor, ip: ip + 1 }))
+        dispatch(updateProcessorState({ ...processor, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -97,7 +112,7 @@ export default class ControlUnit {
         stack: [0, y, z, t],
         stackLift: false,
         buffer: '0',
-        running: false,
+        runFlag: false,
         entry: false
       }
     }

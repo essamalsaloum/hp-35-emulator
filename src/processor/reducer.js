@@ -1,25 +1,25 @@
 import { createAction } from 'redux-actions'
 import processor from '../processor'
 
-const EXECUTE_KEYCODE = 'rpnext/processor/EXECUTE_KEYCODE'
-const SET_RUNNING = 'rpnext/processor/RUNNING'
-const SET_STOPPING = 'rpnext/processor/STOPPING'
-const SET_DELAYED = 'rpnext/processor/SET_DELAYED'
-const CLEAR_DELAYED = 'rpnext/processor/CLEAR_DELAYED'
-const SET_IP = 'rpnext/processor/SET_IP'
-const RESET_IP = 'rpnext/processor/RESET_IP'
-const UPDATE_STATE = 'rpnext/processor/UPDATE_STATE'
-const LOAD_PROGRAM = 'rpnext/processor/LOAD_PROGRAM'
+const EXECUTE_KEYCODE = 'rpnext/controlUnit/EXECUTE_KEYCODE'
+const SET_RUN_FLAG = 'rpnext/controlUnit/SET_RUN_FLAG'
+const CLEAR_RUN_FLAG = 'rpnext/controlUnit/CLEAR_RUN_FLAG'
+const SET_DELAYED_FLAG = 'rpnext/controlUnit/SET_DELAYED_FLAG'
+const CLEAR_DELAYED_FLAG = 'rpnext/controlUnit/CLEAR_DELAYED_FLAG'
+const SET_IP = 'rpnext/controlUnit/SET_IP'
+const RESET_IP = 'rpnext/controlUnit/RESET_IP'
+const UPDATE_STATE = 'rpnext/controlUnit/UPDATE_STATE'
+const LOAD_PROGRAM = 'rpnext/controlUnit/LOAD_PROGRAM'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
-export const setDelayed = createAction(SET_DELAYED)
-export const clearDelayed = createAction(CLEAR_DELAYED)
+export const setDelayedFlag = createAction(SET_DELAYED_FLAG)
+export const clearDelayedFlag = createAction(CLEAR_DELAYED_FLAG)
 export const resetIP = createAction(RESET_IP)
 export const setIP = createAction(SET_IP)
 export const loadProgram = createAction(LOAD_PROGRAM)
 
-export const setRunning = createAction(SET_RUNNING)
-export const setStopping = createAction(SET_STOPPING)
+export const setRunFlag = createAction(SET_RUN_FLAG)
+export const clearRunFlag = createAction(CLEAR_RUN_FLAG)
 export const updateProcessorState = createAction(UPDATE_STATE)
 
 export const startProgram = () => (dispatch, getState) => {
@@ -46,8 +46,8 @@ const initialState = {
   ip: 0,
   entry: true,
   buffer: '0',
-  running: false,
-  delayed: false
+  runFlag: false,
+  delayedFlag: false
 }
 
 function alu(state, payload) {
@@ -66,15 +66,15 @@ export default function reducer(state = initialState, { type, payload }) {
       return { ...state, ip: 0 }
     case SET_IP:
       return { ...state, ip: payload }
-    case SET_RUNNING: {
-      return { ...state, running: true }
+    case SET_RUN_FLAG: {
+      return { ...state, runFlag: true }
     }
-    case SET_STOPPING:
-      return { ...state, running: false }
-    case SET_DELAYED:
-      return { ...state, delayed: true }
-    case CLEAR_DELAYED:
-      return { ...state, delayed: false }
+    case CLEAR_RUN_FLAG:
+      return { ...state, runFlag: false }
+    case SET_DELAYED_FLAG:
+      return { ...state, delayedFlag: true }
+    case CLEAR_DELAYED_FLAG:
+      return { ...state, delayedFlag: false }
     default:
       return state
   }
@@ -84,6 +84,6 @@ export const processorStateSelector = state => state.processor
 export const stackSelector = state => state.processor.stack
 export const bufferSelector = state => state.processor.buffer
 export const ipSelector = state => state.processor.ip
-export const runningSelector = state => state.processor.running
-export const delayedSelector = state => state.processor.delayed
+export const runFlagSelector = state => state.processor.runFlag
+export const delayedSelector = state => state.processor.delayedFlag
 export const keyCodesSelector = state => state.processor.keyCodes

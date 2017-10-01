@@ -18,9 +18,9 @@ import {
   startProgram,
   stopProgram,
   resetIP,
-  setDelayed,
-  clearDelayed,
-  runningSelector,
+  setDelayedFlag,
+  clearDelayedFlag,
+  runFlagSelector,
   delayedSelector
 } from '../processor/reducer'
 
@@ -29,15 +29,15 @@ class InspectToolbar extends React.PureComponent {
   static propTypes = {
     programText: PropTypes.string.isRequired,
     keyCodes: PropTypes.array.isRequired,
-    running: PropTypes.bool.isRequired,
+    runFlag: PropTypes.bool.isRequired,
     loadProgram: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
     startProgram: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
     resetIP: PropTypes.func.isRequired,
-    delayed: PropTypes.bool.isRequired,
-    setDelayed: PropTypes.func.isRequired,
-    clearDelayed: PropTypes.func.isRequired,
+    delayedFlag: PropTypes.bool.isRequired,
+    setDelayedFlag: PropTypes.func.isRequired,
+    clearDelayedFlag: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
   }
 
@@ -58,16 +58,16 @@ class InspectToolbar extends React.PureComponent {
   }
 
   toggleDelayed() {
-    if (this.props.delayed) {
-      this.props.clearDelayed()
+    if (this.props.delayedFlag) {
+      this.props.clearDelayedFlag()
     } else {
-      this.props.setDelayed()
+      this.props.setDelayedFlag()
     }
   }
 
   runStop() {
-    const { running, startProgram, stopProgram } = this.props
-    if (running) {
+    const { runFlag, startProgram, stopProgram } = this.props
+    if (runFlag) {
       stopProgram()
     } else {
       startProgram()
@@ -75,26 +75,26 @@ class InspectToolbar extends React.PureComponent {
   }
 
   render() {
-    const { keyCodes, running, singleStep, resetIP, delayed } = this.props
+    const { keyCodes, runFlag, singleStep, resetIP, delayedFlag } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
             label="Slow"
             labelPosition="right"
-            toggled={delayed}
+            toggled={delayedFlag}
             onToggle={this.toggleDelayed}
           />
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => resetIP()} disabled={keyCodes.length === 0 || running} >
+          <IconButton onClick={() => resetIP()} disabled={keyCodes.length === 0 || runFlag} >
             <Refresh color={grey700} />
           </IconButton>
-          <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || running} >
+          <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || runFlag} >
             <Redo color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} running={running} />
+          <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} runFlag={runFlag} />
         </ToolbarGroup>
       </Toolbar>
     )
@@ -108,13 +108,13 @@ const mapDispatchToProps = dispatch =>
     startProgram,
     stopProgram,
     resetIP,
-    setDelayed,
-    clearDelayed
+    setDelayedFlag,
+    clearDelayedFlag
   }, dispatch)
 
 const mapStateToProps = state => ({
-  running: runningSelector(state),
-  delayed: delayedSelector(state),
+  runFlag: runFlagSelector(state),
+  delayedFlag: delayedSelector(state),
   keyCodes: keyCodesSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),

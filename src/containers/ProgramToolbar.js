@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { selectGitHubTab } from '../ducks/programPanel'
 import { clearProgram, setProgramText, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { loadProgram, startProgram, stopProgram, runningSelector, clearDelayed } from '../processor/reducer'
+import { loadProgram, startProgram, stopProgram, runFlagSelector, clearDelayedFlag } from '../processor/reducer'
 import { compile, extractProgramText } from '../processor/compiler'
 
 class ProgramToolbar extends React.PureComponent {
@@ -20,7 +20,7 @@ class ProgramToolbar extends React.PureComponent {
     initialState: PropTypes.object.isRequired,
     setError: PropTypes.func.isRequired,
     selectGitHubTab: PropTypes.func.isRequired,
-    running: PropTypes.bool.isRequired,
+    runFlag: PropTypes.bool.isRequired,
     programText: PropTypes.string,
     loadProgram: PropTypes.func,
     clearProgram: PropTypes.func,
@@ -30,7 +30,7 @@ class ProgramToolbar extends React.PureComponent {
     isMarkdown: PropTypes.bool.isRequired,
     setRecording: PropTypes.func.isRequired,
     recording: PropTypes.bool.isRequired,
-    clearDelayed: PropTypes.func.isRequired
+    clearDelayedFlag: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -56,22 +56,22 @@ class ProgramToolbar extends React.PureComponent {
     const {
       programText,
       loadProgram,
-      running,
+      runFlag,
       startProgram,
       stopProgram,
       setRecording,
       recording,
       isMarkdown,
       setError,
-      clearDelayed
+      clearDelayedFlag
     } = this.props
     if (recording) {
       setRecording(false)
     }
-    if (running) {
+    if (runFlag) {
       stopProgram()
     } else {
-      clearDelayed()
+      clearDelayedFlag()
       const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
         setError(error)
@@ -85,14 +85,14 @@ class ProgramToolbar extends React.PureComponent {
 
   // to avoid a console warning
   renderToggle() {
-    const { running, isMarkdown, recording } = this.props
-    if (running || isMarkdown) {
+    const { runFlag, isMarkdown, recording } = this.props
+    if (runFlag || isMarkdown) {
       return null
     } else {
       return (<Toggle
         label="Record"
         labelPosition="right"
-        disabled={running || isMarkdown}
+        disabled={runFlag || isMarkdown}
         toggled={recording}
         onToggle={this.toggleRecording}
       />)
@@ -100,12 +100,12 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   renderEditButton() {
-    const { isMarkdown, running } = this.props
+    const { isMarkdown, runFlag } = this.props
     if (!isMarkdown) {
       return null
     } else {
       return (
-        <IconButton onClick={this.extractProgram} disabled={running}>
+        <IconButton onClick={this.extractProgram} disabled={runFlag}>
           <FontIcon className="fa fa-pencil" color={grey700} />
         </IconButton>
       )
@@ -119,7 +119,7 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   render() {
-    const { running, clearProgram, selectGitHubTab } = this.props
+    const { runFlag, clearProgram, selectGitHubTab } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -127,13 +127,13 @@ class ProgramToolbar extends React.PureComponent {
           {this.renderEditButton()}
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => selectGitHubTab()} disabled={running}>
+          <IconButton onClick={() => selectGitHubTab()} disabled={runFlag}>
             <FontIcon className="fa fa-github" color={grey700} />
           </IconButton>
-          <IconButton onClick={clearProgram} disabled={this.isEmptyProgram() || running} >
+          <IconButton onClick={clearProgram} disabled={this.isEmptyProgram() || runFlag} >
             <Delete color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} running={running} />
+          <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} runFlag={runFlag} />
         </ToolbarGroup>
       </Toolbar>
     )
@@ -149,11 +149,11 @@ const mapDispatchToProps = dispatch =>
     startProgram,
     stopProgram,
     setRecording,
-    clearDelayed
+    clearDelayedFlag
   }, dispatch)
 
 const mapStateToProps = state => ({
-  running: runningSelector(state),
+  runFlag: runFlagSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
   recording: recordingSelector(state)

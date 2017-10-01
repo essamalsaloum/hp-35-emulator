@@ -15,7 +15,7 @@ const resetState = {
   keyCodes: [],
   ip: 0,
   error: false,
-  running: false,
+  runFlag: false,
   recording: false
 }
 
