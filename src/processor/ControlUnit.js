@@ -12,7 +12,7 @@ import {
   clearRunFlag,
   processorStateSelector,
   updateProcessorState,
-  delayedSelector,
+  delayedFlagSelector,
 } from './reducer'
 
 const DELAY = 500
@@ -40,7 +40,19 @@ export default class ControlUnit {
     }
   }
 
-  notify(keyCode) {
+  notify(newState, state, keyCode) {
+    const [x] = newState.stack
+    if (!(x instanceof Error || newState.entry)) {
+      if (state.entry) {
+        this.notifyHelper(formatNumber(state.stack[0]))
+      }
+      if (keyCode !== C.ENTER) {
+        this.notifyHelper(keyCode)
+      }
+    }
+  }
+
+  notifyHelper(keyCode) {
     setTimeout(() => {
       for (const listener of this.listeners) {
         listener(keyCode)
@@ -48,27 +60,19 @@ export default class ControlUnit {
     })
   }
 
-  notifyRecorder(newState, state, keyCode) {
-    const [x] = newState.stack
-    if (!(x instanceof Error || newState.entry)) {
-      if (state.entry) {
-        this.notify(formatNumber(state.stack[0]))
-      }
-      if (keyCode !== C.ENTER) {
-        this.notify(keyCode)
-      }
-    }
-  }
-
   async startProgram(dispatch, getState) {
+    const [x] = processorStateSelector(getState()).stack
+    if (x instanceof Error) {
+      return
+    }
+
     const keyCodes = keyCodesSelector(getState())
     let interrupted = false
     dispatch(setRunFlag())
     while (ipSelector(getState()) < keyCodes.length && !interrupted) {
       if (runFlagSelector(getState())) {
-        await this.executeNext(dispatch, getState, delayedSelector(getState()) ? DELAY : 0)
+        await this.executeNext(dispatch, getState, delayedFlagSelector(getState()) ? DELAY : 0)
         const [x] = processorStateSelector(getState()).stack
-        // TODO: fix issue  if trying to continue after error
         if (x instanceof Error) {
           interrupted = true
         }
@@ -133,7 +137,7 @@ export default class ControlUnit {
       ? this.aluExecute(state, keyCode)
       : this.inputExecute(state, keyCode)
 
-    this.notifyRecorder(newState, state, keyCode)
+    this.notify(newState, state, keyCode)
 
     return newState
   }

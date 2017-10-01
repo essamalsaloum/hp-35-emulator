@@ -85,5 +85,5 @@ export const stackSelector = state => state.processor.stack
 export const bufferSelector = state => state.processor.buffer
 export const ipSelector = state => state.processor.ip
 export const runFlagSelector = state => state.processor.runFlag
-export const delayedSelector = state => state.processor.delayedFlag
+export const delayedFlagSelector = state => state.processor.delayedFlag
 export const keyCodesSelector = state => state.processor.keyCodes

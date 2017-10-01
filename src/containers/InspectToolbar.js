@@ -21,7 +21,7 @@ import {
   setDelayedFlag,
   clearDelayedFlag,
   runFlagSelector,
-  delayedSelector
+  delayedFlagSelector
 } from '../processor/reducer'
 
 class InspectToolbar extends React.PureComponent {
@@ -114,7 +114,7 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   runFlag: runFlagSelector(state),
-  delayedFlag: delayedSelector(state),
+  delayedFlag: delayedFlagSelector(state),
   keyCodes: keyCodesSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
