@@ -1,10 +1,10 @@
-import C from './keyCodes'
+import C from './opcodes'
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
 import { formatNumber } from './util'
 import {
-  instructionsSelector,
+  opcodesSelector,
   ipSelector,
   resetIP,
   runFlagSelector,
@@ -41,22 +41,22 @@ export default class ControlUnit {
     }
   }
 
-  notify(newState, state, instruction) {
+  notify(newState, state, opcode) {
     const [x] = newState.stack
     if (!(x instanceof Error || newState.entry)) {
       if (state.entry) {
         this.notifyHelper(formatNumber(state.stack[0]))
       }
-      if (instruction !== C.ENTER) {
-        this.notifyHelper(instruction)
+      if (opcode !== C.ENTER) {
+        this.notifyHelper(opcode)
       }
     }
   }
 
-  notifyHelper(instruction) {
+  notifyHelper(opcode) {
     setTimeout(() => {
       for (const listener of this.listeners) {
-        listener(instruction)
+        listener(opcode)
       }
     })
   }
@@ -67,10 +67,10 @@ export default class ControlUnit {
       return
     }
 
-    const instructions = instructionsSelector(getState())
+    const opcodes = opcodesSelector(getState())
     let interrupted = false
     dispatch(setRunFlag())
-    while (ipSelector(getState()) < instructions.length && !interrupted) {
+    while (ipSelector(getState()) < opcodes.length && !interrupted) {
       if (runFlagSelector(getState())) {
         await this.executeNext(dispatch, getState, delayedFlagSelector(getState()) ? DELAY : 0)
         const [x] = stackSelector(getState())
@@ -98,11 +98,11 @@ export default class ControlUnit {
   executeNext(dispatch, getState, delay) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        const instructions = instructionsSelector(getState())
+        const opcodes = opcodesSelector(getState())
         const ip = ipSelector(getState())
-        const instruction = instructions[ip]
+        const opcode = opcodes[ip]
         let processor = processorSelector(getState())
-        processor = this.execute(processor, instruction)
+        processor = this.execute(processor, opcode)
         dispatch(updateProcessorState({ ...processor, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
@@ -110,7 +110,7 @@ export default class ControlUnit {
     })
   }
 
-  execute(state, instruction) {
+  execute(state, opcode) {
     const [x, y, z, t] = state.stack
     if (x instanceof Error) {
       return {
@@ -122,9 +122,9 @@ export default class ControlUnit {
       }
     }
 
-    if (isValidNumber(instruction)) {
+    if (isValidNumber(opcode)) {
       const [x, y, z] = state.stack
-      const num = parseFloat(instruction)
+      const num = parseFloat(opcode)
       return {
         ...state,
         stack: [num, x, y, z],
@@ -134,26 +134,26 @@ export default class ControlUnit {
       }
     }
 
-    const newState = this.alu.getInstructions().has(instruction)
-      ? this.aluExecute(state, instruction)
-      : this.inputExecute(state, instruction)
+    const newState = this.alu.getInstructions().has(opcode)
+      ? this.aluExecute(state, opcode)
+      : this.inputExecute(state, opcode)
 
-    this.notify(newState, state, instruction)
+    this.notify(newState, state, opcode)
 
     return newState
   }
 
-  aluExecute(state, instruction) {
-    const newState = this.alu.execute(state, instruction)
+  aluExecute(state, opcode) {
+    const newState = this.alu.execute(state, opcode)
     const [x] = newState.stack
     const buffer = x instanceof Error ? x.message : formatNumber(x)
     return { ...newState, buffer, entry: false }
   }
 
-  inputExecute(state, instruction) {
-    const microCode = this.instructionSet[instruction]
+  inputExecute(state, opcode) {
+    const microCode = this.instructionSet[opcode]
     if (!microCode) {
-      console.error(`controlUnit: not implemented [${instruction}]`)
+      console.error(`controlUnit: not implemented [${opcode}]`)
       return state
     }
 
@@ -169,7 +169,7 @@ export default class ControlUnit {
     }
   }
 
-  isValidInstruction(instruction) {
-    return isValidNumber(instruction) || this.validInstructions.has(instruction)
+  isValidInstruction(opcode) {
+    return isValidNumber(opcode) || this.validInstructions.has(opcode)
   }
 }

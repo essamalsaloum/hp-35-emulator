@@ -1,4 +1,4 @@
-import C from '../keyCodes'
+import C from '../opcodes'
 import math from 'mathjs'
 
 const degreesToRadians = degrees => degrees * math.PI / 180.0
@@ -17,7 +17,8 @@ const arithmetic = {
   [C.SUB]: (x, y) => y - x,
   [C.MUL]: (x, y) => y * x,
   [C.DIV]: (x, y) => x === 0 ? new Error('division by 0') : y / x,
-  [C.RECIPROCAL]: x => x === 0 ? new Error('division by 0') :1 / x
+  [C.INV]: x => x === 0 ? new Error('division by 0') :1 / x,
+  [C.IP]: x => math.floor(x)
 }
 
 const transcendental = {
@@ -32,7 +33,7 @@ const transcendental = {
   [C.POW]: (x, y) => math.pow(y, x),
   [C.ROOT]: (x, y) => math.pow(y, 1 / x),
   [C.SIN]: x => math.sin(degreesToRadians(degrees360(x))),
-  [C.SQR]: x => x * x,
+  [C.SQ]: x => x * x,
   [C.SQRT]: x =>x < 0 ? new Error('√(negative)') : math.sqrt(x),
   [C.TAN]: x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
 }
@@ -45,17 +46,17 @@ const funcs = {
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-const compute = instruction => state => {
+const compute = opcode => state => {
   let { stack } = state
-  const fn = funcs[instruction]
+  const fn = funcs[opcode]
   if (!fn) {
-    throw new Error(`math: not implemented [${instruction}]`)
+    throw new Error(`math: not implemented [${opcode}]`)
   }
   stack = fn.length === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
   return { ...state,  stack }
 }
 
-export default Object.keys(funcs).reduce((prev, instruction) => {
-  prev[instruction] = { stackLift: true, fn: compute(instruction) }
+export default Object.keys(funcs).reduce((prev, opcode) => {
+  prev[opcode] = { stackLift: true, fn: compute(opcode) }
   return prev
 }, {})

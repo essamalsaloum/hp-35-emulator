@@ -1,4 +1,4 @@
-import C from '../keyCodes'
+import C from '../opcodes'
 
 const storeMem = state => {
   return {

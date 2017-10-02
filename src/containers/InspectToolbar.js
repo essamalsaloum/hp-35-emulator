@@ -13,7 +13,7 @@ import {compile} from '../processor/compiler'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadProgram,
-  instructionsSelector,
+  opcodesSelector,
   singleStep,
   startProgram,
   stopProgram,
@@ -28,7 +28,7 @@ class InspectToolbar extends React.PureComponent {
 
   static propTypes = {
     programText: PropTypes.string.isRequired,
-    instructions: PropTypes.array.isRequired,
+    opcodes: PropTypes.array.isRequired,
     runFlag: PropTypes.bool.isRequired,
     loadProgram: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
@@ -49,11 +49,11 @@ class InspectToolbar extends React.PureComponent {
 
   componentWillMount() {
     const { programText, loadProgram, isMarkdown } = this.props
-    const { instructions, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
+    const { opcodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
     if (error) {
       console.log(error.message)
     } else {
-      loadProgram(instructions)
+      loadProgram(opcodes)
     }
   }
 
@@ -75,7 +75,7 @@ class InspectToolbar extends React.PureComponent {
   }
 
   render() {
-    const { instructions, runFlag, singleStep, resetIP, delayedFlag } = this.props
+    const { opcodes, runFlag, singleStep, resetIP, delayedFlag } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -88,13 +88,13 @@ class InspectToolbar extends React.PureComponent {
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => resetIP()} disabled={instructions.length === 0 || runFlag} >
+          <IconButton onClick={() => resetIP()} disabled={opcodes.length === 0 || runFlag} >
             <Refresh color={grey700} />
           </IconButton>
-          <IconButton onClick={() => singleStep()} disabled={instructions.length === 0 || runFlag} >
+          <IconButton onClick={() => singleStep()} disabled={opcodes.length === 0 || runFlag} >
             <Redo color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={instructions.length === 0} runFlag={runFlag} />
+          <RunStopButton onClick={this.runStop} disabled={opcodes.length === 0} runFlag={runFlag} />
         </ToolbarGroup>
       </Toolbar>
     )
@@ -115,7 +115,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   runFlag: runFlagSelector(state),
   delayedFlag: delayedFlagSelector(state),
-  instructions: instructionsSelector(state),
+  opcodes: opcodesSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
 })

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { executeInstruction } from '../processor/reducer'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
-import C from '../processor/keyCodes'
+import C from '../processor/opcodes'
 import './Key.css'
 
 const shiftKeyModifiers = {
@@ -19,7 +19,7 @@ const createMarkup = label => ({ __html: label })
 class Key extends React.PureComponent {
 
   static propTypes = {
-    keyCode: PropTypes.string.isRequired,
+    opcode: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
@@ -35,17 +35,17 @@ class Key extends React.PureComponent {
     labelClass: ''
   }
 
-  onClick(keyCode) {
+  onClick(opcode) {
     const { shiftKey, setShiftKey, executeInstruction } = this.props
-    if (keyCode === C.SHIFT_UP) {
+    if (opcode === C.SHIFT_UP) {
       setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
     }
-    else if (keyCode === C.SHIFT_DOWN) {
+    else if (opcode === C.SHIFT_DOWN) {
       setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
     } else {
-      const keyMap = shiftKeyModifiers[keyCode]
-      keyCode = (keyMap && keyMap[shiftKey]) || keyCode
-      executeInstruction(keyCode)
+      const keyMap = shiftKeyModifiers[opcode]
+      opcode = (keyMap && keyMap[shiftKey]) || opcode
+      executeInstruction(opcode)
       if (shiftKey) {
         setShiftKey(null)
       }
@@ -71,7 +71,7 @@ class Key extends React.PureComponent {
       label,
       topLabel,
       bottomLabel,
-      keyCode,
+      opcode,
       labelClass,
       shiftKey
     } = this.props
@@ -79,26 +79,26 @@ class Key extends React.PureComponent {
       label,
       shiftKey: ''
     }
-    if ((topLabel || keyCode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
+    if ((topLabel || opcode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
       decorator.label = topLabel || label
       decorator.shiftKey = shiftKey
-    } else if ((bottomLabel || keyCode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
+    } else if ((bottomLabel || opcode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
       decorator.label = bottomLabel || label
       decorator.shiftKey = shiftKey
     }
 
     return (
-      <div className={`Key Key--keyCode-${keyCode}`}>
+      <div className={`Key Key--opcode-${opcode}`}>
         <button
           type="button"
-          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-keyCode-${keyCode}`}
-          onClick={() => this.onClick(keyCode)}
+          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-opcode-${opcode}`}
+          onClick={() => this.onClick(opcode)}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}
         >
           <div className="Key--label-container">
             {this.renderTopLabel()}
-            <div className={`Key--label-main Key--label-keyCode-${keyCode} ${labelClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
+            <div className={`Key--label-main Key--label-opcode-${opcode} ${labelClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
             {this.renderBottomLabel()}
           </div>
         </button>

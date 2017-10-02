@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import processor from '../processor'
-import C from '../processor/keyCodes'
+import C from '../processor/opcodes'
 
 const EPS = 1e-11
 

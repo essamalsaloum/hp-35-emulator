@@ -1,6 +1,6 @@
-import C from '../processor/keyCodes'
+import C from '../processor/opcodes'
 
-const keyToInstruction = {
+const keyCodeToOpcode = {
   '0': C.D0,
   '1': C.D1,
   '2': C.D2,
@@ -23,4 +23,4 @@ const keyToInstruction = {
   Backspace: C.CLX
 }
 
-export default keyboardEvent => keyToInstruction[keyboardEvent.key]
+export default keyboardEvent => keyCodeToOpcode[keyboardEvent.key]

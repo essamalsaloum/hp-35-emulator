@@ -47,7 +47,7 @@ export const fetchProgramText = name => (dispatch, getState) => {
         dispatch(setMarkdownText(text))
         dispatch(selectProgramTab())
         if (process.env.NODE_ENV === 'development') {
-          console.log(`localStorage cache hit for: ${url}`)
+          console.log(`localStorage cache hit for: ${name}`)
         }
         return
       }

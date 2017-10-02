@@ -35,7 +35,7 @@ const removeBlankAndCommentLines = text =>
     .join('\n')
 
 function compilePlainTextProgram(text) {
-  const instructions = []
+  const opcodes = []
   const aliasMap = Object.keys(aliases).reduce((prev, name) => {
     prev[name] = [aliases[name]]
     return prev
@@ -91,7 +91,7 @@ function compilePlainTextProgram(text) {
             if (!processor.isValidInstruction(token)) {
               return createError(`syntax error: '${token}'`, node.value.context)
             }
-            instructions.push(token)
+            opcodes.push(token)
           }
           node = tokenizer.next()
         } catch (error) {
@@ -102,7 +102,7 @@ function compilePlainTextProgram(text) {
       return createError(`unexpected: '${node.value.text}'`, node.value.context)
     }
   }
-  return { error: null, instructions }
+  return { error: null, opcodes }
 }
 
 function expandAlias(token, aliasMap, tokens = []) {

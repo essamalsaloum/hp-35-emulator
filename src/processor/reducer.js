@@ -27,7 +27,7 @@ export const startProgram = () => (dispatch, getState) => {
 }
 
 export const singleStep = () => (dispatch, getState) => {
-  if (ipSelector(getState()) < instructionsSelector(getState()).length) {
+  if (ipSelector(getState()) < opcodesSelector(getState()).length) {
     processor.executeNext(dispatch, getState)
   } else {
     dispatch(resetIP())
@@ -42,7 +42,7 @@ const initialState = {
   stack: [0, 0, 0, 0],
   stackLift: false,
   memory: 0,
-  instructions: [],
+  opcodes: [],
   ip: 0,
   entry: true,
   buffer: '0',
@@ -57,7 +57,7 @@ function alu(state, payload) {
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case LOAD_PROGRAM:
-      return { ...state, instructions: payload }
+      return { ...state, opcodes: payload }
     case EXECUTE_INSTRUCTION:
       return { ...state, ...alu(state, payload) }
     case UPDATE_STATE:
@@ -86,4 +86,4 @@ export const bufferSelector = state => state.processor.buffer
 export const ipSelector = state => state.processor.ip
 export const runFlagSelector = state => state.processor.runFlag
 export const delayedFlagSelector = state => state.processor.delayedFlag
-export const instructionsSelector = state => state.processor.instructions
+export const opcodesSelector = state => state.processor.opcodes

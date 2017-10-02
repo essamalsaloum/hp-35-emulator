@@ -6,13 +6,13 @@ import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
 import { setProgramText, programTextSelector, isMarkdownSelector, recordingSelector } from '../ducks/program'
-import C from '../processor/keyCodes'
+import C from '../processor/opcodes'
 import processor from '../processor'
 import './ProgramTab.css'
 
 const resetState = {
   text: '',
-  instructions: [],
+  opcodes: [],
   ip: 0,
   error: false,
   runFlag: false,
@@ -40,9 +40,9 @@ class ProgramTab extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = processor.subscribe(instruction => {
-      if (this.props.recording && instruction !== C.CLR) {
-        const text = this.props.programText + instruction + '\n'
+    this.subscription = processor.subscribe(opcode => {
+      if (this.props.recording && opcode !== C.CLR) {
+        const text = this.props.programText + opcode + '\n'
         this.props.setProgramText(text)
       }
     })

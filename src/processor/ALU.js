@@ -20,10 +20,10 @@ export default class ALU {
     }
   }
 
-  execute(state, instruction) {
-    const microCode = this.instructionSet[instruction]
+  execute(state, opcode) {
+    const microCode = this.instructionSet[opcode]
     if (!microCode) {
-      throw new Error(`alu: not implemented [${instruction}]`)
+      throw new Error(`alu: not implemented [${opcode}]`)
     }
     const { stackLift, fn } = microCode
     return {
