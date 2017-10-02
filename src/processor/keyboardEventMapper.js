@@ -1,6 +1,6 @@
 import C from '../processor/keyCodes'
 
-const keyToKeyCode = {
+const keyToInstruction = {
   '0': C.D0,
   '1': C.D1,
   '2': C.D2,
@@ -23,4 +23,4 @@ const keyToKeyCode = {
   Backspace: C.CLX
 }
 
-export default keyboardEvent => keyToKeyCode[keyboardEvent.key]
+export default keyboardEvent => keyToInstruction[keyboardEvent.key]

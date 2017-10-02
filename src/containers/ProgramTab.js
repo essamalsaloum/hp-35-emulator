@@ -12,7 +12,7 @@ import './ProgramTab.css'
 
 const resetState = {
   text: '',
-  keyCodes: [],
+  instructions: [],
   ip: 0,
   error: false,
   runFlag: false,
@@ -40,9 +40,9 @@ class ProgramTab extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = processor.subscribe(keyCode => {
-      if (this.props.recording && keyCode !== C.CLR) {
-        const text = this.props.programText + keyCode + '\n'
+    this.subscription = processor.subscribe(instruction => {
+      if (this.props.recording && instruction !== C.CLR) {
+        const text = this.props.programText + instruction + '\n'
         this.props.setProgramText(text)
       }
     })

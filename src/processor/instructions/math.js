@@ -45,17 +45,17 @@ const funcs = {
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-const compute = opCode => state => {
+const compute = instruction => state => {
   let { stack } = state
-  const fn = funcs[opCode]
+  const fn = funcs[instruction]
   if (!fn) {
-    throw new Error(`math: not implemented [${opCode}]`)
+    throw new Error(`math: not implemented [${instruction}]`)
   }
   stack = fn.length === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
   return { ...state,  stack }
 }
 
-export default Object.keys(funcs).reduce((prev, keyCode) => {
-  prev[keyCode] = { stackLift: true, fn: compute(keyCode) }
+export default Object.keys(funcs).reduce((prev, instruction) => {
+  prev[instruction] = { stackLift: true, fn: compute(instruction) }
   return prev
 }, {})

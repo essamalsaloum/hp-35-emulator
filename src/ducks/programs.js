@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createAction } from 'redux-actions'
-import {setMarkdownText} from '../ducks/program'
-import {selectProgramTab} from '../ducks/programPanel'
+import { setMarkdownText } from '../ducks/program'
+import { selectProgramTab } from '../ducks/programPanel'
 
 const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
 const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'
@@ -19,9 +19,10 @@ export const fetchProgramList = () => dispatch => {
         .filter(item => item.name.endsWith('.md'))
         .sort((a, b) => a.name.localeCompare(b.name))
         .reduce((prev, item) => {
-          const { name, download_url } = item
+          const { name, sha, download_url: url } = item
           prev[name.slice(0, -3)] = {
-            url: download_url,
+            url,
+            sha,
             text: ''
           }
           return prev
@@ -35,13 +36,31 @@ export const fetchProgramList = () => dispatch => {
 
 export const fetchProgramText = name => (dispatch, getState) => {
   const { programs } = getState()
-  const url = programs[name].url
+  const { url, sha } = programs[name]
+  const cachedItem = window.localStorage.getItem(url)
+  if (cachedItem) {
+    try {
+      const data = JSON.parse(cachedItem)
+      if (data.sha === sha) {
+        const { text } = data
+        dispatch(createAction(FETCH_GITHUB_CONTENT)({ name, text }))
+        dispatch(setMarkdownText(text))
+        dispatch(selectProgramTab())
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`localStorage cache hit for: ${url}`)
+        }
+        return
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
   axios.get(url, { headers })
     .then(res => {
-      dispatch(createAction(FETCH_GITHUB_CONTENT)({
-        name: name,
-        text: res.data
-      }))
+      const text = res.data
+      window.localStorage.setItem(url, JSON.stringify({ text, sha }))
+      dispatch(createAction(FETCH_GITHUB_CONTENT)({ name, text }))
       dispatch(setMarkdownText(res.data))
       dispatch(selectProgramTab())
     })

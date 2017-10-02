@@ -8,7 +8,7 @@ export default class ALU {
     ...math
   }
 
-  getOpcodes() {
+  getInstructions() {
     return new Set(Object.keys(this.instructionSet))
   }
 
@@ -20,12 +20,12 @@ export default class ALU {
     }
   }
 
-  execute(state, opCode) {
-    const instruction = this.instructionSet[opCode]
-    if (!instruction) {
-      throw new Error(`alu: not implemented [${opCode}]`)
+  execute(state, instruction) {
+    const microCode = this.instructionSet[instruction]
+    if (!microCode) {
+      throw new Error(`alu: not implemented [${instruction}]`)
     }
-    const { stackLift, fn } = instruction
+    const { stackLift, fn } = microCode
     return {
       ...fn(state),
       stackLift: stackLift !== null ? stackLift : state.stackLift

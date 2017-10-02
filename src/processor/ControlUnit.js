@@ -4,13 +4,14 @@ import input from './instructions/input'
 import memory from './instructions/memory'
 import { formatNumber } from './util'
 import {
-  keyCodesSelector,
+  instructionsSelector,
   ipSelector,
   resetIP,
   runFlagSelector,
   setRunFlag,
   clearRunFlag,
-  processorStateSelector,
+  processorSelector,
+  stackSelector,
   updateProcessorState,
   delayedFlagSelector,
 } from './reducer'
@@ -29,7 +30,7 @@ export default class ControlUnit {
     ...memory
   }
 
-  validOpCodes = new Set([...Object.keys(this.instructionSet), ...this.alu.getOpcodes()])
+  validInstructions = new Set([...Object.keys(this.instructionSet), ...this.alu.getInstructions()])
 
   listeners = new Set()
 
@@ -40,39 +41,39 @@ export default class ControlUnit {
     }
   }
 
-  notify(newState, state, keyCode) {
+  notify(newState, state, instruction) {
     const [x] = newState.stack
     if (!(x instanceof Error || newState.entry)) {
       if (state.entry) {
         this.notifyHelper(formatNumber(state.stack[0]))
       }
-      if (keyCode !== C.ENTER) {
-        this.notifyHelper(keyCode)
+      if (instruction !== C.ENTER) {
+        this.notifyHelper(instruction)
       }
     }
   }
 
-  notifyHelper(keyCode) {
+  notifyHelper(instruction) {
     setTimeout(() => {
       for (const listener of this.listeners) {
-        listener(keyCode)
+        listener(instruction)
       }
     })
   }
 
   async startProgram(dispatch, getState) {
-    const [x] = processorStateSelector(getState()).stack
+    const [x] = stackSelector(getState())
     if (x instanceof Error) {
       return
     }
 
-    const keyCodes = keyCodesSelector(getState())
+    const instructions = instructionsSelector(getState())
     let interrupted = false
     dispatch(setRunFlag())
-    while (ipSelector(getState()) < keyCodes.length && !interrupted) {
+    while (ipSelector(getState()) < instructions.length && !interrupted) {
       if (runFlagSelector(getState())) {
         await this.executeNext(dispatch, getState, delayedFlagSelector(getState()) ? DELAY : 0)
-        const [x] = processorStateSelector(getState()).stack
+        const [x] = stackSelector(getState())
         if (x instanceof Error) {
           interrupted = true
         }
@@ -97,11 +98,11 @@ export default class ControlUnit {
   executeNext(dispatch, getState, delay) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        const keyCodes = keyCodesSelector(getState())
+        const instructions = instructionsSelector(getState())
         const ip = ipSelector(getState())
-        const keyCode = keyCodes[ip]
-        let processor = processorStateSelector(getState())
-        processor = this.execute(processor, keyCode)
+        const instruction = instructions[ip]
+        let processor = processorSelector(getState())
+        processor = this.execute(processor, instruction)
         dispatch(updateProcessorState({ ...processor, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
@@ -109,7 +110,7 @@ export default class ControlUnit {
     })
   }
 
-  execute(state, keyCode) {
+  execute(state, instruction) {
     const [x, y, z, t] = state.stack
     if (x instanceof Error) {
       return {
@@ -121,9 +122,9 @@ export default class ControlUnit {
       }
     }
 
-    if (isValidNumber(keyCode)) {
+    if (isValidNumber(instruction)) {
       const [x, y, z] = state.stack
-      const num = parseFloat(keyCode)
+      const num = parseFloat(instruction)
       return {
         ...state,
         stack: [num, x, y, z],
@@ -133,30 +134,30 @@ export default class ControlUnit {
       }
     }
 
-    const newState = this.alu.getOpcodes().has(keyCode)
-      ? this.aluExecute(state, keyCode)
-      : this.inputExecute(state, keyCode)
+    const newState = this.alu.getInstructions().has(instruction)
+      ? this.aluExecute(state, instruction)
+      : this.inputExecute(state, instruction)
 
-    this.notify(newState, state, keyCode)
+    this.notify(newState, state, instruction)
 
     return newState
   }
 
-  aluExecute(state, keyCode) {
-    const newState = this.alu.execute(state, keyCode)
+  aluExecute(state, instruction) {
+    const newState = this.alu.execute(state, instruction)
     const [x] = newState.stack
     const buffer = x instanceof Error ? x.message : formatNumber(x)
     return { ...newState, buffer, entry: false }
   }
 
-  inputExecute(state, keyCode) {
-    const instruction = this.instructionSet[keyCode]
-    if (!instruction) {
-      console.error(`controlUnit: not implemented [${keyCode}]`)
+  inputExecute(state, instruction) {
+    const microCode = this.instructionSet[instruction]
+    if (!microCode) {
+      console.error(`controlUnit: not implemented [${instruction}]`)
       return state
     }
 
-    const { entry, stackLift, fn } = instruction
+    const { entry, stackLift, fn } = microCode
     if (entry) {
       state = state.stackLift === true ? this.alu.liftStack(state) : state
     }
@@ -168,7 +169,7 @@ export default class ControlUnit {
     }
   }
 
-  isValidKeyCode(keyCode) {
-    return isValidNumber(keyCode) || this.validOpCodes.has(keyCode)
+  isValidInstruction(instruction) {
+    return isValidNumber(instruction) || this.validInstructions.has(instruction)
   }
 }

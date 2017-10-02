@@ -6,7 +6,7 @@ describe('processor', () => {
 
   describe('arithmetic functions', () => {
 
-    it('should add X and Y for keycode add', () => {
+    it('should add X and Y for add instruction', () => {
       const state = {
         stack: [1, 2, 3, 4]
       }

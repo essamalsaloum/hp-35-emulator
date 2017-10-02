@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions'
 import processor from '../processor'
 
-const EXECUTE_KEYCODE = 'rpnext/controlUnit/EXECUTE_KEYCODE'
+const EXECUTE_INSTRUCTION = 'rpnext/controlUnit/EXECUTE_INSTRUCTION'
 const SET_RUN_FLAG = 'rpnext/controlUnit/SET_RUN_FLAG'
 const CLEAR_RUN_FLAG = 'rpnext/controlUnit/CLEAR_RUN_FLAG'
 const SET_DELAYED_FLAG = 'rpnext/controlUnit/SET_DELAYED_FLAG'
@@ -11,7 +11,7 @@ const RESET_IP = 'rpnext/controlUnit/RESET_IP'
 const UPDATE_STATE = 'rpnext/controlUnit/UPDATE_STATE'
 const LOAD_PROGRAM = 'rpnext/controlUnit/LOAD_PROGRAM'
 
-export const executeKeyCode = createAction(EXECUTE_KEYCODE)
+export const executeInstruction = createAction(EXECUTE_INSTRUCTION)
 export const setDelayedFlag = createAction(SET_DELAYED_FLAG)
 export const clearDelayedFlag = createAction(CLEAR_DELAYED_FLAG)
 export const resetIP = createAction(RESET_IP)
@@ -27,7 +27,7 @@ export const startProgram = () => (dispatch, getState) => {
 }
 
 export const singleStep = () => (dispatch, getState) => {
-  if (ipSelector(getState()) < keyCodesSelector(getState()).length) {
+  if (ipSelector(getState()) < instructionsSelector(getState()).length) {
     processor.executeNext(dispatch, getState)
   } else {
     dispatch(resetIP())
@@ -42,7 +42,7 @@ const initialState = {
   stack: [0, 0, 0, 0],
   stackLift: false,
   memory: 0,
-  keyCodes: [],
+  instructions: [],
   ip: 0,
   entry: true,
   buffer: '0',
@@ -57,8 +57,8 @@ function alu(state, payload) {
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case LOAD_PROGRAM:
-      return { ...state, keyCodes: payload }
-    case EXECUTE_KEYCODE:
+      return { ...state, instructions: payload }
+    case EXECUTE_INSTRUCTION:
       return { ...state, ...alu(state, payload) }
     case UPDATE_STATE:
       return payload
@@ -80,10 +80,10 @@ export default function reducer(state = initialState, { type, payload }) {
   }
 }
 
-export const processorStateSelector = state => state.processor
+export const processorSelector = state => state.processor
 export const stackSelector = state => state.processor.stack
 export const bufferSelector = state => state.processor.buffer
 export const ipSelector = state => state.processor.ip
 export const runFlagSelector = state => state.processor.runFlag
 export const delayedFlagSelector = state => state.processor.delayedFlag
-export const keyCodesSelector = state => state.processor.keyCodes
+export const instructionsSelector = state => state.processor.instructions

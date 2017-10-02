@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
 import physicsConstants from '../processor/physicsConstants'
-import { executeKeyCode } from '../processor/reducer'
+import { executeInstruction } from '../processor/reducer'
 import './ConstantsPanel.css'
 
 // TODO: add filter text field
@@ -14,7 +14,7 @@ const createMarkup = ({ symb, value, unit }) => ({ __html: `${symb} = ${value} $
 class ConstantsPanel extends React.PureComponent {
 
   static propTypes = {
-    executeKeyCode: PropTypes.func.isRequired
+    executeInstruction: PropTypes.func.isRequired
   }
 
   renderList() {
@@ -23,7 +23,7 @@ class ConstantsPanel extends React.PureComponent {
         key={index}
         primaryText={text}
         secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
-        onClick={() => this.props.executeKeyCode(rest.value)}
+        onClick={() => this.props.executeInstruction(rest.value)}
       />
     ))
   }
@@ -39,7 +39,7 @@ class ConstantsPanel extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    executeKeyCode,
+    executeInstruction,
   }, dispatch)
 
 export default connect(null, mapDispatchToProps)(ConstantsPanel)

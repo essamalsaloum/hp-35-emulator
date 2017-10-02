@@ -13,7 +13,7 @@ const initialState = {
   buffer: '0'
 }
 
-const keyCodes = [
+const instructions = [
   ...m_e, C.ENTER,
   ...e, C.ENTER,
   C.D4,
@@ -35,7 +35,7 @@ const keyCodes = [
 describe('processor', () => {
   it('should compute the Rydberg constant', () => {
     const expectedRydbergConstant = 1.0973781e+7
-    const finalState = keyCodes.reduce(processor.execute.bind(processor), { ...initialState })
+    const finalState = instructions.reduce(processor.execute.bind(processor), { ...initialState })
     const [computedRydbergConstant] = finalState.stack
     expect(Math.abs(computedRydbergConstant - expectedRydbergConstant) < 1.0).to.be.true
   })

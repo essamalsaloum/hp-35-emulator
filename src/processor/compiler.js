@@ -35,7 +35,7 @@ const removeBlankAndCommentLines = text =>
     .join('\n')
 
 function compilePlainTextProgram(text) {
-  const keyCodes = []
+  const instructions = []
   const aliasMap = Object.keys(aliases).reduce((prev, name) => {
     prev[name] = [aliases[name]]
     return prev
@@ -85,24 +85,31 @@ function compilePlainTextProgram(text) {
         aliasMap[aliasName] = aliasTokens
         node = tokenizer.next()
       } else {
-        const tokens = expandAlias(node.value.text, aliasMap)
-        for (const token of tokens) {
-          if (!processor.isValidKeyCode(token)) {
-            return createError(`syntax error: '${token}'`, node.value.context)
+        try {
+          const tokens = expandAlias(node.value.text, aliasMap)
+          for (const token of tokens) {
+            if (!processor.isValidInstruction(token)) {
+              return createError(`syntax error: '${token}'`, node.value.context)
+            }
+            instructions.push(token)
           }
-          keyCodes.push(token)
+          node = tokenizer.next()
+        } catch (error) {
+          return { error }
         }
-        node = tokenizer.next()
       }
     } else {
       return createError(`unexpected: '${node.value.text}'`, node.value.context)
     }
   }
-  return { error: null, keyCodes }
+  return { error: null, instructions }
 }
 
 function expandAlias(token, aliasMap, tokens = []) {
   if (aliasMap.hasOwnProperty(token)) {
+    if (aliasMap[token].indexOf(token) !== -1) {
+      throw new Error('circular alias definition')
+    }
     aliasMap[token].forEach(t => expandAlias(t, aliasMap, tokens))
   } else {
     tokens.push(token)
@@ -118,7 +125,7 @@ function createError(message, context = 'end of program') {
       context = context.slice(0, 50) + '...'
     }
   }
-  return { error: new Error(`${message} near: ${context}`) }
+  return { error: new Error(`${message} near:\n${context}`) }
 }
 
 function createUnexpectedEndError() {
