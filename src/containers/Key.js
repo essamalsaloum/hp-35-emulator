@@ -23,7 +23,7 @@ const keyDefs = {
   [C.INV]: { label: '<small>1/x</small>', letter: 'K', shiftMap: { [C.STO]: C.STO_K, [C.RCL]: C.RCL_K } },
   [C.SWAP]: { label: 'x↔︎y', letter: 'L', shiftMap: { [C.STO]: C.STO_L, [C.RCL]: C.RCL_L } },
   [C.ROLL_DOWN]: { label: '<small>R↓</small>', letter: 'M', shiftMap: { [C.STO]: C.STO_M, [C.RCL]: C.RCL_M } },
-  [C.FACT]: { label: '!', letter: 'N', shiftMap: { [C.STO]: C.STO_N, [C.RCL]: C.RCL_N } },
+  [C.FACT]: { label: '!', bottom: 'nPr', top: 'nCr', letter: 'N', shiftMap: { [C.SHIFT_DOWN]: C.NPR, [C.SHIFT_UP]: C.NCR, [C.STO]: C.STO_N, [C.RCL]: C.RCL_N } },
   [C.PCT]: { label: '%', bottom: '%chg', letter: 'O', shiftMap: { [C.SHIFT_DOWN]: C.PCTCHG, [C.STO]: C.STO_O, [C.RCL]: C.RCL_O } },
 
   [C.ENTER]: { label: '<small>ENTER ↑</small>' },

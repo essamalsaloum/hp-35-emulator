@@ -1,6 +1,5 @@
 import C from '../keyCodes'
 import math from 'mathjs'
-import flow from 'lodash/flow'
 
 const degreesToRadians = degrees => degrees * math.PI / 180.0
 const radiansToDegrees = radians => radians * 180.0 / math.PI
@@ -13,50 +12,80 @@ const degrees360 = angle => {
   return angle
 }
 
+const monadic = fn => ([x, ...rest]) => ([fn(x), ...rest])
+const dyadic = fn => ([x, y, z, t]) => ([fn(x, y), z, t, t])
+const dyadic2 = fn => ([x, y, z, t]) => ([fn(x, y), y, z, t])
+
+const div = (x, y) => x === 0 ? new Error('division by 0') : y / x
+const inv = x => x === 0 ? new Error('division by 0') : 1 / x
+const pct = (x, y) => y * x / 100
+const pctChg = (x, y) => (x - y) * (100 / y)
+
 const arithmetic = {
-  [C.ADD]: ([x, y, z, t]) => [y + x, z, t, t],
-  [C.SUB]: ([x, y, z, t]) => [y - x, z, t, t],
-  [C.MUL]: ([x, y, z, t]) => [y * x, z, t, t],
-  [C.DIV]: ([x, y, z, t]) => x === 0 ? new Error('division by 0') : [y / x, z, t, t],
-  [C.INV]: ([x, ...rest]) => x === 0 ? new Error('division by 0') : [1 / x, ...rest],
-  [C.IP]: ([x, ...rest]) => [math.floor(x), ...rest],
-  [C.PCT]: ([x, y, ...rest]) => [y * x / 100, y, ...rest],
-  [C.PCTCHG]: ([x, y, ...rest]) => [(x - y) * (100 / y), y, ...rest]
+  [C.ADD]: dyadic((x, y) => y + x),
+  [C.DIV]: dyadic((x, y) => div(x, y)),
+  [C.INTG]: monadic(math.floor),
+  [C.INV]: monadic(inv),
+  [C.IP]: monadic(math.fix),
+  [C.IP]: monadic(math.floor),
+  [C.MUL]: dyadic((x, y) => y * x),
+  [C.PCT]: dyadic2(pct),
+  [C.PCTCHG]: dyadic2(pctChg),
+  [C.SUB]: dyadic((x, y) => y - x),
 }
 
-const abs = x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.acos(x))
+const acos = x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.acos(x))
+const alog = x => math.pow(10, x)
 const asin = x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.asin(x))
 const atan = x => radiansToDegrees(math.atan(x))
 const cos = x => math.abs(degrees360(x) - 90) % 180 === 0 ? 0 : math.cos(degreesToRadians(degrees360(x)))
 const sin = x => math.sin(degreesToRadians(degrees360(x)))
+const sq = x => x * x
 const sqrt = x => x < 0 ? new Error('√(negative)') : math.sqrt(x)
 const tan = x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
+const xRoot = (x, y) => math.pow(y, 1 / x)
 
 const transcendental = {
-  [C.ACOS]: ([x, ...rest]) => [abs(x), ...rest],
-  [C.ALOG]: ([x, ...rest]) => [math.pow(10, x), ...rest],
-  [C.ASIN]: ([x, ...rest]) => [asin(x), ...rest],
-  [C.ATAN]: ([x, ...rest]) => [atan(x), ...rest],
-  [C.COS]: ([x, ...rest]) => [cos(x), ...rest],
-  [C.EXP]: ([x, ...rest]) => [math.exp(x), ...rest],
-  [C.LN]: ([x, ...rest]) => [math.log(x), ...rest],
-  [C.LOG]: ([x, ...rest]) => [math.log10(x), ...rest],
-  [C.POW]: ([x, y, z, t]) => [math.pow(y, x), z, t, t],
-  [C.ROOT]: ([x, y, z, t]) => [math.pow(y, 1 / x), z, t, t],
-  [C.SIN]: ([x, ...rest]) => [sin(x), ...rest],
-  [C.SQ]: ([x, ...rest]) => [x * x , ...rest],
-  [C.SQRT]: ([x, ...rest]) => [sqrt(x), ...rest],
-  [C.TAN]: ([x, ...rest]) => [tan(x), ...rest]
+  [C.ACOS]: monadic(acos),
+  [C.ALOG]: monadic(alog),
+  [C.ASIN]: monadic(asin),
+  [C.ATAN]: monadic(atan),
+  [C.COS]: monadic(cos),
+  [C.EXP]: monadic(math.exp),
+  [C.LN]: monadic(math.log),
+  [C.LOG]: monadic(math.log10),
+  [C.POW]: dyadic(math.pow),
+  [C.SIN]: monadic(sin),
+  [C.SQ]: monadic(sq),
+  [C.SQRT]: monadic(sqrt),
+  [C.TAN]: monadic(tan),
+  [C.XROOT]: dyadic(xRoot),
 }
 
-const statistical = {
-  [C.FACT]: x => x < 0 ? new Error('!(negative)') : math.factorial(math.floor(x))
+const fact = x => x < 0 || math.floor(x) !== x ? new Error('invalid data') : math.factorial(math.floor(x))
+const nCr = (x, y) => {
+  if (x < 0 || math.floor(x) !== x || y < 0 || math.floor(y) !== y || x > y) {
+    return new Error('invalid data')
+  }
+  return math.combinations(y, x)
+}
+const nPr = (x, y) => {
+  if (x < 0 || math.floor(x) !== x || y < 0 || math.floor(y) !== y || x > y) {
+    return new Error('invalid data')
+  }
+  return math.permutations(y, x)
+}
+
+const probability = {
+  [C.FACT]: monadic(fact),
+  [C.NCR]: dyadic(nCr),
+  [C.NPR]: dyadic(nPr),
 }
 
 const funcs = {
   ...arithmetic,
   ...transcendental,
-  ...statistical
+  ...probability,
 }
 
 const compute = keyCode => state => {
