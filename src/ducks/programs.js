@@ -13,6 +13,16 @@ const headers = {
 }
 
 export const fetchProgramList = () => dispatch => {
+  const cachedPrograms = window.sessionStorage.getItem(REPO_URL)
+  if (cachedPrograms) {
+    try {
+      const programs = JSON.parse(cachedPrograms)
+      dispatch(createAction(FETCH_GITHUB_LIST)(programs))
+    } catch(err) {
+      console.error(err.message)
+    }
+  }
+
   axios.get(REPO_URL, { headers })
     .then(res => {
       const programs = res.data
@@ -27,6 +37,7 @@ export const fetchProgramList = () => dispatch => {
           }
           return prev
         }, {})
+      window.sessionStorage.setItem(REPO_URL, JSON.stringify(programs))
       dispatch(createAction(FETCH_GITHUB_LIST)(programs))
     })
     .catch(err => {
