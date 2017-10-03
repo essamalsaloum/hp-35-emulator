@@ -153,7 +153,7 @@ export default class ControlUnit {
   inputExecute(state, keyCode) {
     const microCode = this.instructionSet[keyCode]
     if (!microCode) {
-      console.error(`controlUnit: not implemented [${keyCode}]`)
+      console.error(`controlUnit: not implemented '${keyCode}'`)
       return state
     }
 
@@ -162,9 +162,14 @@ export default class ControlUnit {
       state = state.stackLift === true ? this.alu.liftStack(state) : state
     }
 
+    const newState = fn(state)
+    const {stack, buffer} = newState
+    const [x] = stack
+
     return {
-      ...fn(state),
+      ...newState,
       entry: entry !== null ? entry : state.entry,
+      buffer: entry ? buffer : formatNumber(x),
       stackLift: stackLift !== null ? stackLift : state.stackLift
     }
   }

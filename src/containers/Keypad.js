@@ -66,11 +66,11 @@ class Keypad extends React.PureComponent {
           <Key keyCode={C.TAN}  />
         </div>
         <div className="Keypad--row">
-          <Key keyCode={C.INV} />
           <Key keyCode={C.SWAP} />
           <Key keyCode={C.ROLL_DOWN}/>
-          <Key keyCode={C.STO} />
-          <Key keyCode={C.RCL} />
+          <Key keyCode={C.INV} />
+          <Key keyCode={C.FACT} />
+          <Key keyCode={C.PCT} />
         </div>
         <div className="Keypad--row">
           <Key keyCode={C.ENTER} />
@@ -79,7 +79,7 @@ class Keypad extends React.PureComponent {
           <Key keyCode={C.CLX} />
         </div>
         <div className="Keypad--row">
-          <Key keyCode={C.HELP} />
+          <Key keyCode={C.STO} />
           <Key keyCode={C.D7} />
           <Key keyCode={C.D8} />
           <Key keyCode={C.D9} />

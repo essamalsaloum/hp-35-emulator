@@ -78,6 +78,12 @@
     color: #fff;
 }
 
+.Key--inverse-sto, .Key--inverse-rcl {
+  background-color: #3F51B5;
+  color: #fff;
+}
+
+
 sup {
   vertical-align: super;
   font-size: small;

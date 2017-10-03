@@ -41,7 +41,7 @@ export const stopProgram = () => (dispatch) => {
 const initialState = {
   stack: [0, 0, 0, 0],
   stackLift: false,
-  memory: 0,
+  memory: [],
   keyCodes: [],
   ip: 0,
   entry: true,
