@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Tokenizer, TokenType } from '../processor/Tokenizer'
+import { Tokenizer, TokenType } from '../cpu/Tokenizer'
 
 describe('Tokenizer', () => {
 

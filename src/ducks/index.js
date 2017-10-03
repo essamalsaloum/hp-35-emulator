@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
-import processor from '../processor/reducer'
+import cpu from '../cpu/reducer'
 import programPanel from './programPanel'
 import programs from './programs'
 import program from './program'
 import shiftKey from './shiftKey'
 
 export const rootReducer = combineReducers({
-  processor,
+  cpu,
   programPanel,
   programs,
   program,

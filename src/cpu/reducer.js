@@ -1,15 +1,15 @@
 import { createAction } from 'redux-actions'
-import processor from '../processor'
+import cpu from '../cpu'
 
-const EXECUTE_KEYCODE = 'rpnext/controlUnit/EXECUTE_KEYCODE'
-const PROGRAM_STARTING = 'rpnext/controlUnit/PROGRAM_STARTING'
-const PROGRAM_STOPPING = 'rpnext/controlUnit/PROGRAM_STOPPING'
-const SET_DELAYED = 'rpnext/controlUnit/SET_DELAYED'
-const CLEAR_DELAYED = 'rpnext/controlUnit/CLEAR_DELAYED'
-const GOTO = 'rpnext/controlUnit/GOTO'
-const GOTO_PROGRAM_TOP = 'rpnext/controlUnit/GOTO_PROGRAM_TOP'
-const UPDATE_STATE = 'rpnext/controlUnit/UPDATE_STATE'
-const LOAD_KEYCODES = 'rpnext/controlUnit/LOAD_KEYCODES'
+const EXECUTE_KEYCODE = 'rpnext/cpu/EXECUTE_KEYCODE'
+const PROGRAM_STARTING = 'rpnext/cpu/PROGRAM_STARTING'
+const PROGRAM_STOPPING = 'rpnext/cpu/PROGRAM_STOPPING'
+const SET_DELAYED = 'rpnext/cpu/SET_DELAYED'
+const CLEAR_DELAYED = 'rpnext/cpu/CLEAR_DELAYED'
+const GOTO = 'rpnext/cpu/GOTO'
+const GOTO_PROGRAM_TOP = 'rpnext/cpu/GOTO_PROGRAM_TOP'
+const UPDATE_STATE = 'rpnext/cpu/UPDATE_STATE'
+const LOAD_KEYCODES = 'rpnext/cpu/LOAD_KEYCODES'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
 export const setDelayed = createAction(SET_DELAYED)
@@ -20,22 +20,22 @@ export const loadKeyCodes = createAction(LOAD_KEYCODES)
 
 export const programStarting = createAction(PROGRAM_STARTING)
 export const programStopping = createAction(PROGRAM_STOPPING)
-export const updateProcessorState = createAction(UPDATE_STATE)
+export const updateState = createAction(UPDATE_STATE)
 
 export const startProgram = () => (dispatch, getState) => {
-  processor.startProgram(dispatch, getState)
+  cpu.startProgram(dispatch, getState)
 }
 
 export const singleStep = () => (dispatch, getState) => {
   if (ipSelector(getState()) < keyCodesSelector(getState()).length) {
-    processor.executeNext(dispatch, getState)
+    cpu.executeNext(dispatch, getState)
   } else {
     dispatch(gotoProgramTop())
   }
 }
 
 export const stopProgram = () => (dispatch) => {
-  processor.stopProgram(dispatch)
+  cpu.stopProgram(dispatch)
 }
 
 const initialState = {
@@ -51,7 +51,7 @@ const initialState = {
 }
 
 function alu(state, payload) {
-  return { ...state, ...processor.execute(state, payload) }
+  return { ...state, ...cpu.execute(state, payload) }
 }
 
 export default function reducer(state = initialState, { type, payload }) {
@@ -79,10 +79,10 @@ export default function reducer(state = initialState, { type, payload }) {
   }
 }
 
-export const processorSelector = state => state.processor
-export const stackSelector = state => state.processor.stack
-export const bufferSelector = state => state.processor.buffer
-export const ipSelector = state => state.processor.ip
-export const isRunningSelector = state => state.processor.isRunning
-export const isDelayedSelector = state => state.processor.isDelayed
-export const keyCodesSelector = state => state.processor.keyCodes
+export const processorSelector = state => state.cpu
+export const stackSelector = state => state.cpu.stack
+export const bufferSelector = state => state.cpu.buffer
+export const ipSelector = state => state.cpu.ip
+export const isRunningSelector = state => state.cpu.isRunning
+export const isDelayedSelector = state => state.cpu.isDelayed
+export const keyCodesSelector = state => state.cpu.keyCodes

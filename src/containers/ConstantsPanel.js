@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
-import physicsConstants from '../processor/physicsConstants'
-import { executeKeyCode } from '../processor/reducer'
+import physicsConstants from '../cpu/physicsConstants'
+import { executeKeyCode } from '../cpu/reducer'
 import './ConstantsPanel.css'
 
 // TODO: add filter text field

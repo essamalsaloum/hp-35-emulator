@@ -12,7 +12,7 @@ import {
   programStopping,
   processorSelector,
   stackSelector,
-  updateProcessorState,
+  updateState,
   isDelayedSelector,
 } from './reducer'
 
@@ -101,9 +101,9 @@ export default class ControlUnit {
         const keyCodes = keyCodesSelector(getState())
         const ip = ipSelector(getState())
         const keyCode = keyCodes[ip]
-        let processor = processorSelector(getState())
-        processor = this.execute(processor, keyCode)
-        dispatch(updateProcessorState({ ...processor, ip: ip + 1 }))
+        let cpu = processorSelector(getState())
+        cpu = this.execute(cpu, keyCode)
+        dispatch(updateState({ ...cpu, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)

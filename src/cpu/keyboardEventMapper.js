@@ -1,4 +1,4 @@
-import C from '../processor/keyCodes'
+import C from '../cpu/keyCodes'
 
 const keyCodeToOpcode = {
   '0': C.D0,

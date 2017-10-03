@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import processor from '../processor'
-import C from '../processor/keyCodes'
+import cpu from '../cpu'
+import C from '../cpu/keyCodes'
 
 const m_e = [C.D9, C.DOT, C.D1, C.D0, C.D9, C.D3, C.D8, C.EEX, C.D3, C.D1, C.CHS]
 const e = [C.D1, C.DOT, C.D6, C.D0, C.D2, C.D1, C.D8, C.EEX, C.D1, C.D9, C.CHS]
@@ -32,10 +32,10 @@ const keyCodes = [
   C.DIV
 ]
 
-describe('processor', () => {
+describe('cpu', () => {
   it('should compute the Rydberg constant', () => {
     const expectedRydbergConstant = 1.0973781e+7
-    const finalState = keyCodes.reduce(processor.execute.bind(processor), { ...initialState })
+    const finalState = keyCodes.reduce(cpu.execute.bind(cpu), { ...initialState })
     const [computedRydbergConstant] = finalState.stack
     expect(Math.abs(computedRydbergConstant - expectedRydbergConstant) < 1.0).to.be.true
   })

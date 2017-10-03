@@ -11,8 +11,8 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { showGitHubPanel } from '../ducks/programPanel'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
-import { loadKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../processor/reducer'
-import { compile, extractProgramText } from '../processor/compiler'
+import { loadKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
+import { compile, extractProgramText } from '../cpu/compiler'
 
 class ProgramToolbar extends React.PureComponent {
 

@@ -1,5 +1,5 @@
 import C from '../keyCodes'
-import * as util from '../../processor/util'
+import * as util from '../../cpu/util'
 
 const splitNumber = buffer => {
   const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)

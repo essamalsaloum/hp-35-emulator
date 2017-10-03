@@ -1,5 +1,5 @@
 import aliases from './aliases'
-import processor from './index'
+import cpu from './index'
 import { Tokenizer, TokenType } from './Tokenizer'
 
 const CONTEXT_TRUNCATE_AT = 50
@@ -88,7 +88,7 @@ function compilePlainTextProgram(text) {
         try {
           const tokens = expandAlias(node.value.text, aliasMap)
           for (const token of tokens) {
-            if (!processor.isValidInstruction(token)) {
+            if (!cpu.isValidInstruction(token)) {
               return createError(`syntax error: '${token}'`, node.value.context)
             }
             keyCodes.push(token)

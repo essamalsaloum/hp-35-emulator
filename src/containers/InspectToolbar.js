@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import {compile} from '../processor/compiler'
+import {compile} from '../cpu/compiler'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadKeyCodes,
@@ -22,7 +22,7 @@ import {
   clearDelayed,
   isRunningSelector,
   isDelayedSelector
-} from '../processor/reducer'
+} from '../cpu/reducer'
 
 class InspectToolbar extends React.PureComponent {
 
