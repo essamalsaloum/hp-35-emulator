@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { executeInstruction } from '../processor/reducer'
+import { executeKeyCode } from '../processor/reducer'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
-import C from '../processor/opcodes'
+import C from '../processor/keyCodes'
 import './Key.css'
 
 const shiftKeyModifiers = {
@@ -19,12 +19,12 @@ const createMarkup = label => ({ __html: label })
 class Key extends React.PureComponent {
 
   static propTypes = {
-    opcode: PropTypes.string.isRequired,
+    keyCode: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     topLabel: PropTypes.string,
     bottomLabel: PropTypes.string,
     labelClass: PropTypes.string,
-    executeInstruction: PropTypes.func,
+    executeKeyCode: PropTypes.func,
     shiftKey: PropTypes.string,
     setShiftKey: PropTypes.func.isRequired
   }
@@ -35,17 +35,17 @@ class Key extends React.PureComponent {
     labelClass: ''
   }
 
-  onClick(opcode) {
-    const { shiftKey, setShiftKey, executeInstruction } = this.props
-    if (opcode === C.SHIFT_UP) {
+  onClick(keyCode) {
+    const { shiftKey, setShiftKey, executeKeyCode } = this.props
+    if (keyCode === C.SHIFT_UP) {
       setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
     }
-    else if (opcode === C.SHIFT_DOWN) {
+    else if (keyCode === C.SHIFT_DOWN) {
       setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
     } else {
-      const keyMap = shiftKeyModifiers[opcode]
-      opcode = (keyMap && keyMap[shiftKey]) || opcode
-      executeInstruction(opcode)
+      const keyMap = shiftKeyModifiers[keyCode]
+      keyCode = (keyMap && keyMap[shiftKey]) || keyCode
+      executeKeyCode(keyCode)
       if (shiftKey) {
         setShiftKey(null)
       }
@@ -71,7 +71,7 @@ class Key extends React.PureComponent {
       label,
       topLabel,
       bottomLabel,
-      opcode,
+      keyCode,
       labelClass,
       shiftKey
     } = this.props
@@ -79,26 +79,26 @@ class Key extends React.PureComponent {
       label,
       shiftKey: ''
     }
-    if ((topLabel || opcode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
+    if ((topLabel || keyCode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
       decorator.label = topLabel || label
       decorator.shiftKey = shiftKey
-    } else if ((bottomLabel || opcode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
+    } else if ((bottomLabel || keyCode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
       decorator.label = bottomLabel || label
       decorator.shiftKey = shiftKey
     }
 
     return (
-      <div className={`Key Key--opcode-${opcode}`}>
+      <div className={`Key Key--keyCode-${keyCode}`}>
         <button
           type="button"
-          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-opcode-${opcode}`}
-          onClick={() => this.onClick(opcode)}
+          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-keyCode-${keyCode}`}
+          onClick={() => this.onClick(keyCode)}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}
         >
           <div className="Key--label-container">
             {this.renderTopLabel()}
-            <div className={`Key--label-main Key--label-opcode-${opcode} ${labelClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
+            <div className={`Key--label-main Key--label-keyCode-${keyCode} ${labelClass}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
             {this.renderBottomLabel()}
           </div>
         </button>
@@ -109,7 +109,7 @@ class Key extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    executeInstruction,
+    executeKeyCode,
     setShiftKey,
   }, dispatch)
 

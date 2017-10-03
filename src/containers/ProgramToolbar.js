@@ -9,9 +9,9 @@ import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
-import { selectGitHubTab } from '../ducks/programPanel'
-import { clearProgram, setProgramText, programTextSelector, isMarkdownSelector, setRecording, recordingSelector } from '../ducks/program'
-import { loadProgram, startProgram, stopProgram, runFlagSelector, clearDelayedFlag } from '../processor/reducer'
+import { showGitHubPanel } from '../ducks/programPanel'
+import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
+import { loadKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../processor/reducer'
 import { compile, extractProgramText } from '../processor/compiler'
 
 class ProgramToolbar extends React.PureComponent {
@@ -19,18 +19,19 @@ class ProgramToolbar extends React.PureComponent {
   static propTypes = {
     initialState: PropTypes.object.isRequired,
     setError: PropTypes.func.isRequired,
-    selectGitHubTab: PropTypes.func.isRequired,
-    runFlag: PropTypes.bool.isRequired,
+    showGitHubPanel: PropTypes.func.isRequired,
+    isRunning: PropTypes.bool.isRequired,
     programText: PropTypes.string,
-    loadProgram: PropTypes.func,
+    loadKeyCodes: PropTypes.func,
     clearProgram: PropTypes.func,
-    setProgramText: PropTypes.func,
+    refreshProgramText: PropTypes.func,
     startProgram: PropTypes.func,
     stopProgram: PropTypes.func,
     isMarkdown: PropTypes.bool.isRequired,
     setRecording: PropTypes.func.isRequired,
+    clearRecording: PropTypes.func.isRequired,
     recording: PropTypes.bool.isRequired,
-    clearDelayedFlag: PropTypes.func.isRequired
+    clearDelayed: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -47,37 +48,38 @@ class ProgramToolbar extends React.PureComponent {
   toggleRecording(ev, isInputChecked) {
     const recording = isInputChecked
     if (recording) {
-      this.props.clearProgram()
+      this.props.setRecording()
+    } else {
+      this.props.clearRecording()
     }
-    this.props.setRecording(recording)
   }
 
   runStop() {
     const {
       programText,
-      loadProgram,
-      runFlag,
+      loadKeyCodes,
+      isRunning,
       startProgram,
       stopProgram,
-      setRecording,
+      clearRecording,
       recording,
       isMarkdown,
       setError,
-      clearDelayedFlag
+      clearDelayed
     } = this.props
     if (recording) {
-      setRecording(false)
+      clearRecording()
     }
-    if (runFlag) {
+    if (isRunning) {
       stopProgram()
     } else {
-      clearDelayedFlag()
-      const { opcodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
+      clearDelayed()
+      const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
       if (error) {
         setError(error)
       } else {
         setError(null)
-        loadProgram(opcodes)
+        loadKeyCodes(keyCodes)
         startProgram()
       }
     }
@@ -85,14 +87,14 @@ class ProgramToolbar extends React.PureComponent {
 
   // to avoid a console warning
   renderToggle() {
-    const { runFlag, isMarkdown, recording } = this.props
-    if (runFlag || isMarkdown) {
+    const { isRunning, isMarkdown, recording } = this.props
+    if (isRunning || isMarkdown) {
       return null
     } else {
       return (<Toggle
         label="Record"
         labelPosition="right"
-        disabled={runFlag || isMarkdown}
+        disabled={isRunning || isMarkdown}
         toggled={recording}
         onToggle={this.toggleRecording}
       />)
@@ -100,12 +102,12 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   renderEditButton() {
-    const { isMarkdown, runFlag } = this.props
+    const { isMarkdown, isRunning } = this.props
     if (!isMarkdown) {
       return null
     } else {
       return (
-        <IconButton onClick={this.extractProgram} disabled={runFlag}>
+        <IconButton onClick={this.extractProgram} disabled={isRunning}>
           <FontIcon className="fa fa-pencil" color={grey700} />
         </IconButton>
       )
@@ -113,13 +115,13 @@ class ProgramToolbar extends React.PureComponent {
   }
 
   extractProgram() {
-    const {programText, setProgramText} = this.props
+    const { programText, refreshProgramText } = this.props
     const text = extractProgramText(programText)
-    setProgramText(text)
+    refreshProgramText(text)
   }
 
   render() {
-    const { runFlag, clearProgram, selectGitHubTab } = this.props
+    const { isRunning, clearProgram, showGitHubPanel } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -127,13 +129,13 @@ class ProgramToolbar extends React.PureComponent {
           {this.renderEditButton()}
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => selectGitHubTab()} disabled={runFlag}>
+          <IconButton onClick={() => showGitHubPanel()} disabled={isRunning}>
             <FontIcon className="fa fa-github" color={grey700} />
           </IconButton>
-          <IconButton onClick={clearProgram} disabled={this.isEmptyProgram() || runFlag} >
+          <IconButton onClick={clearProgram} disabled={this.isEmptyProgram() || isRunning} >
             <Delete color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} runFlag={runFlag} />
+          <RunStopButton onClick={this.runStop} disabled={this.isEmptyProgram()} isRunning={isRunning} />
         </ToolbarGroup>
       </Toolbar>
     )
@@ -142,21 +144,22 @@ class ProgramToolbar extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    selectGitHubTab,
-    loadProgram,
+    showGitHubPanel,
+    loadKeyCodes,
     clearProgram,
-    setProgramText,
+    refreshProgramText,
     startProgram,
     stopProgram,
     setRecording,
-    clearDelayedFlag
+    clearRecording,
+    clearDelayed
   }, dispatch)
 
 const mapStateToProps = state => ({
-  runFlag: runFlagSelector(state),
+  isRunning: isRunningSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
-  recording: recordingSelector(state)
+  recording: isRecordingSelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramToolbar)

@@ -1,4 +1,4 @@
-import C from '../opcodes'
+import C from '../keyCodes'
 
 export const liftStack = state => {
   const [x, y, z] = state.stack

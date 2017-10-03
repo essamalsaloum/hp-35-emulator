@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createAction } from 'redux-actions'
-import { setMarkdownText } from '../ducks/program'
-import { selectProgramTab } from '../ducks/programPanel'
+import { loadMarkdownText } from '../ducks/program'
+import { showProgramPanel } from '../ducks/programPanel'
 
 const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
 const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'
@@ -44,8 +44,8 @@ export const fetchProgramText = name => (dispatch, getState) => {
       if (data.sha === sha) {
         const { text } = data
         dispatch(createAction(FETCH_GITHUB_CONTENT)({ name, text }))
-        dispatch(setMarkdownText(text))
-        dispatch(selectProgramTab())
+        dispatch(loadMarkdownText(text))
+        dispatch(showProgramPanel())
         if (process.env.NODE_ENV === 'development') {
           console.log(`localStorage cache hit for: ${name}`)
         }
@@ -61,8 +61,8 @@ export const fetchProgramText = name => (dispatch, getState) => {
       const text = res.data
       window.localStorage.setItem(url, JSON.stringify({ text, sha }))
       dispatch(createAction(FETCH_GITHUB_CONTENT)({ name, text }))
-      dispatch(setMarkdownText(res.data))
-      dispatch(selectProgramTab())
+      dispatch(loadMarkdownText(res.data))
+      dispatch(showProgramPanel())
     })
     .catch(err => {
       dispatch(createAction(FETCH_GITHUB_CONTENT)(err))

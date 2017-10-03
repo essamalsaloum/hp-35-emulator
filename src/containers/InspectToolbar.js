@@ -12,32 +12,32 @@ import RunStopButton from '../components/RunStopButton'
 import {compile} from '../processor/compiler'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
-  loadProgram,
-  opcodesSelector,
+  loadKeyCodes,
+  keyCodesSelector,
   singleStep,
   startProgram,
   stopProgram,
-  resetIP,
-  setDelayedFlag,
-  clearDelayedFlag,
-  runFlagSelector,
-  delayedFlagSelector
+  gotoProgramTop,
+  setDelayed,
+  clearDelayed,
+  isRunningSelector,
+  isDelayedSelector
 } from '../processor/reducer'
 
 class InspectToolbar extends React.PureComponent {
 
   static propTypes = {
     programText: PropTypes.string.isRequired,
-    opcodes: PropTypes.array.isRequired,
-    runFlag: PropTypes.bool.isRequired,
-    loadProgram: PropTypes.func.isRequired,
+    keyCodes: PropTypes.array.isRequired,
+    isRunning: PropTypes.bool.isRequired,
+    loadKeyCodes: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
     startProgram: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
-    resetIP: PropTypes.func.isRequired,
-    delayedFlag: PropTypes.bool.isRequired,
-    setDelayedFlag: PropTypes.func.isRequired,
-    clearDelayedFlag: PropTypes.func.isRequired,
+    gotoProgramTop: PropTypes.func.isRequired,
+    isDelayed: PropTypes.bool.isRequired,
+    setDelayed: PropTypes.func.isRequired,
+    clearDelayed: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
   }
 
@@ -48,26 +48,26 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadProgram, isMarkdown } = this.props
-    const { opcodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
+    const { programText, loadKeyCodes, isMarkdown } = this.props
+    const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
     if (error) {
       console.log(error.message)
     } else {
-      loadProgram(opcodes)
+      loadKeyCodes(keyCodes)
     }
   }
 
   toggleDelayed() {
-    if (this.props.delayedFlag) {
-      this.props.clearDelayedFlag()
+    if (this.props.isDelayed) {
+      this.props.clearDelayed()
     } else {
-      this.props.setDelayedFlag()
+      this.props.setDelayed()
     }
   }
 
   runStop() {
-    const { runFlag, startProgram, stopProgram } = this.props
-    if (runFlag) {
+    const { isRunning, startProgram, stopProgram } = this.props
+    if (isRunning) {
       stopProgram()
     } else {
       startProgram()
@@ -75,26 +75,26 @@ class InspectToolbar extends React.PureComponent {
   }
 
   render() {
-    const { opcodes, runFlag, singleStep, resetIP, delayedFlag } = this.props
+    const { keyCodes, isRunning, singleStep, gotoProgramTop, isDelayed } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
           <Toggle
             label="Slow"
             labelPosition="right"
-            toggled={delayedFlag}
+            toggled={isDelayed}
             onToggle={this.toggleDelayed}
           />
 
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>
-          <IconButton onClick={() => resetIP()} disabled={opcodes.length === 0 || runFlag} >
+          <IconButton onClick={() => gotoProgramTop()} disabled={keyCodes.length === 0 || isRunning} >
             <Refresh color={grey700} />
           </IconButton>
-          <IconButton onClick={() => singleStep()} disabled={opcodes.length === 0 || runFlag} >
+          <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || isRunning} >
             <Redo color={grey700} />
           </IconButton>
-          <RunStopButton onClick={this.runStop} disabled={opcodes.length === 0} runFlag={runFlag} />
+          <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} isRunning={isRunning} />
         </ToolbarGroup>
       </Toolbar>
     )
@@ -103,19 +103,19 @@ class InspectToolbar extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    loadProgram,
+    loadKeyCodes,
     singleStep,
     startProgram,
     stopProgram,
-    resetIP,
-    setDelayedFlag,
-    clearDelayedFlag
+    gotoProgramTop,
+    setDelayed,
+    clearDelayed
   }, dispatch)
 
 const mapStateToProps = state => ({
-  runFlag: runFlagSelector(state),
-  delayedFlag: delayedFlagSelector(state),
-  opcodes: opcodesSelector(state),
+  isRunning: isRunningSelector(state),
+  isDelayed: isDelayedSelector(state),
+  keyCodes: keyCodesSelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
 })

@@ -1,4 +1,4 @@
-import C from '../opcodes'
+import C from '../keyCodes'
 import * as util from '../../processor/util'
 
 const splitNumber = buffer => {

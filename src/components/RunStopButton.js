@@ -5,12 +5,12 @@ import PlayArrow from 'material-ui/svg-icons/av/play-arrow'
 import Pause from 'material-ui/svg-icons/av/pause'
 import { grey700 } from 'material-ui/styles/colors'
 
-export default function RunStopButton({ runFlag, ...rest }) {
+export default function RunStopButton({ isRunning, ...rest }) {
   const iconProps = {
     color: grey700
   }
 
-  const icon = runFlag ? <Pause {...iconProps} /> : <PlayArrow {...iconProps} />
+  const icon = isRunning ? <Pause {...iconProps} /> : <PlayArrow {...iconProps} />
 
   return (
     <IconButton  {...rest}>
@@ -20,5 +20,5 @@ export default function RunStopButton({ runFlag, ...rest }) {
 }
 
 RunStopButton.propTypes = {
-  runFlag: PropTypes.bool.isRequired
+  isRunning: PropTypes.bool.isRequired
 }

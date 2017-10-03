@@ -1,16 +1,16 @@
 import { createAction } from 'redux-actions'
 
-const GITHUB = 'rpnext/programPanel/GITHUB'
-const PROGRAM = 'rpnext/programPanel/PROGRAM'
+const SHOW_GITHUB_PANEL = 'rpnext/programPanel/SHOW_GITHUB_PANEL'
+const SHOW_PROGRAM_PANEL = 'rpnext/programPanel/SHOW_PROGRAM_PANEL'
 
-export const selectProgramTab = createAction(PROGRAM)
-export const selectGitHubTab = createAction(GITHUB)
+export const showProgramPanel = createAction(SHOW_PROGRAM_PANEL)
+export const showGitHubPanel = createAction(SHOW_GITHUB_PANEL)
 
 export default (state = 'program', { type }) => {
   switch (type) {
-    case PROGRAM:
+    case SHOW_PROGRAM_PANEL:
       return 'program'
-    case GITHUB:
+    case SHOW_GITHUB_PANEL:
       return 'github'
     default:
       return state

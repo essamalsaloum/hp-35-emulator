@@ -1,4 +1,4 @@
-import C from '../opcodes'
+import C from '../keyCodes'
 import math from 'mathjs'
 
 const degreesToRadians = degrees => degrees * math.PI / 180.0
@@ -46,17 +46,17 @@ const funcs = {
 const monadicFn = ([x, y, z, t], fn) => [fn(x), y, z, t]
 const dyadicFn = ([x, y, z, t], fn) => [fn(x, y), z, t, t]
 
-const compute = opcode => state => {
+const compute = keyCode => state => {
   let { stack } = state
-  const fn = funcs[opcode]
+  const fn = funcs[keyCode]
   if (!fn) {
-    throw new Error(`math: not implemented [${opcode}]`)
+    throw new Error(`math: not implemented [${keyCode}]`)
   }
   stack = fn.length === 2 ? dyadicFn(stack, fn) : monadicFn(stack, fn)
   return { ...state,  stack }
 }
 
-export default Object.keys(funcs).reduce((prev, opcode) => {
-  prev[opcode] = { stackLift: true, fn: compute(opcode) }
+export default Object.keys(funcs).reduce((prev, keyCode) => {
+  prev[keyCode] = { stackLift: true, fn: compute(keyCode) }
   return prev
 }, {})

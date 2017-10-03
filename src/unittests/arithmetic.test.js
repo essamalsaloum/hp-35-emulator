@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import processor from '../processor'
-import C from '../processor/opcodes'
+import C from '../processor/keyCodes'
 
 describe('processor', () => {
 
   describe('arithmetic functions', () => {
 
-    it('should add X and Y for add opcode', () => {
+    it('should add X and Y for add keyCode', () => {
       const state = {
         stack: [1, 2, 3, 4]
       }

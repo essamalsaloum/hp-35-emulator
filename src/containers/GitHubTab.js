@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { selectProgramTab } from '../ducks/programPanel'
+import { showProgramPanel } from '../ducks/programPanel'
 import { fetchProgramList, fetchProgramText, programsSelector } from '../ducks/programs'
-import { setMarkdownText } from '../ducks/program'
+import { loadMarkdownText } from '../ducks/program'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
 import GitHubToolbar from './GitHubToolbar'
@@ -16,8 +16,8 @@ class GitHubTab extends React.PureComponent {
     programs: PropTypes.object,
     fetchProgramList: PropTypes.func,
     fetchProgramText: PropTypes.func,
-    selectProgramTab: PropTypes.func,
-    setMarkdownText: PropTypes.func
+    showProgramPanel: PropTypes.func,
+    loadMarkdownText: PropTypes.func
   }
 
   componentWillMount() {
@@ -31,8 +31,8 @@ class GitHubTab extends React.PureComponent {
     const { programs } = this.props
     const { text } = programs[name]
     if (text) {
-      this.props.setMarkdownText(text)
-      this.props.selectProgramTab()
+      this.props.loadMarkdownText(text)
+      this.props.showProgramPanel()
     } else {
       this.props.fetchProgramText(name)
     }
@@ -59,7 +59,7 @@ class GitHubTab extends React.PureComponent {
         <List className="GitHubTab--list">
           {this.renderList()}
         </List>
-        <GitHubToolbar onBackClick={this.props.selectProgramTab} />
+        <GitHubToolbar onBackClick={this.props.showProgramPanel} />
       </div>
     )
   }
@@ -73,8 +73,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     fetchProgramList,
     fetchProgramText,
-    selectProgramTab,
-    setMarkdownText
+    showProgramPanel,
+    loadMarkdownText
   }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(GitHubTab)

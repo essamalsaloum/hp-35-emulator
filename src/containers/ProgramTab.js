@@ -5,17 +5,17 @@ import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
-import { setProgramText, programTextSelector, isMarkdownSelector, recordingSelector } from '../ducks/program'
-import C from '../processor/opcodes'
+import { refreshProgramText, programTextSelector, isMarkdownSelector, isRecordingSelector } from '../ducks/program'
+import C from '../processor/keyCodes'
 import processor from '../processor'
 import './ProgramTab.css'
 
 const resetState = {
   text: '',
-  opcodes: [],
+  keyCodes: [],
   ip: 0,
   error: false,
-  runFlag: false,
+  isRunning: false,
   recording: false
 }
 
@@ -27,7 +27,7 @@ class ProgramTab extends React.PureComponent {
 
   static propTypes = {
     programText: PropTypes.string,
-    setProgramText: PropTypes.func.isRequired,
+    refreshProgramText: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
     recording: PropTypes.bool.isRequired,
   }
@@ -40,10 +40,10 @@ class ProgramTab extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.subscription = processor.subscribe(opcode => {
-      if (this.props.recording && opcode !== C.CLR) {
-        const text = this.props.programText + opcode + '\n'
-        this.props.setProgramText(text)
+    this.subscription = processor.subscribe(keyCode => {
+      if (this.props.recording && keyCode !== C.CLR) {
+        const text = this.props.programText + keyCode + '\n'
+        this.props.refreshProgramText(text)
       }
     })
   }
@@ -53,7 +53,7 @@ class ProgramTab extends React.PureComponent {
   }
 
   onTextChange(event) {
-    this.props.setProgramText(event.target.value)
+    this.props.refreshProgramText(event.target.value)
   }
 
   resetState() {
@@ -110,13 +110,13 @@ class ProgramTab extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    setProgramText,
+    refreshProgramText,
   }, dispatch)
 
 const mapStateToProps = state => ({
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
-  recording: recordingSelector(state)
+  recording: isRecordingSelector(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)

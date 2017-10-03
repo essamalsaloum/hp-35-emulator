@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { opcodesSelector, ipSelector } from '../processor/reducer'
+import { keyCodesSelector, ipSelector } from '../processor/reducer'
 import InspectToolbar from './InspectToolbar'
 import './InspectTab.css'
 
 class InspectTab extends React.PureComponent {
 
   static propTypes = {
-    opcodes: PropTypes.array,
+    keyCodes: PropTypes.array,
     ip: PropTypes.number.isRequired
   }
 
@@ -17,13 +17,13 @@ class InspectTab extends React.PureComponent {
     this.renderInstruction = this.renderInstruction.bind(this)
   }
 
-  renderInstruction(opcode, id) {
+  renderInstruction(keyCode, id) {
     const className = id === this.props.ip
       ? 'InspectTab--list-item-current'
       : 'InspectTab--list-item'
     return (
       <div key={id} className={className}>
-        {opcode}
+        {keyCode}
       </div>
     )
   }
@@ -32,7 +32,7 @@ class InspectTab extends React.PureComponent {
     return (
       <div className="InspectTab" >
         <div className="InspectTab--list">
-          {this.props.opcodes.map(this.renderInstruction)}
+          {this.props.keyCodes.map(this.renderInstruction)}
         </div>
         <InspectToolbar />
       </div>
@@ -41,7 +41,7 @@ class InspectTab extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  opcodes: opcodesSelector(state),
+  keyCodes: keyCodesSelector(state),
   ip: ipSelector(state)
 })
 

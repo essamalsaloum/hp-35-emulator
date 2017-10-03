@@ -36,7 +36,7 @@ export default function register() {
         // Is not local host. Just register service worker
         registerValidSW(swUrl)
       } else {
-        // This is runFlag on localhost. Lets check if a service worker still exists or not.
+        // This is isRunning on localhost. Lets check if a service worker still exists or not.
         checkValidServiceWorker(swUrl)
       }
     })
@@ -94,7 +94,7 @@ function checkValidServiceWorker(swUrl) {
     })
     .catch(() => {
       console.log(
-        'No internet connection found. App is runFlag in offline mode.'
+        'No internet connection found. App is isRunning in offline mode.'
       )
     })
 }
