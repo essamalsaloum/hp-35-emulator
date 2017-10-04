@@ -83,6 +83,7 @@ export default {
 
   CANCEL: 'cancel',
   HELP: 'help',
+  MEM: 'mem',
 
   STO_A: 'sto.a',
   STO_B: 'sto.b',

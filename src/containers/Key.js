@@ -4,56 +4,112 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { executeKeyCode } from '../cpu/reducer'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
+import { setMainPanel } from '../ducks/ui'
 import C from '../cpu/keyCodes'
 import './Key.css'
 
-const keyDefs = {
-  [C.POW]: { label: 'y<sup>x</sup>', letter: 'A', shiftMap: { [C.STO]: C.STO_A, [C.RCL]: C.RCL_A } },
-  [C.LOG]: { label: 'log', letter: 'B', shiftMap: { [C.STO]: C.STO_B, [C.RCL]: C.RCL_B } },
-  [C.LN]: { label: 'ln', letter: 'C', shiftMap: { [C.STO]: C.STO_C, [C.RCL]: C.RCL_C } },
-  [C.EXP]: { label: 'e<sup>x</sup>', top: '10<sup>x</sup>', bottom: '', letter: 'D', shiftMap: { [C.SHIFT_UP]: C.ALOG, [C.STO]: C.STO_D, [C.RCL]: C.RCL_D } },
-  [C.CLR]: { label: '<small>CLR<small>', letter: 'E', shiftMap: { [C.STO]: C.STO_E, [C.RCL]: C.RCL_E } },
-
-  [C.SQRT]: { label: '√x', letter: 'F', shiftMap: { [C.STO]: C.STO_F, [C.RCL]: C.RCL_F } },
-  [C.SQ]: { label: 'x<sup>2</sup', letter: 'G', shiftMap: { [C.STO]: C.STO_G, [C.RCL]: C.RCL_G } },
-  [C.SIN]: { label: 'sin', bottom: 'asin', letter: 'H', shiftMap: { [C.SHIFT_DOWN]: C.ASIN, [C.STO]: C.STO_H, [C.RCL]: C.RCL_H } },
-  [C.COS]: { label: 'cos', bottom: 'acos', letter: 'I', shiftMap: { [C.SHIFT_DOWN]: C.ACOS, [C.STO]: C.STO_I, [C.RCL]: C.RCL_I } },
-  [C.TAN]: { label: 'tan', bottom: 'atan', letter: 'J', shiftMap: { [C.SHIFT_DOWN]: C.ATAN, [C.STO]: C.STO_J, [C.RCL]: C.RCL_J } },
-
-  [C.INV]: { label: '<small>1/x</small>', letter: 'K', shiftMap: { [C.STO]: C.STO_K, [C.RCL]: C.RCL_K } },
-  [C.SWAP]: { label: 'x↔︎y', letter: 'L', shiftMap: { [C.STO]: C.STO_L, [C.RCL]: C.RCL_L } },
-  [C.ROLL_DOWN]: { label: '<small>R↓</small>', letter: 'M', shiftMap: { [C.STO]: C.STO_M, [C.RCL]: C.RCL_M } },
-  [C.FACT]: { label: '!', bottom: 'nPr', top: 'nCr', letter: 'N', shiftMap: { [C.SHIFT_DOWN]: C.NPR, [C.SHIFT_UP]: C.NCR, [C.STO]: C.STO_N, [C.RCL]: C.RCL_N } },
-  [C.PCT]: { label: '%', bottom: '%chg', letter: 'O', shiftMap: { [C.SHIFT_DOWN]: C.PCTCHG, [C.STO]: C.STO_O, [C.RCL]: C.RCL_O } },
-
-  [C.ENTER]: { label: '<small>ENTER ↑</small>' },
-  [C.CHS]: { label: '<small>CHS</small>', letter: 'P', shiftMap: { [C.STO]: C.STO_P, [C.RCL]: C.RCL_P } },
-  [C.EEX]: { label: '<small>EEX</small>', letter: 'Q', shiftMap: { [C.STO]: C.STO_Q, [C.RCL]: C.RCL_Q } },
-  [C.CLX]: { label: '<small>CLX</small>', letter: 'R', shiftMap: { [C.STO]: C.STO_R, [C.RCL]: C.RCL_R } },
-
-  [C.STO]: { label: '<small>STO</small>', bottom: 'RCL' },
-  [C.D7]: { label: '7', },
-  [C.D8]: { label: '8', letter: 'S', shiftMap: { [C.STO]: C.STO_S, [C.RCL]: C.RCL_S } },
-  [C.D9]: { label: '9', letter: 'T', shiftMap: { [C.STO]: C.STO_T, [C.RCL]: C.RCL_T } },
-  [C.DIV]: { label: '÷', letter: 'U', shiftMap: { [C.STO]: C.STO_U, [C.RCL]: C.RCL_U } },
-
-  [C.SHIFT_UP]: { label: 'f' },
-  [C.D4]: { label: '4' },
-  [C.D5]: { label: '5', letter: 'V', shiftMap: { [C.STO]: C.STO_V, [C.RCL]: C.RCL_V } },
-  [C.D6]: { label: '6', letter: 'W', shiftMap: { [C.STO]: C.STO_W, [C.RCL]: C.RCL_W } },
-  [C.MUL]: { label: '×', letter: 'X', shiftMap: { [C.STO]: C.STO_X, [C.RCL]: C.RCL_X } },
-
-  [C.SHIFT_DOWN]: { label: 'g' },
-  [C.D1]: { label: '1' },
-  [C.D2]: { label: '2', letter: 'Y', shiftMap: { [C.STO]: C.STO_Y, [C.RCL]: C.RCL_Y } },
-  [C.D3]: { label: '3', letter: 'Z', shiftMap: { [C.STO]: C.STO_Z, [C.RCL]: C.RCL_Z } },
-  [C.SUB]: { label: '-' },
-
-  [C.CANCEL]: { label: 'C' },
-  [C.D0]: { label: '0' },
-  [C.DOT]: { label: '•' },
-  [C.PI]: { label: 'π' },
-  [C.ADD]: { label: '+' }
+const keyLabels = {
+  [C.ACOS]: 'acos',
+  [C.ADD]: '+',
+  [C.ALOG]: '10<sup>x</sup>',
+  [C.ASIN]: 'asin',
+  [C.ATAN]: 'atan',
+  [C.CANCEL]: 'C',
+  [C.CHS]: '+/-',
+  [C.CLR]: 'CLR',
+  [C.CLX]: 'CLX',
+  [C.CONST]: 'Const',
+  [C.COS]: 'cos',
+  [C.D0]: '0',
+  [C.D1]: '1',
+  [C.D2]: '2',
+  [C.D3]: '3',
+  [C.D4]: '4',
+  [C.D5]: '5',
+  [C.D6]: '6',
+  [C.D7]: '7',
+  [C.D8]: '8',
+  [C.D9]: '9',
+  [C.DIV]: '÷',
+  [C.DOT]: '•',
+  [C.EEX]: 'EEX',
+  [C.ENTER]: 'Enter ↑',
+  [C.EXP]: 'e<sup>x</sup>',
+  [C.FACT]: '!',
+  [C.INV]: '1/x',
+  [C.LN]: 'ln',
+  [C.LOG]: 'log',
+  [C.MEM]: 'MEM',
+  [C.MUL]: '×',
+  [C.NCR]: 'nCr',
+  [C.NPR]: 'nPr',
+  [C.PCT]: '%',
+  [C.PCTCHG]: '%chg',
+  [C.PI]: 'π',
+  [C.POW]: 'y<sup>x</sup>',
+  [C.RCL]: 'RCL',
+  [C.RCL_A]: 'A',
+  [C.RCL_B]: 'B',
+  [C.RCL_C]: 'C',
+  [C.RCL_D]: 'D',
+  [C.RCL_E]: 'E',
+  [C.RCL_F]: 'F',
+  [C.RCL_G]: 'G',
+  [C.RCL_H]: 'H',
+  [C.RCL_I]: 'I',
+  [C.RCL_J]: 'J',
+  [C.RCL_K]: 'K',
+  [C.RCL_L]: 'L',
+  [C.RCL_M]: 'M',
+  [C.RCL_N]: 'N',
+  [C.RCL_O]: 'O',
+  [C.RCL_P]: 'P',
+  [C.RCL_Q]: 'Q',
+  [C.RCL_R]: 'R',
+  [C.RCL_S]: 'S',
+  [C.RCL_T]: 'T',
+  [C.RCL_U]: 'U',
+  [C.RCL_V]: 'V',
+  [C.RCL_W]: 'W',
+  [C.RCL_X]: 'X',
+  [C.RCL_Y]: 'Y',
+  [C.RCL_Z]: 'Z',
+  [C.ROLL_DOWN]: 'R↓',
+  [C.SHIFT_DOWN]: 'g',
+  [C.SHIFT_UP]: 'f',
+  [C.SIN]: 'sin',
+  [C.SQ]: 'x<sup>2</sup',
+  [C.SQRT]: '√x',
+  [C.STO]: 'STO',
+  [C.STO_A]: 'A',
+  [C.STO_B]: 'B',
+  [C.STO_C]: 'C',
+  [C.STO_D]: 'D',
+  [C.STO_E]: 'E',
+  [C.STO_F]: 'F',
+  [C.STO_G]: 'G',
+  [C.STO_H]: 'H',
+  [C.STO_I]: 'I',
+  [C.STO_J]: 'J',
+  [C.STO_K]: 'K',
+  [C.STO_L]: 'L',
+  [C.STO_M]: 'M',
+  [C.STO_N]: 'N',
+  [C.STO_O]: 'O',
+  [C.STO_P]: 'P',
+  [C.STO_Q]: 'Q',
+  [C.STO_R]: 'R',
+  [C.STO_S]: 'S',
+  [C.STO_T]: 'T',
+  [C.STO_U]: 'U',
+  [C.STO_V]: 'V',
+  [C.STO_W]: 'W',
+  [C.STO_X]: 'X',
+  [C.STO_Y]: 'Y',
+  [C.STO_Z]: 'Z',
+  [C.SUB]: '−',
+  [C.SWAP]: 'x↔︎y',
+  [C.TAN]: 'tan',
 }
 
 const createMarkup = label => ({ __html: label })
@@ -62,14 +118,26 @@ class Key extends React.PureComponent {
 
   static propTypes = {
     keyCode: PropTypes.string.isRequired,
+    shiftCodes: PropTypes.object,
     executeKeyCode: PropTypes.func,
     shiftKey: PropTypes.string,
-    setShiftKey: PropTypes.func.isRequired
+    setShiftKey: PropTypes.func.isRequired,
+    setMainPanel: PropTypes.func.isRequired,
   }
 
-  onClick(keyCode) {
-    const { shiftKey, setShiftKey, executeKeyCode } = this.props
-    const { shiftMap } = keyDefs[keyCode]
+  static defaultProps = {
+    shiftCodes: {}
+  }
+
+  constructor(props) {
+    super(props)
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick() {
+    const keyCode = this.getShiftedKeyCode()
+    const { shiftKey, shiftCodes, setShiftKey, executeKeyCode, setMainPanel } = this.props
+
     switch (keyCode) {
       case C.SHIFT_UP:
         setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
@@ -77,77 +145,75 @@ class Key extends React.PureComponent {
       case C.SHIFT_DOWN:
         setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
         break
-      case C.STO:
-        if (shiftKey === C.SHIFT_DOWN) {
-          setShiftKey(C.RCL)
-        } else {
-          setShiftKey(shiftKey === C.STO ? null : C.STO)
-        }
+      case C.MEM:
+        setMainPanel('memory')
         break
-      // case C.RCL:
-      //   setShiftKey(shiftKey === C.STO ? null : C.RCL)
-      //   break
+      case C.CONST:
+        setMainPanel('constants')
+        break
       default:
-        keyCode = (shiftMap && shiftMap[shiftKey]) || keyCode
-        executeKeyCode(keyCode)
-        if (shiftKey) {
-          setShiftKey(null)
+        if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {
+          executeKeyCode(keyCode)
         }
+    }
 
+    if (shiftKey && keyCode !== C.SHIFT_UP && keyCode !== C.SHIFT_DOWN) {
+      setShiftKey(null)
     }
   }
 
+  getShiftedKeyCode() {
+    const { keyCode } = this.props
+    const { shiftKey, shiftCodes } = this.props
+    return shiftKey && shiftCodes[shiftKey] ? shiftCodes[shiftKey] : keyCode
+  }
+
   renderTopLabel() {
-    const { shiftKey, keyCode } = this.props
-    const { top = '' } = keyDefs[keyCode]
-    return shiftKey ? (<div className="Key--label-top"></div>) : (
-      <div className="Key--label-top" dangerouslySetInnerHTML={createMarkup(top)}></div>
-    )
+    const { shiftCodes, shiftKey } = this.props
+    const keyCodeUp = shiftCodes[C.SHIFT_UP]
+    return keyCodeUp && !shiftKey ? (
+      <div className="Key--label-top" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeUp])}></div>
+    ) : (<div className="Key--label-top"></div>)
   }
 
   renderBottomLabel() {
-    const { shiftKey, keyCode } = this.props
-    const { bottom = '' } = keyDefs[keyCode]
-    return shiftKey ? (<div className="Key--label-bottom"></div>) : (
-      <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(bottom)}></div>
-    )
+    const { shiftCodes, shiftKey } = this.props
+    const keyCodeDown = shiftCodes[C.SHIFT_DOWN]
+    return keyCodeDown && !shiftKey ? (
+      <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeDown])}></div>
+    ) : (<div className="Key--label-bottom"></div>)
   }
 
   render() {
-    const { shiftKey, keyCode } = this.props
-    const { label, top = '', bottom = '', letter = '' } = keyDefs[keyCode]
-    const decorator = { label, shiftKey: '' }
+    const { keyCode, shiftKey = 'none', shiftCodes } = this.props
+    let label = keyLabels[keyCode]
 
-    if ((top || keyCode === C.SHIFT_UP) && shiftKey === C.SHIFT_UP) {
-      decorator.label = top || label
-      decorator.shiftKey = shiftKey
-    } else if ((bottom || keyCode === C.SHIFT_DOWN) && shiftKey === C.SHIFT_DOWN) {
-      decorator.label = bottom || label
-      decorator.shiftKey = shiftKey
-    } else if ((letter || keyCode === C.STO) && shiftKey === C.STO) {
-      decorator.label = letter || label
-      decorator.shiftKey = shiftKey
-    } else if ((letter || keyCode === C.RCL) && shiftKey === C.RCL) {
-      decorator.label = letter || label
-      decorator.shiftKey = shiftKey
+    if (shiftKey === C.SHIFT_UP) {
+      label = keyLabels[keyCode === C.SHIFT_UP ? C.SHIFT_UP : shiftCodes[C.SHIFT_UP]]
+    } else if (shiftKey === C.SHIFT_DOWN) {
+      label = keyLabels[keyCode === C.SHIFT_DOWN ? C.SHIFT_DOWN : shiftCodes[C.SHIFT_DOWN]]
+    } else if (shiftKey === C.STO) {
+      label = keyLabels[keyCode === C.STO ? C.STO : shiftCodes[C.STO]]
+    } else if (shiftKey === C.RCL) {
+      label = keyLabels[keyCode === C.STO ? C.RCL : shiftCodes[C.RCL]]
     }
 
     return (
       <div className={`Key Key--keyCode-${keyCode}`}>
         <button
           type="button"
-          className={`Key--button Key--inverse-${decorator.shiftKey} Key--button-keyCode-${keyCode}`}
-          onClick={() => this.onClick(keyCode)}
+          className={`Key--button Key--color-${shiftKey || 'none'} Key--button-keyCode-${keyCode}`}
+          onClick={this.onClick}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}
         >
           <div className="Key--label-container">
             {this.renderTopLabel()}
-            <div className={`Key--label-main Key--label-keyCode-${keyCode}`} dangerouslySetInnerHTML={createMarkup(decorator.label)}></div>
+            <div className={`Key--label-main Key--label-keyCode-${keyCode}`} dangerouslySetInnerHTML={createMarkup(label)}></div>
             {this.renderBottomLabel()}
           </div>
         </button>
-      </div>
+      </div >
     )
   }
 }
@@ -156,6 +222,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     executeKeyCode,
     setShiftKey,
+    setMainPanel,
   }, dispatch)
 
 const mapStateToProps = state => ({

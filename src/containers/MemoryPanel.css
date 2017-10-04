@@ -1,4 +1,4 @@
-.ConstantsPanel {
+.MemoryPanel {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -9,7 +9,7 @@
   background-color: #fff;
 }
 
-.ConstantsPanel--list {
+.MemoryPanel--list {
   flex: 1;
   overflow-y: auto;
 }

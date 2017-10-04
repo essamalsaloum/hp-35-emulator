@@ -81,6 +81,7 @@ export default function reducer(state = initialState, { type, payload }) {
 
 export const processorSelector = state => state.cpu
 export const stackSelector = state => state.cpu.stack
+export const memorySelector = state => state.cpu.memory
 export const bufferSelector = state => state.cpu.buffer
 export const ipSelector = state => state.cpu.ip
 export const isRunningSelector = state => state.cpu.isRunning

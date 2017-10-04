@@ -68,19 +68,16 @@
   font-size: 1rem;
 }
 
-.Key--inverse-shiftUp {
-    background-color: #2E7D32;
-    color: #fff;
+.Key--color-shiftUp {
+    color: #2E7D32;
 }
 
-.Key--inverse-shiftDown {
-    background-color: #EF6C00;
-    color: #fff;
+.Key--color-shiftDown {
+    color: #EF6C00;
 }
 
-.Key--inverse-sto, .Key--inverse-rcl {
-  background-color: #3F51B5;
-  color: #fff;
+.Key--color-sto, .Key--color-rcl {
+  color: #3F51B5;
 }
 
 

@@ -7,7 +7,7 @@ import { fetchProgramList, fetchProgramText, programsSelector } from '../ducks/p
 import { loadMarkdownText } from '../ducks/program'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
-import GitHubToolbar from './GitHubToolbar'
+import ChildToolbar from '../components/ChildToolbar'
 import './GitHubTab.css'
 
 class GitHubTab extends React.PureComponent {
@@ -59,7 +59,7 @@ class GitHubTab extends React.PureComponent {
         <List className="GitHubTab--list">
           {this.renderList()}
         </List>
-        <GitHubToolbar onBackClick={this.props.showProgramPanel} />
+        <ChildToolbar onBackClick={this.props.showProgramPanel} />
       </div>
     )
   }

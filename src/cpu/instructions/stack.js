@@ -60,6 +60,7 @@ const recallMem = state => {
 
 export default {
   [C.ENTER]: { stackLift: false, fn: enter },
+  [C.CANCEL]: { stackLift: false, fn: clx },
   [C.CLX]: { stackLift: false, fn: clx },
   [C.CLR]: { stackLift: false, fn: clr },
   [C.SWAP]: { stackLift: true, fn: swap },
