@@ -7,6 +7,7 @@ export default {
   CLR: 'clr',
   CLX: 'clx',
   CONST: 'const',
+  CONV: 'conv',
   COS: 'cos',
   DOT: 'dot',
   D0: 'd0',
@@ -72,6 +73,7 @@ export default {
   TO_DEGREE_F: '->F',   // Convert degree K -> F
   TO_GAL: '->gal',      // Convert liters to gallons
   TO_HMS: '->hms',      // Converts x from a decimal fraction to hours–minutes–seconds format
+  TO_IN: '->in',        // Converts inches to cm
   TO_KG: '->kg',        // Converts miles to kilometers
   TO_L: '->l',          // Converts gallons to liters
   TO_LB: '->lb',        // Converts kilograms to pounds

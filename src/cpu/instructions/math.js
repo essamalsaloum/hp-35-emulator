@@ -1,11 +1,13 @@
 import arithmetic from './math/arithmetic'
 import transcendental from './math/transcendental'
 import probability from './math/probability'
+import conversions from './math/conversions'
 
 const funcs = {
   ...arithmetic,
   ...transcendental,
   ...probability,
+  ...conversions,
 }
 
 const compute = keyCode => state => {

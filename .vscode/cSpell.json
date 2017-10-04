@@ -10,6 +10,7 @@
         "ALOG",
         "antilog",
         "comparator",
+        "CONV",
         "epowx",
         "IDIV",
         "impendence",

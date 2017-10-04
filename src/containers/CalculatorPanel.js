@@ -6,6 +6,7 @@ import Display from './Display'
 import Keypad from './Keypad'
 import MemoryPanel from './MemoryPanel'
 import ConstantsPanel from './ConstantsPanel'
+import ConversionsPanel from './ConversionsPanel'
 import { mainPanelSelector } from '../ducks/ui'
 import './CalculatorPanel.css'
 
@@ -23,6 +24,8 @@ class CalculatorPanel extends React.PureComponent {
         return <MemoryPanel />
       case C.CONSTANTS_PANEL:
         return <ConstantsPanel />
+      case C.CONVERSIONS_PANEL:
+        return <ConversionsPanel />
       default:
         return <Keypad />
     }

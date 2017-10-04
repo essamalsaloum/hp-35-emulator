@@ -3,10 +3,10 @@ import K from '../../keyCodes'
 import { monadic, dyadic } from './mathHelpers'
 
 const fact = x => {
-  if (x < 0 || math.floor(x) !== x) {
-    return new Error('invalid data')
+  if (x < 0 ) {
+    return new Error('invalid x')
   }
-  x = math.factorial(math.floor(x))
+  x = math.factorial(x)
   return Number.isFinite(x) ? x : new Error('overflow')
 }
 
@@ -16,6 +16,7 @@ const nCr = (y, x) => {
   }
   return math.combinations(y, x)
 }
+
 const nPr = (y, x) => {
   if (x < 0 || math.floor(x) !== x || y < 0 || math.floor(y) !== y || x > y) {
     return new Error('invalid data')

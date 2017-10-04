@@ -15,11 +15,12 @@ const keyLabels = {
   [K.ALOG]: '10<sup>x</sup>',
   [K.ASIN]: 'ASIN',
   [K.ATAN]: 'ATAN',
-  [K.CANCEL]: 'K',
+  [K.CANCEL]: 'C',
   [K.CHS]: '+/-',
   [K.CLR]: 'CLR',
   [K.CLX]: 'CLX',
   [K.CONST]: 'Const',
+  [K.CONV]: 'Conv',
   [K.COS]: 'COS',
   [K.D0]: '0',
   [K.D1]: '1',
@@ -97,6 +98,9 @@ class Key extends React.PureComponent {
         break
       case K.CONST:
         setMainPanel(C.CONSTANTS_PANEL)
+        break
+      case K.CONV:
+        setMainPanel(C.CONVERSIONS_PANEL)
         break
       default:
         if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {
