@@ -7,6 +7,7 @@ import ChildToolbar from '../components/ChildToolbar'
 import physicsConstants from '../cpu/physicsConstants'
 import { executeKeyCode } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
+import C from '../constants'
 import './ConstantsPanel.css'
 
 // TODO: add filter text field
@@ -22,7 +23,7 @@ class ConstantsPanel extends React.PureComponent {
 
   onItemClick(value) {
     this.props.executeKeyCode(value)
-    this.props.setMainPanel('keypad')
+    this.props.setMainPanel(C.KEYPAD)
   }
 
   renderList() {
@@ -39,7 +40,7 @@ class ConstantsPanel extends React.PureComponent {
   render() {
     return (
       <div className="ConstantsPanel">
-        <ChildToolbar title="Physics Constants" onBackClick={() => this.props.setMainPanel('keypad')} />
+        <ChildToolbar title="Physics Constants" onBackClick={() => this.props.setMainPanel(C.KEYPAD)} />
         <List className="ConstantsPanel--list">
           {this.renderList()}
         </List>

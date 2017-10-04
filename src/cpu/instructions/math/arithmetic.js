@@ -1,5 +1,5 @@
 import math from 'mathjs'
-import C from '../../keyCodes'
+import K from '../../keyCodes'
 import { monadic, dyadic, dyadic2 } from './mathHelpers'
 
 const div = (y, x) => x === 0 ? new Error('division by 0') : y / x
@@ -8,14 +8,14 @@ const pct = (y, x) => y * x / 100
 const pctChg = (y, x) => (x - y) * (100 / y)
 
 export default {
-  [C.ADD]: dyadic((y, x) => y + x),
-  [C.DIV]: dyadic(div),
-  [C.INTG]: monadic(math.floor),
-  [C.INV]: monadic(inv),
-  [C.IP]: monadic(math.fix),
-  [C.IP]: monadic(math.floor),
-  [C.MUL]: dyadic((y, x) => y * x),
-  [C.PCT]: dyadic2(pct),
-  [C.PCTCHG]: dyadic2(pctChg),
-  [C.SUB]: dyadic((y, x) => y - x),
+  [K.ADD]: dyadic((y, x) => y + x),
+  [K.DIV]: dyadic(div),
+  [K.INTG]: monadic(math.floor),
+  [K.INV]: monadic(inv),
+  [K.IP]: monadic(math.fix),
+  [K.IP]: monadic(math.floor),
+  [K.MUL]: dyadic((y, x) => y * x),
+  [K.PCT]: dyadic2(pct),
+  [K.PCTCHG]: dyadic2(pctChg),
+  [K.SUB]: dyadic((y, x) => y - x),
 }

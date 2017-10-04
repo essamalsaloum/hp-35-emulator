@@ -1,26 +1,26 @@
-import C from '../cpu/keyCodes'
+import K from '../cpu/keyCodes'
 
 const keyCodeToOpcode = {
-  '0': C.D0,
-  '1': C.D1,
-  '2': C.D2,
-  '3': C.D3,
-  '4': C.D4,
-  '5': C.D5,
-  '6': C.D6,
-  '7': C.D7,
-  '8': C.D8,
-  '9': C.D9,
-  '.': C.DOT,
-  ',': C.DOT,
-  '+': C.ADD,
-  '-': C.SUB,
-  '*': C.MUL,
-  '/': C.DIV,
-  '±': C.CHS,
-  'e': C.EEX,
-  Enter: C.ENTER,
-  Backspace: C.CLX
+  '0': K.D0,
+  '1': K.D1,
+  '2': K.D2,
+  '3': K.D3,
+  '4': K.D4,
+  '5': K.D5,
+  '6': K.D6,
+  '7': K.D7,
+  '8': K.D8,
+  '9': K.D9,
+  '.': K.DOT,
+  ',': K.DOT,
+  '+': K.ADD,
+  '-': K.SUB,
+  '*': K.MUL,
+  '/': K.DIV,
+  '±': K.CHS,
+  'e': K.EEX,
+  Enter: K.ENTER,
+  Backspace: K.CLX
 }
 
 export default keyboardEvent => keyCodeToOpcode[keyboardEvent.key]

@@ -8,7 +8,8 @@ import Avatar from 'material-ui/Avatar'
 import { indigoA200, pinkA700, blueGrey400 } from 'material-ui/styles/colors'
 import MemoryUpdateButton from '../components/MemoryUpdateButton'
 import ChildToolbar from '../components/ChildToolbar'
-import C from '../cpu/keyCodes'
+import C from '../constants'
+import K from '../cpu/keyCodes'
 import { executeKeyCode, memorySelector } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
 import './MemoryPanel.css'
@@ -16,32 +17,32 @@ import './MemoryPanel.css'
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 const keyCodes = [
-  [C.RCL_A, C.STO_A],
-  [C.RCL_B, C.STO_B],
-  [C.RCL_C, C.STO_C],
-  [C.RCL_D, C.STO_D],
-  [C.RCL_E, C.STO_E],
-  [C.RCL_F, C.STO_F],
-  [C.RCL_G, C.STO_G],
-  [C.RCL_H, C.STO_H],
-  [C.RCL_I, C.STO_I],
-  [C.RCL_J, C.STO_J],
-  [C.RCL_K, C.STO_K],
-  [C.RCL_L, C.STO_L],
-  [C.RCL_M, C.STO_M],
-  [C.RCL_N, C.STO_N],
-  [C.RCL_O, C.STO_O],
-  [C.RCL_P, C.STO_P],
-  [C.RCL_Q, C.STO_Q],
-  [C.RCL_R, C.STO_R],
-  [C.RCL_S, C.STO_S],
-  [C.RCL_T, C.STO_T],
-  [C.RCL_U, C.STO_U],
-  [C.RCL_V, C.STO_V],
-  [C.RCL_W, C.STO_W],
-  [C.RCL_X, C.STO_X],
-  [C.RCL_Y, C.STO_Y],
-  [C.RCL_Z, C.STO_Z],
+  [K.RCL_A, K.STO_A],
+  [K.RCL_B, K.STO_B],
+  [K.RCL_C, K.STO_C],
+  [K.RCL_D, K.STO_D],
+  [K.RCL_E, K.STO_E],
+  [K.RCL_F, K.STO_F],
+  [K.RCL_G, K.STO_G],
+  [K.RCL_H, K.STO_H],
+  [K.RCL_I, K.STO_I],
+  [K.RCL_J, K.STO_J],
+  [K.RCL_K, K.STO_K],
+  [K.RCL_L, K.STO_L],
+  [K.RCL_M, K.STO_M],
+  [K.RCL_N, K.STO_N],
+  [K.RCL_O, K.STO_O],
+  [K.RCL_P, K.STO_P],
+  [K.RCL_Q, K.STO_Q],
+  [K.RCL_R, K.STO_R],
+  [K.RCL_S, K.STO_S],
+  [K.RCL_T, K.STO_T],
+  [K.RCL_U, K.STO_U],
+  [K.RCL_V, K.STO_V],
+  [K.RCL_W, K.STO_W],
+  [K.RCL_X, K.STO_X],
+  [K.RCL_Y, K.STO_Y],
+  [K.RCL_Z, K.STO_Z],
 ]
 
 class MemoryPanel extends React.PureComponent {
@@ -55,7 +56,7 @@ class MemoryPanel extends React.PureComponent {
   onClick(keyCode, goBack = true) {
     this.props.executeKeyCode(keyCode)
     if (goBack) {
-      this.props.setMainPanel('keypad')
+      this.props.setMainPanel(C.KEYPAD)
     }
   }
 

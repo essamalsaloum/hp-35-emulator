@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import cpu from '../cpu'
-import C from '../cpu/keyCodes'
+import K from '../cpu/keyCodes'
 
-const m_e = [C.D9, C.DOT, C.D1, C.D0, C.D9, C.D3, C.D8, C.EEX, C.D3, C.D1, C.CHS]
-const e = [C.D1, C.DOT, C.D6, C.D0, C.D2, C.D1, C.D8, C.EEX, C.D1, C.D9, C.CHS]
-const eps_0 = [C.D8, C.DOT, C.D8, C.D5, C.D4, C.D1, C.D9, C.EEX, C.D1, C.D2, C.CHS]
-const h = [C.D6, C.DOT, C.D6, C.D2, C.D6, C.D0, C.D8, C.EEX, C.D3, C.D4, C.CHS]
-const c = [C.D2, C.DOT, C.D9, C.D9, C.D7, C.D9, C.D2, C.EEX, C.D8]
+const m_e = [K.D9, K.DOT, K.D1, K.D0, K.D9, K.D3, K.D8, K.EEX, K.D3, K.D1, K.CHS]
+const e = [K.D1, K.DOT, K.D6, K.D0, K.D2, K.D1, K.D8, K.EEX, K.D1, K.D9, K.CHS]
+const eps_0 = [K.D8, K.DOT, K.D8, K.D5, K.D4, K.D1, K.D9, K.EEX, K.D1, K.D2, K.CHS]
+const h = [K.D6, K.DOT, K.D6, K.D2, K.D6, K.D0, K.D8, K.EEX, K.D3, K.D4, K.CHS]
+const c = [K.D2, K.DOT, K.D9, K.D9, K.D7, K.D9, K.D2, K.EEX, K.D8]
 
 const initialState = {
   stack: [ 0, 0, 0, 0 ],
@@ -14,22 +14,22 @@ const initialState = {
 }
 
 const keyCodes = [
-  ...m_e, C.ENTER,
-  ...e, C.ENTER,
-  C.D4,
-  C.POW,
-  C.MUL,
-  C.D8, C.ENTER,
+  ...m_e, K.ENTER,
+  ...e, K.ENTER,
+  K.D4,
+  K.POW,
+  K.MUL,
+  K.D8, K.ENTER,
   ...eps_0,
-  C.SQR,
-  C.MUL,
-  ...h, C.ENTER,
-  C.D3,
-  C.POW,
-  C.MUL,
+  K.SQR,
+  K.MUL,
+  ...h, K.ENTER,
+  K.D3,
+  K.POW,
+  K.MUL,
   ...c,
-  C.MUL,
-  C.DIV
+  K.MUL,
+  K.DIV
 ]
 
 describe('cpu', () => {

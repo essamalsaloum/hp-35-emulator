@@ -1,4 +1,4 @@
-import C from './keyCodes'
+import K from './keyCodes'
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
@@ -47,7 +47,7 @@ export default class ControlUnit {
       if (state.entry) {
         this.notifyHelper(formatNumber(state.stack[0]))
       }
-      if (keyCode !== C.ENTER) {
+      if (keyCode !== K.ENTER) {
         this.notifyHelper(keyCode)
       }
     }

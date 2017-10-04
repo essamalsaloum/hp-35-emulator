@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import C from '../constants'
 import Display from './Display'
 import Keypad from './Keypad'
 import MemoryPanel from './MemoryPanel'
@@ -16,11 +17,11 @@ class CalculatorPanel extends React.PureComponent {
 
   renderPanel() {
     switch (this.props.mainPanel) {
-      case 'keypad':
+      case C.KEYPAD:
         return <Keypad />
-      case 'memory':
+      case C.MEM:
         return <MemoryPanel />
-      case 'constants':
+      case C.CONST:
         return <ConstantsPanel />
       default:
         return <Keypad />

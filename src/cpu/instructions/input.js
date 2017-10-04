@@ -1,4 +1,4 @@
-import C from '../keyCodes'
+import K from '../keyCodes'
 import * as util from '../../cpu/util'
 
 const splitNumber = buffer => {
@@ -105,18 +105,18 @@ const pi = state => {
 }
 
 export default {
-  [C.CHS]: { entry: null, stackLift: null, fn: changeSign },
-  [C.DOT]: { entry: true, stackLift: false, fn: decimal },
-  [C.D0]: { entry: true, stackLift: false, fn: digit('0') },
-  [C.D1]: { entry: true, stackLift: false, fn: digit('1') },
-  [C.D2]: { entry: true, stackLift: false, fn: digit('2') },
-  [C.D3]: { entry: true, stackLift: false, fn: digit('3') },
-  [C.D4]: { entry: true, stackLift: false, fn: digit('4') },
-  [C.D5]: { entry: true, stackLift: false, fn: digit('5') },
-  [C.D6]: { entry: true, stackLift: false, fn: digit('6') },
-  [C.D7]: { entry: true, stackLift: false, fn: digit('7') },
-  [C.D8]: { entry: true, stackLift: false, fn: digit('8') },
-  [C.D9]: { entry: true, stackLift: false, fn: digit('9') },
-  [C.EEX]: { entry: true, stackLift: false, fn: enterExponent },
-  [C.PI]: { entry: false, stackLift: true, fn: pi }
+  [K.CHS]: { entry: null, stackLift: null, fn: changeSign },
+  [K.DOT]: { entry: true, stackLift: false, fn: decimal },
+  [K.D0]: { entry: true, stackLift: false, fn: digit('0') },
+  [K.D1]: { entry: true, stackLift: false, fn: digit('1') },
+  [K.D2]: { entry: true, stackLift: false, fn: digit('2') },
+  [K.D3]: { entry: true, stackLift: false, fn: digit('3') },
+  [K.D4]: { entry: true, stackLift: false, fn: digit('4') },
+  [K.D5]: { entry: true, stackLift: false, fn: digit('5') },
+  [K.D6]: { entry: true, stackLift: false, fn: digit('6') },
+  [K.D7]: { entry: true, stackLift: false, fn: digit('7') },
+  [K.D8]: { entry: true, stackLift: false, fn: digit('8') },
+  [K.D9]: { entry: true, stackLift: false, fn: digit('9') },
+  [K.EEX]: { entry: true, stackLift: false, fn: enterExponent },
+  [K.PI]: { entry: false, stackLift: true, fn: pi }
 }

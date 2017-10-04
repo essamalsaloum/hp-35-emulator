@@ -6,7 +6,7 @@ import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
 import { refreshProgramText, programTextSelector, isMarkdownSelector, isRecordingSelector } from '../ducks/program'
-import C from '../cpu/keyCodes'
+import K from '../cpu/keyCodes'
 import cpu from '../cpu'
 import './ProgramTab.css'
 
@@ -41,7 +41,7 @@ class ProgramTab extends React.PureComponent {
 
   componentWillMount() {
     this.subscription = cpu.subscribe(keyCode => {
-      if (this.props.recording && keyCode !== C.CLR) {
+      if (this.props.recording && keyCode !== K.CLR) {
         const text = this.props.programText + keyCode + '\n'
         this.props.refreshProgramText(text)
       }

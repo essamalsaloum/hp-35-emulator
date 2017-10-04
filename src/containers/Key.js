@@ -5,110 +5,58 @@ import { bindActionCreators } from 'redux'
 import { executeKeyCode } from '../cpu/reducer'
 import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
 import { setMainPanel } from '../ducks/ui'
-import C from '../cpu/keyCodes'
+import K from '../cpu/keyCodes'
+import C from '../constants'
 import './Key.css'
 
 const keyLabels = {
-  [C.ACOS]: 'ACOS',
-  [C.ADD]: '+',
-  [C.ALOG]: '10<sup>x</sup>',
-  [C.ASIN]: 'ASIN',
-  [C.ATAN]: 'ATAN',
-  [C.CANCEL]: 'C',
-  [C.CHS]: '+/-',
-  [C.CLR]: 'CLR',
-  [C.CLX]: 'CLX',
-  [C.CONST]: 'Const',
-  [C.COS]: 'COS',
-  [C.D0]: '0',
-  [C.D1]: '1',
-  [C.D2]: '2',
-  [C.D3]: '3',
-  [C.D4]: '4',
-  [C.D5]: '5',
-  [C.D6]: '6',
-  [C.D7]: '7',
-  [C.D8]: '8',
-  [C.D9]: '9',
-  [C.DIV]: '÷',
-  [C.DOT]: '•',
-  [C.EEX]: 'EEX',
-  [C.ENTER]: 'ENTER ↑',
-  [C.EXP]: 'e<sup>x</sup>',
-  [C.FACT]: '!',
-  [C.INV]: '1/x',
-  [C.LN]: 'LN',
-  [C.LOG]: 'LOG',
-  [C.MEM]: 'MEM',
-  [C.MUL]: '×',
-  [C.NCR]: 'nCr',
-  [C.NPR]: 'nPr',
-  [C.PCT]: '%',
-  [C.PCTCHG]: '%chg',
-  [C.PI]: 'π',
-  [C.POW]: 'y<sup>x</sup>',
-  [C.RCL]: 'RCL',
-  [C.RCL_A]: 'A',
-  [C.RCL_B]: 'B',
-  [C.RCL_C]: 'C',
-  [C.RCL_D]: 'D',
-  [C.RCL_E]: 'E',
-  [C.RCL_F]: 'F',
-  [C.RCL_G]: 'G',
-  [C.RCL_H]: 'H',
-  [C.RCL_I]: 'I',
-  [C.RCL_J]: 'J',
-  [C.RCL_K]: 'K',
-  [C.RCL_L]: 'L',
-  [C.RCL_M]: 'M',
-  [C.RCL_N]: 'N',
-  [C.RCL_O]: 'O',
-  [C.RCL_P]: 'P',
-  [C.RCL_Q]: 'Q',
-  [C.RCL_R]: 'R',
-  [C.RCL_S]: 'S',
-  [C.RCL_T]: 'T',
-  [C.RCL_U]: 'U',
-  [C.RCL_V]: 'V',
-  [C.RCL_W]: 'W',
-  [C.RCL_X]: 'X',
-  [C.RCL_Y]: 'Y',
-  [C.RCL_Z]: 'Z',
-  [C.ROLL_DOWN]: 'R↓',
-  [C.SHIFT_DOWN]: 'g',
-  [C.SHIFT_UP]: 'f',
-  [C.SIN]: 'SIN',
-  [C.SQ]: 'x<sup>2</sup',
-  [C.SQRT]: '√x',
-  [C.STO_A]: 'A',
-  [C.STO_B]: 'B',
-  [C.STO_C]: 'C',
-  [C.STO_D]: 'D',
-  [C.STO_E]: 'E',
-  [C.STO_F]: 'F',
-  [C.STO_G]: 'G',
-  [C.STO_H]: 'H',
-  [C.STO_I]: 'I',
-  [C.STO_J]: 'J',
-  [C.STO_K]: 'K',
-  [C.STO_L]: 'L',
-  [C.STO_M]: 'M',
-  [C.STO_N]: 'N',
-  [C.STO_O]: 'O',
-  [C.STO_P]: 'P',
-  [C.STO_Q]: 'Q',
-  [C.STO_R]: 'R',
-  [C.STO_S]: 'S',
-  [C.STO_T]: 'T',
-  [C.STO_U]: 'U',
-  [C.STO_V]: 'V',
-  [C.STO_W]: 'W',
-  [C.STO_X]: 'X',
-  [C.STO_Y]: 'Y',
-  [C.STO_Z]: 'Z',
-  [C.SUB]: '−',
-  [C.SWAP]: 'x↔︎y',
-  [C.TAN]: 'TAN',
+  [K.ACOS]: 'ACOS',
+  [K.ADD]: '+',
+  [K.ALOG]: '10<sup>x</sup>',
+  [K.ASIN]: 'ASIN',
+  [K.ATAN]: 'ATAN',
+  [K.CANCEL]: 'K',
+  [K.CHS]: '+/-',
+  [K.CLR]: 'CLR',
+  [K.CLX]: 'CLX',
+  [K.CONST]: 'Const',
+  [K.COS]: 'COS',
+  [K.D0]: '0',
+  [K.D1]: '1',
+  [K.D2]: '2',
+  [K.D3]: '3',
+  [K.D4]: '4',
+  [K.D5]: '5',
+  [K.D6]: '6',
+  [K.D7]: '7',
+  [K.D8]: '8',
+  [K.D9]: '9',
+  [K.DIV]: '÷',
+  [K.DOT]: '•',
+  [K.EEX]: 'EEX',
+  [K.ENTER]: 'ENTER ↑',
+  [K.EXP]: 'e<sup>x</sup>',
+  [K.FACT]: '!',
+  [K.INV]: '1/x',
+  [K.LN]: 'LN',
+  [K.LOG]: 'LOG',
+  [K.MEM]: 'MEM',
+  [K.MUL]: '×',
+  [K.NCR]: 'nCr',
+  [K.NPR]: 'nPr',
+  [K.PCT]: '%',
+  [K.PCTCHG]: '%chg',
+  [K.PI]: 'π',
+  [K.POW]: 'y<sup>x</sup>',
+  [K.ROLL_DOWN]: 'R↓',
+  [K.SHIFT_DOWN]: 'g',
+  [K.SHIFT_UP]: 'f',
+  [K.SIN]: 'SIN',
+  [K.SQ]: 'x<sup>2</sup',
+  [K.SQRT]: '√x',
+  [K.SUB]: '−',
+  [K.SWAP]: 'x↔︎y',
+  [K.TAN]: 'TAN',
 }
 
 const createMarkup = label => ({ __html: label })
@@ -138,17 +86,17 @@ class Key extends React.PureComponent {
     const { shiftKey, shiftCodes, setShiftKey, executeKeyCode, setMainPanel } = this.props
 
     switch (keyCode) {
-      case C.SHIFT_UP:
-        setShiftKey(shiftKey === C.SHIFT_UP ? null : C.SHIFT_UP)
+      case K.SHIFT_UP:
+        setShiftKey(shiftKey === K.SHIFT_UP ? null : K.SHIFT_UP)
         break
-      case C.SHIFT_DOWN:
-        setShiftKey(shiftKey === C.SHIFT_DOWN ? null : C.SHIFT_DOWN)
+      case K.SHIFT_DOWN:
+        setShiftKey(shiftKey === K.SHIFT_DOWN ? null : K.SHIFT_DOWN)
         break
-      case C.MEM:
-        setMainPanel('memory')
+      case K.MEM:
+        setMainPanel(C.MEM)
         break
-      case C.CONST:
-        setMainPanel('constants')
+      case K.CONST:
+        setMainPanel(C.CONST)
         break
       default:
         if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {
@@ -156,7 +104,7 @@ class Key extends React.PureComponent {
         }
     }
 
-    if (shiftKey && keyCode !== C.SHIFT_UP && keyCode !== C.SHIFT_DOWN) {
+    if (shiftKey && keyCode !== K.SHIFT_UP && keyCode !== K.SHIFT_DOWN) {
       setShiftKey(null)
     }
   }
@@ -169,7 +117,7 @@ class Key extends React.PureComponent {
 
   renderTopLabel() {
     const { shiftCodes, shiftKey } = this.props
-    const keyCodeUp = shiftCodes[C.SHIFT_UP]
+    const keyCodeUp = shiftCodes[K.SHIFT_UP]
     return keyCodeUp && !shiftKey ? (
       <div className="Key--label-top" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeUp])}></div>
     ) : (<div className="Key--label-top"></div>)
@@ -177,7 +125,7 @@ class Key extends React.PureComponent {
 
   renderBottomLabel() {
     const { shiftCodes, shiftKey } = this.props
-    const keyCodeDown = shiftCodes[C.SHIFT_DOWN]
+    const keyCodeDown = shiftCodes[K.SHIFT_DOWN]
     return keyCodeDown && !shiftKey ? (
       <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeDown])}></div>
     ) : (<div className="Key--label-bottom"></div>)
@@ -187,14 +135,14 @@ class Key extends React.PureComponent {
     const { keyCode, shiftKey = 'none', shiftCodes } = this.props
     let label = keyLabels[keyCode]
 
-    if (shiftKey === C.SHIFT_UP) {
-      label = keyLabels[keyCode === C.SHIFT_UP ? C.SHIFT_UP : shiftCodes[C.SHIFT_UP]]
-    } else if (shiftKey === C.SHIFT_DOWN) {
-      label = keyLabels[keyCode === C.SHIFT_DOWN ? C.SHIFT_DOWN : shiftCodes[C.SHIFT_DOWN]]
-    } else if (shiftKey === C.STO) {
-      label = keyLabels[keyCode === C.STO ? C.STO : shiftCodes[C.STO]]
-    } else if (shiftKey === C.RCL) {
-      label = keyLabels[keyCode === C.STO ? C.RCL : shiftCodes[C.RCL]]
+    if (shiftKey === K.SHIFT_UP) {
+      label = keyLabels[keyCode === K.SHIFT_UP ? K.SHIFT_UP : shiftCodes[K.SHIFT_UP]]
+    } else if (shiftKey === K.SHIFT_DOWN) {
+      label = keyLabels[keyCode === K.SHIFT_DOWN ? K.SHIFT_DOWN : shiftCodes[K.SHIFT_DOWN]]
+    } else if (shiftKey === K.STO) {
+      label = keyLabels[keyCode === K.STO ? K.STO : shiftCodes[K.STO]]
+    } else if (shiftKey === K.RCL) {
+      label = keyLabels[keyCode === K.STO ? K.RCL : shiftCodes[K.RCL]]
     }
 
     return (

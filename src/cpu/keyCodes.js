@@ -68,8 +68,8 @@ export default {
   TANH: 'tanh',         // Hyperbolic tangent
   TO_CM: '->cm',        // Convert inches to cm
   TO_DEG: '->deg',      // Convert radians to degrees
-  TO_DEGREE_C: '->C',   // Convert degree F -> C
-  TO_DEGREE_F: '->F',   // Convert degree C -> F
+  TO_DEGREE_C: '->K',   // Convert degree F -> K
+  TO_DEGREE_F: '->F',   // Convert degree K -> F
   TO_GAL: '->gal',      // Convert liters to gallons
   TO_HMS: '->hms',      // Converts x from a decimal fraction to hours–minutes–seconds format
   TO_KG: '->kg',        // Converts miles to kilometers

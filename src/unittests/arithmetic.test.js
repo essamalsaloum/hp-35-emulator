@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import cpu from '../cpu'
-import C from '../cpu/keyCodes'
+import K from '../cpu/keyCodes'
 
 describe('cpu', () => {
 
@@ -12,7 +12,7 @@ describe('cpu', () => {
       }
       const expectedStack = [3, 3, 4, 4]
 
-      const newState = cpu.execute(state, C.ADD)
+      const newState = cpu.execute(state, K.ADD)
       expect(newState.stack).to.deep.equal(expectedStack)
     })
 

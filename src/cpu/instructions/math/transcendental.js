@@ -1,5 +1,5 @@
 import math from 'mathjs'
-import C from '../../keyCodes'
+import K from '../../keyCodes'
 import { monadic, dyadic } from './mathHelpers'
 
 const degreesToRadians = degrees => degrees * math.PI / 180.0
@@ -25,19 +25,19 @@ const tan = x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degre
 const xRoot = (y, x) => math.pow(y, 1 / x)
 
 export default {
-  [C.ACOS]: monadic(acos),
-  [C.ALOG]: monadic(alog),
-  [C.ASIN]: monadic(asin),
-  [C.ATAN]: monadic(atan),
-  [C.COS]: monadic(cos),
-  [C.EXP]: monadic(math.exp),
-  [C.LN]: monadic(math.log),
-  [C.LOG]: monadic(math.log10),
-  [C.POW]: dyadic(math.pow),
-  [C.SIN]: monadic(sin),
-  [C.SQ]: monadic(sq),
-  [C.SQRT]: monadic(sqrt),
-  [C.TAN]: monadic(tan),
-  [C.XROOT]: dyadic(xRoot),
+  [K.ACOS]: monadic(acos),
+  [K.ALOG]: monadic(alog),
+  [K.ASIN]: monadic(asin),
+  [K.ATAN]: monadic(atan),
+  [K.COS]: monadic(cos),
+  [K.EXP]: monadic(math.exp),
+  [K.LN]: monadic(math.log),
+  [K.LOG]: monadic(math.log10),
+  [K.POW]: dyadic(math.pow),
+  [K.SIN]: monadic(sin),
+  [K.SQ]: monadic(sq),
+  [K.SQRT]: monadic(sqrt),
+  [K.TAN]: monadic(tan),
+  [K.XROOT]: dyadic(xRoot),
 }
 

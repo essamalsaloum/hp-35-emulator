@@ -1,14 +1,12 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton'
-import FontIcon from 'material-ui/FontIcon'
+import Reply from 'material-ui/svg-icons/content/reply'
+import { grey500 } from 'material-ui/styles/colors'
 
 export default function MemoryUpdateButton(props) {
   return (
     <IconButton  {...props}>
-      <FontIcon
-        className="fa fa-mail-reply"
-        style={{ opacity: 0.7 }}
-      />
+      <Reply color={grey500} />
     </IconButton>
   )
 }

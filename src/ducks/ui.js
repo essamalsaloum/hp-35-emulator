@@ -1,9 +1,10 @@
 import { createAction } from 'redux-actions'
+import C from '../constants'
 
 const SET_MAIN_PANEL = 'rpnext/ui/SET_MAIN_PANEL'
 
 const initialState = {
-  mainPanel: 'keypad'
+  mainPanel: C.KEYPAD
 }
 
 export const setMainPanel = createAction(SET_MAIN_PANEL)

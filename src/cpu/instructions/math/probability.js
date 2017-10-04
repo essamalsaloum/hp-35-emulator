@@ -1,5 +1,5 @@
 import math from 'mathjs'
-import C from '../../keyCodes'
+import K from '../../keyCodes'
 import { monadic, dyadic } from './mathHelpers'
 
 const fact = x => {
@@ -24,7 +24,7 @@ const nPr = (y, x) => {
 }
 
 export default {
-  [C.FACT]: monadic(fact),
-  [C.NCR]: dyadic(nCr),
-  [C.NPR]: dyadic(nPr),
+  [K.FACT]: monadic(fact),
+  [K.NCR]: dyadic(nCr),
+  [K.NPR]: dyadic(nPr),
 }

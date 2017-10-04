@@ -1,4 +1,4 @@
-import C from '../keyCodes'
+import K from '../keyCodes'
 
 export const liftStack = state => {
   const [x, y, z] = state.stack
@@ -59,12 +59,12 @@ const recallMem = state => {
 }
 
 export default {
-  [C.ENTER]: { stackLift: false, fn: enter },
-  [C.CANCEL]: { stackLift: false, fn: clx },
-  [C.CLX]: { stackLift: false, fn: clx },
-  [C.CLR]: { stackLift: false, fn: clr },
-  [C.SWAP]: { stackLift: true, fn: swap },
-  [C.ROLL_DOWN]: { stackLift: true, fn: rollDown },
-  [C.STO]: { stackLift: true, fn: storeMem },
-  [C.RCL]: { stackLift: true, fn: recallMem },
+  [K.ENTER]: { stackLift: false, fn: enter },
+  [K.CANCEL]: { stackLift: false, fn: clx },
+  [K.CLX]: { stackLift: false, fn: clx },
+  [K.CLR]: { stackLift: false, fn: clr },
+  [K.SWAP]: { stackLift: true, fn: swap },
+  [K.ROLL_DOWN]: { stackLift: true, fn: rollDown },
+  [K.STO]: { stackLift: true, fn: storeMem },
+  [K.RCL]: { stackLift: true, fn: recallMem },
 }
