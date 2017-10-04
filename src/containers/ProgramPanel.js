@@ -6,7 +6,8 @@ import TabTemplate from '../components/TabTemplate'
 import ProgramTab from './ProgramTab'
 import GitHubTab from './GitHubTab'
 import InspectTab from './InspectTab'
-import { programPanelSelector } from '../ducks/programPanel'
+import { programPanelSelector } from '../ducks/ui'
+import C from '../constants'
 import './ProgramPanel.css'
 
 // see: https://github.com/callemall/material-ui/issues/2085
@@ -33,7 +34,7 @@ class ProgramPanel extends React.PureComponent {
   }
 
   renderProgramTab() {
-    return this.props.selectedPanel === 'program'
+    return this.props.selectedPanel === C.PROGRAM_PANEL
       ? (<ProgramTab />)
       : (<GitHubTab />)
   }

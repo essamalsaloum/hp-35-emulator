@@ -56,7 +56,7 @@ class MemoryPanel extends React.PureComponent {
   onClick(keyCode, goBack = true) {
     this.props.executeKeyCode(keyCode)
     if (goBack) {
-      this.props.setMainPanel(C.KEYPAD)
+      this.props.setMainPanel(C.KEYPAD_PANEL)
     }
   }
 
@@ -66,7 +66,7 @@ class MemoryPanel extends React.PureComponent {
     if (Number.isFinite(num)) {
       return <div style={{ color: pinkA700 }}>{num}</div>
     } else {
-      return <div style={{ opacity: 0.5 }}>0</div>
+      return <div style={{ opacity: 0.5 }}>-</div>
     }
   }
 
@@ -92,10 +92,12 @@ class MemoryPanel extends React.PureComponent {
             </Avatar>
           }
           primaryText={this.renderText(i)}
-          onClick={() => this.onClick(keyCodes[i][0])}
+          onClick={type === 'used' ? () => this.onClick(keyCodes[i][0]) : null}
           rightIconButton={
             <MemoryUpdateButton
               onClick={() => this.onClick(keyCodes[i][1], false)}
+              tooltip="assign"
+              tooltipPosition="bottom-left"
             />
           }
         />

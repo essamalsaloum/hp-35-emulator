@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { executeKeyCode } from '../cpu/reducer'
-import { setShiftKey, shiftKeySelector } from '../ducks/shiftKey'
+import { setShiftKey, shiftKeySelector } from '../ducks/ui'
 import { setMainPanel } from '../ducks/ui'
 import K from '../cpu/keyCodes'
 import C from '../constants'
@@ -93,10 +93,10 @@ class Key extends React.PureComponent {
         setShiftKey(shiftKey === K.SHIFT_DOWN ? null : K.SHIFT_DOWN)
         break
       case K.MEM:
-        setMainPanel(C.MEM)
+        setMainPanel(C.MEMORY_PANEL)
         break
       case K.CONST:
-        setMainPanel(C.CONST)
+        setMainPanel(C.CONSTANTS_PANEL)
         break
       default:
         if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {

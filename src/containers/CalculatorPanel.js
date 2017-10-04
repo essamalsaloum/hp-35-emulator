@@ -17,11 +17,11 @@ class CalculatorPanel extends React.PureComponent {
 
   renderPanel() {
     switch (this.props.mainPanel) {
-      case C.KEYPAD:
+      case C.KEYPAD_PANEL:
         return <Keypad />
-      case C.MEM:
+      case C.MEMORY_PANEL:
         return <MemoryPanel />
-      case C.CONST:
+      case C.CONSTANTS_PANEL:
         return <ConstantsPanel />
       default:
         return <Keypad />

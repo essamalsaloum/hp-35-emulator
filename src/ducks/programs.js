@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createAction } from 'redux-actions'
 import { loadMarkdownText } from '../ducks/program'
-import { showProgramPanel } from '../ducks/programPanel'
+import { showProgramPanel } from '../ducks/ui'
 
 const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
 const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'

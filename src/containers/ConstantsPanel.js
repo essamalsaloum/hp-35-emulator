@@ -23,7 +23,7 @@ class ConstantsPanel extends React.PureComponent {
 
   onItemClick(value) {
     this.props.executeKeyCode(value)
-    this.props.setMainPanel(C.KEYPAD)
+    this.props.setMainPanel(C.KEYPAD_PANEL)
   }
 
   renderList() {
@@ -40,7 +40,7 @@ class ConstantsPanel extends React.PureComponent {
   render() {
     return (
       <div className="ConstantsPanel">
-        <ChildToolbar title="Physics Constants" onBackClick={() => this.props.setMainPanel(C.KEYPAD)} />
+        <ChildToolbar title="Physics Constants" onBackClick={() => this.props.setMainPanel(C.KEYPAD_PANEL)} />
         <List className="ConstantsPanel--list">
           {this.renderList()}
         </List>
