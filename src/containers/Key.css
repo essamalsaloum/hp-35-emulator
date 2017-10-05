@@ -1,24 +1,24 @@
 .Key {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
 }
 
 .Key--button {
-    flex: 1;
-    padding: 0;
-    margin: 4px;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    border: none;
-    border-radius: 4px;
-    background-color: #ffffff;
-    -webkit-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.75);
+  flex: 1;
+  padding: 0;
+  margin: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.75);
 }
 
 .Key--bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .Key--small-caps {
@@ -26,15 +26,15 @@
 }
 
 .Key--button-keyCode-shiftUp {
-    color: #2E7D32;
+  color: #2E7D32;
 }
 
 .Key--button-keyCode-shiftDown {
-    color: #EF6C00;
+  color: #EF6C00;
 }
 
 .Key--keyCode-enter {
-    flex: 2;
+  flex: 2;
 }
 
 .Key--label-main {
@@ -44,24 +44,24 @@
 }
 
 .Key--label-top {
-    height: 1em;
-    line-height: 1em;
-    font-size: 11px;
-    color: #2E7D32;
+  height: 1em;
+  line-height: 1em;
+  font-size: 11px;
+  color: #2E7D32;
 }
 
 .Key--label-bottom {
-    height: 0.7rem;
-    line-height: 0.7rem;
-    font-size: 0.7rem;
-    color: #EF6C00;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  font-size: 0.7rem;
+  color: #EF6C00;
 }
 
 .Key--label-keyCode-div,
 .Key--label-keyCode-mul,
 .Key--label-keyCode-sub,
 .Key--label-keyCode-add {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .Key small {
@@ -69,17 +69,14 @@
 }
 
 .Key--color-shiftUp {
-    color: #2E7D32;
+  color: white;
+  background-color: #2E7D32;
 }
 
 .Key--color-shiftDown {
-    color: #EF6C00;
+  color: white;
+  background-color: #EF6C00;
 }
-
-.Key--color-sto, .Key--color-rcl {
-  color: #3F51B5;
-}
-
 
 sup {
   vertical-align: super;

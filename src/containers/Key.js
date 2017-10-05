@@ -138,22 +138,21 @@ class Key extends React.PureComponent {
   render() {
     const { keyCode, shiftKey = 'none', shiftCodes } = this.props
     let label = keyLabels[keyCode]
+    let colorModifier = 'none'
 
     if (shiftKey === K.SHIFT_UP) {
       label = keyLabels[keyCode === K.SHIFT_UP ? K.SHIFT_UP : shiftCodes[K.SHIFT_UP]]
+      colorModifier = shiftCodes[K.SHIFT_UP] ? K.SHIFT_UP : colorModifier
     } else if (shiftKey === K.SHIFT_DOWN) {
       label = keyLabels[keyCode === K.SHIFT_DOWN ? K.SHIFT_DOWN : shiftCodes[K.SHIFT_DOWN]]
-    } else if (shiftKey === K.STO) {
-      label = keyLabels[keyCode === K.STO ? K.STO : shiftCodes[K.STO]]
-    } else if (shiftKey === K.RCL) {
-      label = keyLabels[keyCode === K.STO ? K.RCL : shiftCodes[K.RCL]]
+      colorModifier = shiftCodes[K.SHIFT_DOWN] ? K.SHIFT_DOWN : colorModifier
     }
 
     return (
       <div className={`Key Key--keyCode-${keyCode}`}>
         <button
           type="button"
-          className={`Key--button Key--color-${shiftKey || 'none'} Key--button-keyCode-${keyCode}`}
+          className={`Key--button Key--color-${colorModifier || 'none'} Key--button-keyCode-${keyCode}`}
           onClick={this.onClick}
           onKeyUp={ev => ev.preventDefault()}
           onKeyDown={ev => ev.preventDefault()}

@@ -1,6 +1,6 @@
-import K from './keyCodes'
+import K from '../keyCodes'
 
-export default {
+export const physicsConstantDefs = {
   [K.SPEED_OF_LIGHT]: { symb: 'c', text: 'Speed of light in vacuum', value: '299792458', unit: 'm s<sup>-1</sup>' },
   [K.ACCELERATION_OF_GRAVITY]: { symb: 'g', text: 'Standard acceleration of gravity', value: '9.80665', unit: 'm s<sup>-2</sup>' },
   [K.GRAVITATIONAL_CONSTANT]: { symb: 'G', text: 'Newtonian constant of gravitation', value: '6.673e-11', unit: 'm<sup>3</sup> kg<sup>-1</sup> s<sup>-2</sup>' },
@@ -43,3 +43,10 @@ export default {
   [K.CONDUCTANCE_QUANTUM]: { symb: 'G<sub>0</sub>', text: 'Conductance quantum', value: '7.748091696e-5', unit: 'S' },
   [K.NATURAL_LOGARITHM_BASE_NUMBER]: { symb: 'e', text: 'The base number of natural logarithm (natural constant)', value: '2.71828182846', unit: '' }
 }
+
+export default (() =>
+  Object.keys(physicsConstantDefs).reduce((prev, key) => {
+    prev[key] = ([x, y, z]) => [+physicsConstantDefs[key].value, x, y, z]
+    return prev
+  }, {})
+)()

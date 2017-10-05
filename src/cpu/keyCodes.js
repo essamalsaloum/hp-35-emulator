@@ -1,3 +1,49 @@
+const physicsConstants = {
+  SPEED_OF_LIGHT: 'speed_of_light',
+  ACCELERATION_OF_GRAVITY: 'acceleration_of_gravity',
+  GRAVITATIONAL_CONSTANT: 'gravitational_constant',
+  MOLAR_VOLUME_OF_IDEAL_GAS: 'molar_volume_of_ideal_gas',
+  AVOGADRO_CONSTANT: 'avogadro_constant',
+  RYDBERG_CONSTANT: 'rydberg_constant',
+  ELEMENTARY_CHARGE: 'elementary_charge',
+  ELECTRON_MASS: 'electron_mass',
+  PROTON_MASS: 'proton_mass',
+  NEUTRON_MASS: 'neutron_mass',
+  MUON_MASS: 'muon_mass',
+  BOLTZMAN_CONSTANT: 'boltzman_constant',
+  PLANCK_CONSTANT: 'planck_constant',
+  PLANCK_CONSTANT_OVER_2_PI: 'Planck_constant_over_2_pi',
+  MAGNETIC_FLUX_QUANTUM: 'magnetic_flux_quantum',
+  BOHR_RADIUS: 'bohr_radius',
+  ELECTRIC_CONSTANT: 'electric_constant',
+  MOLAR_GAS_CONSTANT: 'molar_gas_constant',
+  FARADAY_CONSTANT: 'faraday_constant',
+  ATOMIC_MASS_CONSTANT: 'atomic_mass_constant',
+  MAGNETIC_CONSTANT: 'magnetic_constant',
+  BOHR_MAGNETON: 'bohr_magneton',
+  NUCLEAR_MAGNETON: 'nuclear_magneton',
+  PROTON_MAGNETIC_MOMENT: 'proton_magnetic_moment',
+  ELECTRON_MAGNETIC_MOMENT: 'electron_magnetic_moment',
+  NEUTRON_MAGNETIC_MOMENT: 'neutron_magnetic_moment',
+  MUON_MAGNETIC_MOMENT: 'muon_magnetic_moment',
+  CLASSICAL_ELECTRON_RADIUS: 'classical_electron_radius',
+  IMPEDANCE_OF_FREE_SPACE: 'impedance_of_free_space',
+  COMPTON_WAVELENGTH: 'compton_wavelength',
+  NEUTRON_COMPTON_WAVELENGTH: 'neutron_compton_wavelength',
+  PROTON_COMPTON_WAVELENGTH: 'proton_compton_wavelength',
+  FINE_STRUCTURE_CONSTANT: 'fine_structure_constant',
+  STEFAN_BOLTZMAN_CONSTANT: 'stefan_boltzman_constant',
+  CELSIUS_TEMPERATURE: 'celsius_temperature',
+  STANDARD_ATMOSPHERE: 'standard_atmosphere',
+  PROTON_GYROMAGNETIC_RATIO: 'proton_gyromagnetic_ratio',
+  FIRST_RADIATION_CONSTANT: 'first_radiation_constant',
+  SECOND_RADIATION_CONSTANT: 'second_radiation_constant',
+  CONDUCTANCE_QUANTUM: 'conductance_quantum',
+  NATURAL_LOGARITHM_BASE_NUMBER: 'natural_logarithm_base_number'
+
+
+}
+
 export default {
   ACOS: 'acos',
   ADD: '+',
@@ -140,4 +186,7 @@ export default {
   RCL_X: 'rcl.x',
   RCL_Y: 'rcl.y',
   RCL_Z: 'rcl.z',
+
+  ...physicsConstants,
+
 }

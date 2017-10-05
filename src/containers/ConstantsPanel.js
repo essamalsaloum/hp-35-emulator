@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
 import ChildToolbar from '../components/ChildToolbar'
-import physicsConstants from '../cpu/physicsConstants'
+import { physicsConstantDefs } from '../cpu/instructions/physicsConstants'
 import { executeKeyCode } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
 import C from '../constants'
@@ -21,20 +21,23 @@ class ConstantsPanel extends React.PureComponent {
     setMainPanel: PropTypes.func.isRequired,
   }
 
-  onItemClick(value) {
-    this.props.executeKeyCode(value)
+  onItemClick(keyCode) {
+    this.props.executeKeyCode(keyCode)
     this.props.setMainPanel(C.KEYPAD_PANEL)
   }
 
   renderList() {
-    return physicsConstants.map(({ text, ...rest }, index) => (
-      <ListItem
-        key={index}
-        primaryText={text}
-        secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
-        onClick={() => this.onItemClick(rest.value)}
-      />
-    ))
+    return Object.keys(physicsConstantDefs).map(keyCode => {
+      const { text, ...rest } = physicsConstantDefs[keyCode]
+      return (
+        <ListItem
+          key={keyCode}
+          primaryText={text}
+          secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
+          onClick={() => this.onItemClick(keyCode)}
+        />
+      )
+    })
   }
 
   render() {

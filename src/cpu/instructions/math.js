@@ -2,12 +2,14 @@ import arithmetic from './math/arithmetic'
 import transcendental from './math/transcendental'
 import probability from './math/probability'
 import conversions from './math/conversions'
+import physicsConstants from './physicsConstants'
 
 const funcs = {
   ...arithmetic,
   ...transcendental,
   ...probability,
   ...conversions,
+  ...physicsConstants,
 }
 
 const compute = keyCode => state => {
