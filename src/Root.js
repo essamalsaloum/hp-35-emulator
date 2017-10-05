@@ -3,8 +3,19 @@ import { Provider } from 'react-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo700 } from 'material-ui/styles/colors'
+import throttle from 'lodash/throttle'
+import { saveState } from './localStorage'
 import store from './store'
 import App from './App'
+
+const THROTTLE_WAIT_MS = 1000
+
+const saveStateHelper = () => {
+  const { cpu, program } = store.getState()
+  saveState({ cpu, program })
+}
+
+const saveStateThrottled = throttle(saveStateHelper, THROTTLE_WAIT_MS)
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -24,5 +35,11 @@ class Root extends React.PureComponent {
     )
   }
 }
+
+store.subscribe(() => {
+  saveStateThrottled()
+})
+
+window.onbeforeunload = saveStateHelper
 
 export default Root
