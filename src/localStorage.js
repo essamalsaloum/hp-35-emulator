@@ -6,7 +6,7 @@ export const loadState = () => {
     }
     return JSON.parse(serializedState)
   } catch (err) {
-    console.error('error deserializing the state from localStorage')
+    console.log('error deserializing the state from localStorage')
   }
 }
 
@@ -15,6 +15,6 @@ export const saveState = state => {
     const serializedState = JSON.stringify(state)
     window.localStorage.setItem('state', serializedState)
   } catch (err) {
-    console.error('error persisting the state to localStorage')
+    console.log('error persisting the state to localStorage')
   }
 }

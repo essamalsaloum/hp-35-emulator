@@ -18,14 +18,15 @@ describe('Tokenizer', () => {
     }
 
     const expectedResult = [
-      { type: TokenType.token, text: 'alias' },
-      { type: TokenType.token, text: 'x^3', },
-      { type: TokenType.equalSign, text: '=' },
-      { type: TokenType.leftBrace, text: '{' },
-      { type: TokenType.token, text: '3' },
-      { type: TokenType.token, text: 'y^x' },
-      { type: TokenType.rightBrace, text: '}' }
+      { type: 'token', text: 'alias', context: 'alias x^3 = { 3 y^x }' },
+      { type: 'token', text: 'x^3', context: 'x^3 = { 3 y^x }' },
+      { type: 'equalSign', text: '=', context: '= { 3 y^x }' },
+      { type: 'leftBrace', text: '{', context: '{ 3 y^x }' },
+      { type: 'token', text: '3', context: '3 y^x }' },
+      { type: 'token', text: 'y^x', context: 'y^x }' },
+      { type: 'rightBrace', text: '}', context: '}' }
     ]
+
     expect(result).to.deep.equal(expectedResult)
   })
 
