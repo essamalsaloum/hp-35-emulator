@@ -1,22 +1,112 @@
-import aliases from './aliases'
 import cpu from './index'
+import * as github from '../services/github'
 import { Tokenizer, TokenType } from './Tokenizer'
 
 const CONTEXT_TRUNCATE_AT = 50
+
 const isBlankOrComment = line => line === '' || /^\s*\/\//.test(line)
-export function compile(text, mode = 'text') {
+
+export async function compile(text, mode = 'text', aliasMap = {}) {
+  // console.log('compile', mode, text)
   return mode === 'markdown'
-    ? compileMarkDownProgram(text)
-    : compilePlainTextProgram(text)
+    ? compileMarkDownProgram(text, aliasMap)
+    : compilePlainTextProgram(text, aliasMap)
 }
 
-function compileMarkDownProgram(text) {
+async function compileMarkDownProgram(text, aliasMap = {}) {
   if (!/^\s*```txt/gm.test(text)) {
-    console.log('invalid file format')
-    return
+    return Promise.reject(new Error('invalid file format'))
   }
   const progText = extractProgramText(text)
-  return compilePlainTextProgram(progText)
+  return compilePlainTextProgram(progText, aliasMap)
+}
+
+async function compilePlainTextProgram(text, aliasMap = {}) {
+  const keyCodes = []
+
+  text = removeBlankAndCommentLines(text)
+  const tokenizer = new Tokenizer(text)
+
+  try {
+    let node = await tokenizer.next()
+
+    while (!node.done) {
+      if (node.value.type === TokenType.token) {
+        if (node.value.text === 'import') {
+          node = await tokenizer.next()
+          if (node.done) {
+            throw createUnexpectedEndError()
+          }
+          if (node.value.type !== TokenType.quotedString) {
+            throw createError(`expected quoted string}`, node.value.context)
+          }
+          const name = node.value.text.slice(1, -1)
+          const programs = await github.fetchProgramList()
+          const program = programs[name]
+          if (!program) {
+            throw createError(`program not found: ${name}`, node.value.context)
+          }
+          const { url, sha } = program
+          const importedText = await github.fetchProgramText(url, sha)
+          const mode = /^```txt/m.test(importedText) ? 'markdown' : text
+          const importedKeyCodes = await compile(importedText, mode, aliasMap)
+          keyCodes.push(importedKeyCodes)
+          node = await tokenizer.next()
+        } else if (node.value.text === 'alias') {
+          node = await tokenizer.next()
+          if (node.done) {
+            throw createUnexpectedEndError()
+          }
+          if (node.value.type !== TokenType.token) {
+            throw createError(`expected alias name`, node.value.context)
+          }
+          const aliasName = node.value.text
+          node = await tokenizer.next()
+          if (node.done) {
+            throw createUnexpectedEndError()
+          }
+          if (node.value.type !== TokenType.equalSign) {
+            throw createError(`expected '='`, node.value.context)
+          }
+          node = await tokenizer.next()
+          if (node.done) {
+            throw createUnexpectedEndError()
+          }
+          if (node.value.type !== TokenType.leftBrace) {
+            throw createError(`expected '{'`, node.value.context)
+          }
+          node = await tokenizer.next()
+          const aliasTokens = []
+          while (!node.done && node.value.type !== TokenType.rightBrace) {
+            if (node.value.type !== TokenType.token) {
+              throw createError(`unexpected: '${node.value.text}'`, node.value.context)
+            }
+            aliasTokens.push(node.value.text)
+            node = await tokenizer.next()
+          }
+          if (node.done) {
+            throw createError(`missing '}'`, 'end of program')
+          }
+          aliasMap[aliasName] = aliasTokens
+          node = await tokenizer.next()
+        } else {
+          const tokens = expandAlias(node.value.text, aliasMap)
+          for (const token of tokens) {
+            if (!cpu.isValidInstruction(token)) {
+              throw createError(`syntax error: '${token}'`, node.value.context)
+            }
+            keyCodes.push(token)
+          }
+          node = await tokenizer.next()
+        }
+      } else {
+        throw createError(`unexpected: '${node.value.text}'`, node.value.context)
+      }
+    }
+    return keyCodes.filter(keyCode => keyCode.length !== 0)
+  } catch (err) {
+    return Promise.reject(err)
+  }
 }
 
 export function extractProgramText(text) {
@@ -34,76 +124,6 @@ const removeBlankAndCommentLines = text =>
     .filter(line => !isBlankOrComment(line))
     .join('\n')
 
-function compilePlainTextProgram(text) {
-  const keyCodes = []
-  const aliasMap = Object.keys(aliases).reduce((prev, name) => {
-    prev[name] = [aliases[name]]
-    return prev
-  }, {})
-
-  text = removeBlankAndCommentLines(text)
-  const tokenizer = new Tokenizer(text)
-
-  let node = tokenizer.next()
-  while (!node.done) {
-    if (node.value.type === TokenType.token) {
-      if (node.value.text === 'alias') {
-        node = tokenizer.next()
-        if (node.done) {
-          return createUnexpectedEndError()
-        }
-        if (node.value.type !== TokenType.token) {
-          return createError(`expected alias name`, node.value.context)
-        }
-        const aliasName = node.value.text
-        node = tokenizer.next()
-        if (node.done) {
-          return createUnexpectedEndError()
-        }
-        if (node.value.type !== TokenType.equalSign) {
-          return createError(`expected '='`, node.value.context)
-        }
-        node = tokenizer.next()
-        if (node.done) {
-          return createUnexpectedEndError()
-        }
-        if (node.value.type !== TokenType.leftBrace) {
-          return createError(`expected '{'`, node.value.context)
-        }
-        node = tokenizer.next()
-        const aliasTokens = []
-        while (!node.done && node.value.type !== TokenType.rightBrace) {
-          if (node.value.type !== TokenType.token) {
-            return createError(`unexpected: '${node.value.text}'`, node.value.context)
-          }
-          aliasTokens.push(node.value.text)
-          node = tokenizer.next()
-        }
-        if (node.done) {
-          return createError(`missing '}'`, 'end of program')
-        }
-        aliasMap[aliasName] = aliasTokens
-        node = tokenizer.next()
-      } else {
-        try {
-          const tokens = expandAlias(node.value.text, aliasMap)
-          for (const token of tokens) {
-            if (!cpu.isValidInstruction(token)) {
-              return createError(`syntax error: '${token}'`, node.value.context)
-            }
-            keyCodes.push(token)
-          }
-          node = tokenizer.next()
-        } catch (error) {
-          return { error }
-        }
-      }
-    } else {
-      return createError(`unexpected: '${node.value.text}'`, node.value.context)
-    }
-  }
-  return { error: null, keyCodes }
-}
 
 function expandAlias(token, aliasMap, tokens = []) {
   if (aliasMap.hasOwnProperty(token)) {
@@ -125,9 +145,9 @@ function createError(message, context = 'end of program') {
       context = context.slice(0, 50) + '...'
     }
   }
-  return { error: new Error(`${message} near:\n${context}`) }
+  return new Error(`${message} near:\n${context}`)
 }
 
 function createUnexpectedEndError() {
-  return { error: new Error('unexpected end of program') }
+  return new Error('unexpected end of program')
 }

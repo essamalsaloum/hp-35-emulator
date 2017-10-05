@@ -74,14 +74,13 @@ class ProgramToolbar extends React.PureComponent {
       stopProgram()
     } else {
       clearDelayed()
-      const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
-      if (error) {
-        setError(error)
-      } else {
-        setError(null)
-        loadKeyCodes(keyCodes)
-        startProgram()
-      }
+      compile(programText, isMarkdown ? 'markdown' : 'text')
+        .then(keyCodes => {
+          setError(null)
+          loadKeyCodes(keyCodes)
+          startProgram()
+        })
+        .catch(setError)
     }
   }
 

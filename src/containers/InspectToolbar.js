@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import {compile} from '../cpu/compiler'
+import { compile } from '../cpu/compiler'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadKeyCodes,
@@ -49,12 +49,9 @@ class InspectToolbar extends React.PureComponent {
 
   componentWillMount() {
     const { programText, loadKeyCodes, isMarkdown } = this.props
-    const { keyCodes, error } = compile(programText, isMarkdown ? 'markdown' : 'text')
-    if (error) {
-      console.log(error.message)
-    } else {
-      loadKeyCodes(keyCodes)
-    }
+    compile(programText, isMarkdown ? 'markdown' : 'text')
+      .then(keyCodes => loadKeyCodes(keyCodes))
+      .catch(error => console.log(error.message))
   }
 
   toggleDelayed() {
