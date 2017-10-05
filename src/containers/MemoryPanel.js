@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Avatar from 'material-ui/Avatar'
-import { indigoA200, pinkA700, blueGrey400 } from 'material-ui/styles/colors'
+import { indigoA200, pinkA700, grey400 } from 'material-ui/styles/colors'
 import math from 'mathjs'
 import MemoryUpdateButton from '../components/MemoryUpdateButton'
 import ChildToolbar from '../components/ChildToolbar'
@@ -85,7 +85,7 @@ class MemoryPanel extends React.PureComponent {
           key={i}
           leftAvatar={
             <Avatar color='white'
-              backgroundColor={type === 'used' ? indigoA200 : blueGrey400}
+              backgroundColor={type === 'used' ? indigoA200 : grey400}
               size={30}
               style={{ margin: 5 }}
             >
