@@ -23,8 +23,6 @@ class Keypad extends React.PureComponent {
 
   keyUpHandler = ev => {
     const { shiftKey, setShiftKey, executeKeyCode } = this.props
-    ev.preventDefault()
-    ev.stopPropagation()
     const keyCode = mapKeyboardEvent(ev)
     if (keyCode) {
       if (shiftKey) {
@@ -34,11 +32,46 @@ class Keypad extends React.PureComponent {
     }
   }
 
+  keyDownHandler = ev => {
+    console.log(ev)
+    const { setShiftKey } = this.props
+    if (ev.key === 'Shift') {
+      ev.preventDefault()
+      setShiftKey(K.SHIFT_UP)
+    } else if (ev.key === 'Alt') {
+      ev.preventDefault()
+      setShiftKey(K.SHIFT_DOWN)
+    }
+  }
+
+  bodyKeyUpHandler = ev => {
+    const { shiftKey, setShiftKey } = this.props
+    ev.preventDefault()
+    if (ev.key === 'Shift' && shiftKey === K.SHIFT_UP) {
+      setShiftKey(null)
+    } else if (ev.key === 'Alt' && shiftKey === K.SHIFT_DOWN) {
+      setShiftKey(null)
+    }
+  }
+
+  bodyKeyDownHandler = ev => {
+    const { setShiftKey } = this.props
+    if (ev.key === 'Shift') {
+      ev.preventDefault()
+      setShiftKey(K.SHIFT_UP)
+    } else if (ev.key === 'Alt') {
+      ev.preventDefault()
+      setShiftKey(K.SHIFT_DOWN)
+    }
+  }
+
   componentDidMount() {
     const elem = document.querySelector('.CalculatorPanel')
     if (elem) {
       elem.addEventListener('keyup', this.keyUpHandler)
     }
+    document.body.addEventListener('keyup', this.bodyKeyUpHandler)
+    document.body.addEventListener('keydown', this.bodyKeyDownHandler)
   }
 
   componentWillUnmount() {
@@ -46,6 +79,8 @@ class Keypad extends React.PureComponent {
     if (elem) {
       elem.removeEventListener('keyup', this.keyUpHandler)
     }
+    document.body.removeEventListener('keyup', this.bodyKeyUpHandler)
+    document.body.removeEventListener('keydown', this.bodyKeyDownHandler)
   }
 
   render() {
