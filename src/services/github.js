@@ -6,12 +6,12 @@ const headers = {
   Accept: 'application/vnd.github.v3+json'
 }
 
-const programsCache = new Map()
+const cache = new Map()
 
 export const fetchFileList = path => {
   const url = path ? `${REPO_URL}/${path}` : REPO_URL
   console.log(url)
-  const cachedPrograms = programsCache.get(url)
+  const cachedPrograms = cache.get(url)
   if (cachedPrograms) {
     return new Promise((resolve, reject) => {
       try {
@@ -35,13 +35,13 @@ export const fetchFileList = path => {
           }
           return prev
         }, {})
-      programsCache.set(REPO_URL, programs)
+      cache.set(url, programs)
       return programs
     })
 }
 
 export const fetchProgramText = (url, sha) => {
-  const cachedItem = window.localStorage.getItem(url)
+  const cachedItem = cache.get(url)
   if (cachedItem) {
     return new Promise((resolve, reject) => {
       try {
@@ -58,7 +58,7 @@ export const fetchProgramText = (url, sha) => {
   return axios.get(url, { headers })
     .then(res => {
       const text = res.data
-      window.localStorage.setItem(url, JSON.stringify({ text, sha }))
+      cache.set(url, JSON.stringify({ text, sha }))
       return text
     })
 }
