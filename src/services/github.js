@@ -6,12 +6,14 @@ const headers = {
   Accept: 'application/vnd.github.v3+json'
 }
 
+const programsCache = new Map()
+
 export const fetchProgramList = () => {
-  const cachedPrograms = window.sessionStorage.getItem(REPO_URL)
+  const cachedPrograms = programsCache.get(REPO_URL)
   if (cachedPrograms) {
     return new Promise((resolve, reject) => {
       try {
-        resolve(JSON.parse(cachedPrograms))
+        resolve(cachedPrograms)
       } catch (err) {
         reject(err)
       }
@@ -31,8 +33,8 @@ export const fetchProgramList = () => {
           }
           return prev
         }, {})
-        window.sessionStorage.setItem(REPO_URL, JSON.stringify(programs))
-        return programs
+      programsCache.set(REPO_URL, programs)
+      return programs
     })
 }
 
