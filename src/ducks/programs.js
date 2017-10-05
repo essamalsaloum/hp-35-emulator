@@ -6,8 +6,8 @@ import { showProgramPanel } from '../ducks/ui'
 const FETCH_GITHUB_LIST = 'rpnext/programs/FETCH_GITHUB_LIST'
 const FETCH_GITHUB_CONTENT = 'rpnext/programs/FETCH_GITHUB_CONTENT'
 
-export const fetchProgramList = () => dispatch => {
-  github.fetchProgramList()
+export const fetchFileList = () => dispatch => {
+  github.fetchFileList()
     .then(programs => dispatch(createAction(FETCH_GITHUB_LIST)(programs)))
     .catch(err => dispatch(createAction(FETCH_GITHUB_LIST)(err)))
 }

@@ -8,8 +8,10 @@ const headers = {
 
 const programsCache = new Map()
 
-export const fetchProgramList = () => {
-  const cachedPrograms = programsCache.get(REPO_URL)
+export const fetchFileList = path => {
+  const url = path ? `${REPO_URL}/${path}` : REPO_URL
+  console.log(url)
+  const cachedPrograms = programsCache.get(url)
   if (cachedPrograms) {
     return new Promise((resolve, reject) => {
       try {
@@ -19,7 +21,7 @@ export const fetchProgramList = () => {
       }
     })
   }
-  return axios.get(REPO_URL, { headers })
+  return axios.get(url, { headers })
     .then(res => {
       const programs = res.data
         .filter(item => item.name.endsWith('.md'))

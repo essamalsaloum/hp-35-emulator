@@ -40,11 +40,18 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
           if (node.value.type !== TokenType.quotedString) {
             throw createError(`expected quoted string}`, node.value.context)
           }
-          const name = node.value.text.slice(1, -1)
-          const programs = await github.fetchProgramList()
+          const importTarget = node.value.text.slice(1, -1)
+          let name = importTarget
+          let path = ''
+          const pos = importTarget.lastIndexOf('/')
+          if (pos !== -1) {
+            path = importTarget.slice(0, pos)
+            name = importTarget.slice(pos +1)
+          }
+          const programs = await github.fetchFileList(path)
           const program = programs[name]
           if (!program) {
-            throw createError(`program not found: ${name}`, node.value.context)
+            throw createError(`program not found: ${importTarget}`, node.value.context)
           }
           const { url, sha } = program
           const importedText = await github.fetchProgramText(url, sha)
@@ -58,7 +65,7 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
             throw createUnexpectedEndError()
           }
           if (node.value.type !== TokenType.token) {
-            throw createError(`expected alias name`, node.value.context)
+            throw createError(`expected alias filePath`, node.value.context)
           }
           const aliasName = node.value.text
           node = await tokenizer.next()

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { showProgramPanel } from '../ducks/ui'
-import { fetchProgramList, fetchProgramText, programsSelector } from '../ducks/programs'
+import { fetchFileList, fetchProgramText, programsSelector } from '../ducks/programs'
 import { loadMarkdownText } from '../ducks/program'
 import { List, ListItem } from 'material-ui/List'
 import AvPlayListPlay from 'material-ui/svg-icons/av/playlist-play'
@@ -14,7 +14,7 @@ class GitHubTab extends React.PureComponent {
 
   static propTypes = {
     programs: PropTypes.object,
-    fetchProgramList: PropTypes.func,
+    fetchFileList: PropTypes.func,
     fetchProgramText: PropTypes.func,
     showProgramPanel: PropTypes.func,
     loadMarkdownText: PropTypes.func
@@ -23,7 +23,7 @@ class GitHubTab extends React.PureComponent {
   componentWillMount() {
     const { programs } = this.props
     if (!programs) {
-      this.props.fetchProgramList()
+      this.props.fetchFileList()
     }
   }
 
@@ -71,7 +71,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    fetchProgramList,
+    fetchFileList,
     fetchProgramText,
     showProgramPanel,
     loadMarkdownText
