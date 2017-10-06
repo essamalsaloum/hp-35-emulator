@@ -121,7 +121,7 @@ export function extractProgramText(text) {
   return matches.reduce((buf, match) => {
     buf += match.slice(6, -3) + '\n'
     return buf
-  }, '').trim()
+  }, '').trim().concat('\n')
 }
 
 const removeBlankAndCommentLines = text =>

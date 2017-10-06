@@ -17,8 +17,13 @@ const compute = keyCode => state => {
   if (!fn) {
     throw new Error(`math: not implemented [${keyCode}]`)
   }
-  const { stack } = state
-  return { ...state, stack: fn(stack) }
+  let { stack } = state
+  stack = fn(stack)
+  const [x] = stack
+  if (typeof x !== 'object') {
+    stack[0] = Number.isFinite(x) ? x : new Error('Error')
+  }
+  return { ...state, stack }
 }
 
 export default Object.keys(funcs).reduce((prev, keyCode) => {
