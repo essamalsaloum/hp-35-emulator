@@ -11,10 +11,10 @@ describe('Tokenizer', () => {
 
     const result = []
 
-    let item = tokenizer.next()
+    let item = tokenizer.nextSync()
     while (!item.done) {
       result.push(item.value)
-      item = tokenizer.next()
+      item = tokenizer.nextSync()
     }
 
     const expectedResult = [

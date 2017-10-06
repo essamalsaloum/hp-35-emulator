@@ -19,29 +19,29 @@ export class Tokenizer {
     this.text = text.trim()
   }
 
-  next() {
-    return new Promise((resolve, reject) => {
-      if (this.text === '') {
-        return resolve({ done: true })
-      }
-
-      for (const pattern of tokenPatterns) {
-        const match = this.text.match(pattern.regex)
-        if (match) {
-          const result = {
-            done: false,
-            value: {
-              type: pattern.type,
-              text: match[0],
-              context: this.text
-            }
+  nextSync() {
+    if (this.text === '') {
+      return { done: true }
+    }
+    for (const pattern of tokenPatterns) {
+      const match = this.text.match(pattern.regex)
+      if (match) {
+        const result = {
+          done: false,
+          value: {
+            type: pattern.type,
+            text: match[0],
+            context: this.text
           }
-          this.text = this.text.slice(match[0].length).trim()
-          return resolve(result)
         }
+        this.text = this.text.slice(match[0].length).trim()
+        return result
       }
+    }
+    throw new Error('logic error in Tokenizer')
+  }
 
-      reject(new Error('logic error in Tokenizer'))
-    })
+  next() {
+    return new Promise(resolve => resolve(this.nextSync()))
   }
 }

@@ -8,7 +8,7 @@ const SET_DELAYED = 'rpnext/cpu/SET_DELAYED'
 const CLEAR_DELAYED = 'rpnext/cpu/CLEAR_DELAYED'
 const GOTO = 'rpnext/cpu/GOTO'
 const GOTO_PROGRAM_TOP = 'rpnext/cpu/GOTO_PROGRAM_TOP'
-const UPDATE_STATE = 'rpnext/cpu/UPDATE_STATE'
+const UPDATE = 'rpnext/cpu/UPDATE'
 const LOAD_KEYCODES = 'rpnext/cpu/LOAD_KEYCODES'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
@@ -20,7 +20,7 @@ export const loadKeyCodes = createAction(LOAD_KEYCODES)
 
 export const programStarting = createAction(PROGRAM_STARTING)
 export const programStopping = createAction(PROGRAM_STOPPING)
-export const updateState = createAction(UPDATE_STATE)
+export const updateState = createAction(UPDATE)
 
 export const startProgram = () => (dispatch, getState) => {
   cpu.startProgram(dispatch, getState)
@@ -60,7 +60,7 @@ export default function reducer(state = initialState, { type, payload }) {
       return { ...state, keyCodes: payload }
     case EXECUTE_KEYCODE:
       return { ...state, ...alu(state, payload) }
-    case UPDATE_STATE:
+    case UPDATE:
       return payload
     case GOTO_PROGRAM_TOP:
       return { ...state, ip: 0 }
