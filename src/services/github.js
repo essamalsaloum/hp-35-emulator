@@ -6,7 +6,7 @@ const config = {
   headers: {
     Accept: 'application/vnd.github.v3+json'
   },
-  timeout: 2000
+  timeout: 10000
 }
 
 const cache = new Map()
