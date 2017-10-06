@@ -17,7 +17,8 @@ const styles = {
     flex: '1 1 100%',
     minHeight: 0,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'hidden'
   },
   container: {
     flex: '1 1 100%',
