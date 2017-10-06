@@ -1,9 +1,7 @@
 import math from 'mathjs'
 import K from '../../keyCodes'
 import { monadic, dyadic } from './mathHelpers'
-
-const degreesToRadians = degrees => degrees * math.PI / 180.0
-const radiansToDegrees = radians => radians * 180.0 / math.PI
+import { degreesToRadians, radiansToDegrees } from './conversions'
 
 const degrees360 = angle => {
   angle %= 360

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
+import Avatar from 'material-ui/Avatar'
+import LabelOutLine from 'material-ui/svg-icons/action/label-outline'
 import ChildToolbar from '../components/ChildToolbar'
 import { physicsConstantDefs } from '../cpu/instructions/physicsConstants'
 import { executeKeyCode } from '../cpu/reducer'
@@ -32,6 +34,7 @@ class ConstantsPanel extends React.PureComponent {
       return (
         <ListItem
           key={keyCode}
+          leftAvatar={<Avatar icon={<LabelOutLine />} />}
           primaryText={text}
           secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
           onClick={() => this.onItemClick(keyCode)}

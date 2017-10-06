@@ -40,8 +40,79 @@ const physicsConstants = {
   SECOND_RADIATION_CONSTANT: 'second_radiation_constant',
   CONDUCTANCE_QUANTUM: 'conductance_quantum',
   NATURAL_LOGARITHM_BASE_NUMBER: 'natural_logarithm_base_number'
+}
 
+const conversions = {
+  FROM_HMS: 'hms->',    // Convert hh:mm:ss to decimal fraction
+  TO_CM: '->cm',        // Convert inches to cm
+  TO_DEG: '->deg',      // Convert radians to degrees
+  TO_DEGREE_C: '->K',   // Convert degree F -> K
+  TO_DEGREE_F: '->F',   // Convert degree K -> F
+  TO_GAL: '->gal',      // Convert liters to gallons
+  TO_HMS: '->hms',      // Converts x from a decimal fraction to hh:mm:ss format
+  TO_IN: '->in',        // Converts inches to cm
+  TO_KG: '->kg',        // Converts pounds to kg
+  TO_KM: '->km',        // Converts miles to km
+  TO_L: '->l',          // Converts gallons to liters
+  TO_LB: '->lb',        // Converts kilograms to pounds
+  TO_MILE: '->mile',    // Converts kilometers to miles
+  TO_RAD: '->rad',      // Degrees to radians. Returns (2π/360) x
+}
 
+const memory = {
+  MEM: 'mem',
+  STO_A: 'sto.a',
+  STO_B: 'sto.b',
+  STO_C: 'sto.c',
+  STO_D: 'sto.d',
+  STO_E: 'sto.e',
+  STO_F: 'sto.f',
+  STO_G: 'sto.g',
+  STO_H: 'sto.h',
+  STO_I: 'sto.i',
+  STO_J: 'sto.j',
+  STO_K: 'sto.k',
+  STO_L: 'sto.l',
+  STO_M: 'sto.m',
+  STO_N: 'sto.n',
+  STO_O: 'sto.o',
+  STO_P: 'sto.p',
+  STO_Q: 'sto.q',
+  STO_R: 'sto.r',
+  STO_S: 'sto.s',
+  STO_T: 'sto.t',
+  STO_U: 'sto.u',
+  STO_V: 'sto.v',
+  STO_W: 'sto.w',
+  STO_X: 'sto.x',
+  STO_Y: 'sto.y',
+  STO_Z: 'sto.z',
+  RCL_A: 'rcl.a',
+  RCL_B: 'rcl.b',
+  RCL_C: 'rcl.c',
+  RCL_D: 'rcl.d',
+  RCL_E: 'rcl.e',
+  RCL_F: 'rcl.f',
+  RCL_G: 'rcl.g',
+  RCL_H: 'rcl.h',
+  RCL_I: 'rcl.i',
+  RCL_J: 'rcl.j',
+  RCL_K: 'rcl.k',
+  RCL_L: 'rcl.l',
+  RCL_M: 'rcl.m',
+  RCL_N: 'rcl.n',
+  RCL_O: 'rcl.o',
+  RCL_P: 'rcl.p',
+  RCL_Q: 'rcl.q',
+  RCL_R: 'rcl.r',
+  RCL_S: 'rcl.s',
+  RCL_T: 'rcl.t',
+  RCL_U: 'rcl.u',
+  RCL_V: 'rcl.v',
+  RCL_W: 'rcl.w',
+  RCL_X: 'rcl.x',
+  RCL_Y: 'rcl.y',
+  RCL_Z: 'rcl.z',
 }
 
 export default {
@@ -113,80 +184,14 @@ export default {
   SINH: 'sinh',         // Hyperbolic sine
   SQ: 'x^2',            // x^2
   TANH: 'tanh',         // Hyperbolic tangent
-  TO_CM: '->cm',        // Convert inches to cm
-  TO_DEG: '->deg',      // Convert radians to degrees
-  TO_DEGREE_C: '->K',   // Convert degree F -> K
-  TO_DEGREE_F: '->F',   // Convert degree K -> F
-  TO_GAL: '->gal',      // Convert liters to gallons
-  TO_HMS: '->hms',      // Converts x from a decimal fraction to hours–minutes–seconds format
-  TO_IN: '->in',        // Converts inches to cm
-  TO_KG: '->kg',        // Converts miles to kilometers
-  TO_L: '->l',          // Converts gallons to liters
-  TO_LB: '->lb',        // Converts kilograms to pounds
-  TO_MILE: '->mile',    // Converts kilometers to miles
-  TO_RAD: '->rad',      // Degrees to radians. Returns (2π/360) x
   XROOT: 'xRoot',       // x-th root of y
 
   // extensions
 
   CANCEL: 'cancel',
   HELP: 'help',
-  MEM: 'mem',
 
-  STO_A: 'sto.a',
-  STO_B: 'sto.b',
-  STO_C: 'sto.c',
-  STO_D: 'sto.d',
-  STO_E: 'sto.e',
-  STO_F: 'sto.f',
-  STO_G: 'sto.g',
-  STO_H: 'sto.h',
-  STO_I: 'sto.i',
-  STO_J: 'sto.j',
-  STO_K: 'sto.k',
-  STO_L: 'sto.l',
-  STO_M: 'sto.m',
-  STO_N: 'sto.n',
-  STO_O: 'sto.o',
-  STO_P: 'sto.p',
-  STO_Q: 'sto.q',
-  STO_R: 'sto.r',
-  STO_S: 'sto.s',
-  STO_T: 'sto.t',
-  STO_U: 'sto.u',
-  STO_V: 'sto.v',
-  STO_W: 'sto.w',
-  STO_X: 'sto.x',
-  STO_Y: 'sto.y',
-  STO_Z: 'sto.z',
-
-  RCL_A: 'rcl.a',
-  RCL_B: 'rcl.b',
-  RCL_C: 'rcl.c',
-  RCL_D: 'rcl.d',
-  RCL_E: 'rcl.e',
-  RCL_F: 'rcl.f',
-  RCL_G: 'rcl.g',
-  RCL_H: 'rcl.h',
-  RCL_I: 'rcl.i',
-  RCL_J: 'rcl.j',
-  RCL_K: 'rcl.k',
-  RCL_L: 'rcl.l',
-  RCL_M: 'rcl.m',
-  RCL_N: 'rcl.n',
-  RCL_O: 'rcl.o',
-  RCL_P: 'rcl.p',
-  RCL_Q: 'rcl.q',
-  RCL_R: 'rcl.r',
-  RCL_S: 'rcl.s',
-  RCL_T: 'rcl.t',
-  RCL_U: 'rcl.u',
-  RCL_V: 'rcl.v',
-  RCL_W: 'rcl.w',
-  RCL_X: 'rcl.x',
-  RCL_Y: 'rcl.y',
-  RCL_Z: 'rcl.z',
-
+  ...memory,
   ...physicsConstants,
-
+  ...conversions,
 }
