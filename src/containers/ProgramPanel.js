@@ -41,7 +41,8 @@ class ProgramPanel extends React.PureComponent {
 
   render() {
     return (
-      <div className="ProgramPanel">
+      <div
+      className="ProgramPanel">
         <Tabs
           style={styles.root}
           contentContainerStyle={styles.container}

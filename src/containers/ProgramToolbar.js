@@ -13,6 +13,7 @@ import { showGitHubPanel } from '../ducks/ui'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
 import { loadKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
 import { compile, extractProgramText } from '../cpu/compiler'
+import { setLoading, clearLoading } from '../ducks/library'
 
 class ProgramToolbar extends React.PureComponent {
 
@@ -31,7 +32,9 @@ class ProgramToolbar extends React.PureComponent {
     setRecording: PropTypes.func.isRequired,
     clearRecording: PropTypes.func.isRequired,
     recording: PropTypes.bool.isRequired,
-    clearDelayed: PropTypes.func.isRequired
+    clearDelayed: PropTypes.func.isRequired,
+    setLoading: PropTypes.func.isRequired,
+    clearLoading: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -65,7 +68,9 @@ class ProgramToolbar extends React.PureComponent {
       recording,
       isMarkdown,
       setError,
-      clearDelayed
+      clearDelayed,
+      setLoading,
+      clearLoading,
     } = this.props
     if (recording) {
       clearRecording()
@@ -74,13 +79,18 @@ class ProgramToolbar extends React.PureComponent {
       stopProgram()
     } else {
       clearDelayed()
+      setLoading()
       compile(programText, isMarkdown ? 'markdown' : 'text')
         .then(keyCodes => {
           setError(null)
+          clearLoading()
           loadKeyCodes(keyCodes)
           startProgram()
         })
-        .catch(setError)
+        .catch(error => {
+          clearLoading()
+          setError(error)
+        })
     }
   }
 
@@ -151,7 +161,9 @@ const mapDispatchToProps = dispatch =>
     stopProgram,
     setRecording,
     clearRecording,
-    clearDelayed
+    clearDelayed,
+    setLoading,
+    clearLoading,
   }, dispatch)
 
 const mapStateToProps = state => ({

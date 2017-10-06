@@ -1,7 +1,13 @@
 .GitHubTab {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.GitHubTab--refresh {
+  display: inline-block;
+  position: relative;
 }
 
 .GitHubTab--list {

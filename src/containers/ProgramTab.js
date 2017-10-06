@@ -5,10 +5,14 @@ import { bindActionCreators } from 'redux'
 import ProgramToolbar from './ProgramToolbar'
 import ProgramTextArea from '../components/ProgramTextArea'
 import ProgramTextMarkdown from '../components/ProgramTextMarkdown'
+import RefreshIndicator from 'material-ui/RefreshIndicator'
 import { refreshProgramText, programTextSelector, isMarkdownSelector, isRecordingSelector } from '../ducks/program'
+import { loadingSelector } from '../ducks/library'
 import K from '../cpu/keyCodes'
 import cpu from '../cpu'
 import './ProgramTab.css'
+
+const REFRESHER_SIZE = 35
 
 const resetState = {
   text: '',
@@ -21,6 +25,9 @@ const resetState = {
 
 class ProgramTab extends React.PureComponent {
 
+  refresherTop = 0
+  refresherLeft = 0
+
   state = {
     error: null
   }
@@ -30,6 +37,7 @@ class ProgramTab extends React.PureComponent {
     refreshProgramText: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
     recording: PropTypes.bool.isRequired,
+    loading: PropTypes.bool,
   }
 
   subscriptions = []
@@ -46,6 +54,11 @@ class ProgramTab extends React.PureComponent {
         this.props.refreshProgramText(text)
       }
     })
+  }
+
+  componentDidMount() {
+    this.refresherTop = (this.container.clientHeight - REFRESHER_SIZE) / 2
+    this.refresherLeft = (this.container.clientWidth - REFRESHER_SIZE) / 2
   }
 
   componentWillUnmount() {
@@ -95,8 +108,19 @@ class ProgramTab extends React.PureComponent {
   }
 
   render() {
+    const { loading } = this.props
     return (
-      <div className="ProgramTab">
+      <div className="ProgramTab"
+        ref={container => { this.container = container }}
+      >
+        <RefreshIndicator
+          size={REFRESHER_SIZE}
+          left={this.refresherLeft}
+          top={this.refresherTop}
+          status={loading ? 'loading' : 'hide'}
+          className="ProgramTab--refresh"
+        />
+
         {this.renderProgramText()}
         {this.renderError()}
         <ProgramToolbar
@@ -116,7 +140,8 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
-  recording: isRecordingSelector(state)
+  recording: isRecordingSelector(state),
+  loading: loadingSelector(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramTab)

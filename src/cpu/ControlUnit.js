@@ -3,6 +3,7 @@ import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
 import { formatNumber } from './util'
+// import { playSuccessSound } from '../services/audio'
 import {
   keyCodesSelector,
   ipSelector,
@@ -85,6 +86,7 @@ export default class ControlUnit {
     if (!interrupted) {
       dispatch(gotoProgramTop())
     }
+    // playSuccessSound()
   }
 
   stopProgram(dispatch) {
@@ -163,7 +165,7 @@ export default class ControlUnit {
     }
 
     const newState = fn(state)
-    const {stack, buffer} = newState
+    const { stack, buffer } = newState
     const [x] = stack
 
     return {

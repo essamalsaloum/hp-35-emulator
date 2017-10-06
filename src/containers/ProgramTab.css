@@ -1,7 +1,13 @@
 .ProgramTab {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.ProgramTab--refresh {
+  display: inline-block;
+  position: relative;
 }
 
 .ProgramTab--error {

@@ -27,7 +27,7 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
   text = removeBlankAndCommentLines(text)
   const tokenizer = new Tokenizer(text)
 
-  try {
+  // try {
     let node = await tokenizer.next()
 
     while (!node.done) {
@@ -111,9 +111,9 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
       }
     }
     return keyCodes.filter(keyCode => keyCode.length !== 0)
-  } catch (err) {
-    return Promise.reject(err)
-  }
+  // } catch (err) {
+  //   return Promise.reject(err)
+  // }
 }
 
 export function extractProgramText(text) {
