@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List, ListItem } from 'material-ui/List'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 import Avatar from 'material-ui/Avatar'
 import LabelOutLine from 'material-ui/svg-icons/action/label-outline'
+import { grey500 } from 'material-ui/styles/colors'
 import ChildToolbar from '../components/ChildToolbar'
 import { physicsConstantDefs } from '../cpu/instructions/physicsConstants'
 import { executeKeyCode } from '../cpu/reducer'
@@ -15,6 +18,12 @@ import './ConstantsPanel.css'
 // TODO: add filter text field
 
 const createMarkup = ({ symb, value, unit }) => ({ __html: `${symb} = ${value} ${unit}` })
+
+const WikiButton = (props = {}) => (
+  <IconButton {...props}>
+    <FontIcon className="fa fa-external-link" color={grey500} />
+  </IconButton>
+)
 
 class ConstantsPanel extends React.PureComponent {
 
@@ -28,9 +37,14 @@ class ConstantsPanel extends React.PureComponent {
     this.props.setMainPanel(C.KEYPAD_PANEL)
   }
 
+  onWikiClick(keyCode) {
+    const {wikipedia} = physicsConstantDefs[keyCode]
+    window.open(wikipedia, '_blank')
+  }
+
   renderList() {
     return Object.keys(physicsConstantDefs).map(keyCode => {
-      const { text, ...rest } = physicsConstantDefs[keyCode]
+      const { text, wikipedia, ...rest } = physicsConstantDefs[keyCode]
       return (
         <ListItem
           key={keyCode}
@@ -38,6 +52,7 @@ class ConstantsPanel extends React.PureComponent {
           primaryText={text}
           secondaryText={(<div style={{ height: '1.5em' }} dangerouslySetInnerHTML={createMarkup(rest)}></div>)}
           onClick={() => this.onItemClick(keyCode)}
+          rightIconButton={wikipedia ? <WikiButton onClick={() => this.onWikiClick(keyCode)}/> : null}
         />
       )
     })
