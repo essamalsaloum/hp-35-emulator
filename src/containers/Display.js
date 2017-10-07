@@ -17,6 +17,9 @@ class Display extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    // remove next line disable updates while running calculator program
+    return true
+    // eslint-disable-next-line no-unreachable
     return !this.props.isRunning ||
       (this.props.isRunning && !nextProps.isRunning) ||
       this.props.isDelayed
