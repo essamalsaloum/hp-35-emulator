@@ -21,7 +21,7 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CLEAR_PROGRAM:
-      return { ...initialState }
+      return { ...state, text: '' }
     case REFRESH_PROGRAM_TEXT:
       return { ...state, text: payload, isMarkdown: false }
     case LOAD_MARKDOWN_TEXT:
