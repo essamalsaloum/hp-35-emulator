@@ -8,14 +8,6 @@ export const liftStack = state => {
   }
 }
 
-const enter = state => {
-  const [x, y, z] = state.stack
-  return {
-    ...state,
-    stack: [x, x, y, z]
-  }
-}
-
 const clx = state => ({
   ...state,
   stack: [0, ...state.stack.slice(1)]
@@ -50,7 +42,7 @@ const storeMem = state => {
 }
 
 const recallMem = state => {
-  state = enter(state)
+  state = liftStack(state)
   const [, y, z, t] = state.stack
   return {
     ...state,
@@ -59,7 +51,7 @@ const recallMem = state => {
 }
 
 export default {
-  [K.ENTER]: { stackLift: false, fn: enter },
+  [K.ENTER]: { stackLift: false, fn: liftStack },
   [K.CANCEL]: { stackLift: false, fn: clx },
   [K.CLX]: { stackLift: false, fn: clx },
   [K.CLR]: { stackLift: false, fn: clr },
