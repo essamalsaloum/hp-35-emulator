@@ -34,22 +34,6 @@ const rollDown = state => {
   }
 }
 
-const storeMem = state => {
-  return {
-    ...state,
-    memory: state.stack[0]
-  }
-}
-
-const recallMem = state => {
-  state = liftStack(state)
-  const [, y, z, t] = state.stack
-  return {
-    ...state,
-    stack: [state.memory, y, z, t]
-  }
-}
-
 export default {
   [K.ENTER]: { stackLift: false, fn: liftStack },
   [K.CANCEL]: { stackLift: false, fn: clx },
@@ -57,6 +41,4 @@ export default {
   [K.CLR]: { stackLift: false, fn: clr },
   [K.SWAP]: { stackLift: true, fn: swap },
   [K.ROLL_DOWN]: { stackLift: true, fn: rollDown },
-  [K.STO]: { stackLift: true, fn: storeMem },
-  [K.RCL]: { stackLift: true, fn: recallMem },
 }
