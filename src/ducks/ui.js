@@ -6,7 +6,6 @@ const SET_SHIFT_KEY = 'rpnext/ui/SET_SHIFT_KEY'
 const SHOW_GITHUB_PANEL = 'rpnext/ui/SHOW_GITHUB_PANEL'
 const SHOW_PROGRAM_PANEL = 'rpnext/ui/SHOW_PROGRAM_PANEL'
 
-
 const initialState = {
   mainPanel: C.KEYPAD_PANEL,
   programPanel: C.PROGRAM_PANEL,

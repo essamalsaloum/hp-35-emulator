@@ -10,6 +10,7 @@ import ChildToolbar from '../components/ChildToolbar'
 import WikiButton from '../components/WikiButton'
 import { executeKeyCode } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
+import { setRecentConversion, recentConversionsSelector } from '../ducks/recent'
 import C from '../constants'
 import K from '../cpu/keyCodes'
 import './ConversionsPanel.css'
@@ -34,7 +35,7 @@ const weight = {
 
 const volume = {
   [K.GAL_TO_L]: { description: 'gal → l', comment: '1 gal = 3.79 l', wiki: 'https://en.wikipedia.org/wiki/Gallon' },
-  [K.L_TO_GAL]: { description: 'l → gal', comment: '1 l = 0.264 gal'},
+  [K.L_TO_GAL]: { description: 'l → gal', comment: '1 l = 0.264 gal' },
 }
 
 const math = {
@@ -43,7 +44,15 @@ const math = {
 }
 const temperature = {
   [K.C_TO_F]: { description: '°C → °F', comment: '0 °C = 32 °F' },
-  [K.F_TO_C]: { description: '°F → °C', comment: '100 °F → 37.8 °C'},
+  [K.F_TO_C]: { description: '°F → °C', comment: '100 °F → 37.8 °C' },
+}
+
+const allConversions = {
+  ...distance,
+  ...weight,
+  ...volume,
+  ...math,
+  ...temperature,
 }
 
 class ConversionsPanel extends React.PureComponent {
@@ -51,16 +60,36 @@ class ConversionsPanel extends React.PureComponent {
   static propTypes = {
     executeKeyCode: PropTypes.func.isRequired,
     setMainPanel: PropTypes.func.isRequired,
+    setRecentConversion: PropTypes.func.isRequired,
+    recentConversions: PropTypes.array.isRequired,
   }
 
-  onItemClick(value) {
-    this.props.executeKeyCode(value)
+  onItemClick(keyCode) {
+    this.props.setRecentConversion(keyCode)
+    this.props.executeKeyCode(keyCode)
     this.props.setMainPanel(C.KEYPAD_PANEL)
   }
 
   onWikiClick(keyCode, conversions) {
     const { wiki } = conversions[keyCode]
     window.open(wiki, '_blank')
+  }
+
+  renderRecent() {
+    const { recentConversions } = this.props
+    if (recentConversions.length === 0) {
+      return null
+    }
+    const conversions = recentConversions.reduce((prev, keyCode) => {
+      prev[keyCode] = allConversions[keyCode]
+      return prev
+    }, {})
+    return (
+      <div>
+        <Subheader>Recent</Subheader>
+        {this.renderList(conversions)}
+      </div>
+    )
   }
 
   renderList(conversions) {
@@ -80,10 +109,12 @@ class ConversionsPanel extends React.PureComponent {
   }
 
   render() {
+    const { setMainPanel } = this.props
     return (
       <div className="ConversionsPanel">
-        <ChildToolbar title="Conversions" onBackClick={() => this.props.setMainPanel(C.KEYPAD_PANEL)} />
+        <ChildToolbar title="Conversions" onBackClick={() => setMainPanel(C.KEYPAD_PANEL)} />
         <List className="ConversionsPanel--list">
+          {this.renderRecent()}
           <Subheader>Distance</Subheader>
           {this.renderList(distance)}
           <Subheader>Weight</Subheader>
@@ -104,6 +135,11 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     executeKeyCode,
     setMainPanel,
+    setRecentConversion,
   }, dispatch)
 
-export default connect(null, mapDispatchToProps)(ConversionsPanel)
+const mapStateToProps = state => ({
+  recentConversions: recentConversionsSelector(state),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConversionsPanel)
