@@ -25,6 +25,7 @@ const isValidNumber = num => NUMERIC_REGEX.test(num)
 export default class ControlUnit {
   alu = new ALU()
   timeoutID = null
+  enterSeen = false
 
   instructionSet = {
     ...input,
@@ -42,19 +43,30 @@ export default class ControlUnit {
     }
   }
 
-  notify(newState, state, keyCode) {
-    const [x] = newState.stack
-    if (!(x instanceof Error || newState.entry)) {
-      if (state.entry) {
-        this.notifyHelper(formatNumber(state.stack[0]))
+  notify(newState, oldState, keyCode) {
+    if (newState.stack[0] instanceof Error) {
+      return
+    }
+
+    if (oldState.entry && !newState.entry) {
+      this.emit(formatNumber(oldState.stack[0]))
+    }
+
+    if (!newState.entry && newState.stackLift) {
+      this.emit(keyCode)
+    }
+
+    if (keyCode === K.ENTER) {
+      if (this.enterSeen || oldState.stackLift) {
+        this.emit(K.ENTER)
       }
-      if (keyCode !== K.ENTER) {
-        this.notifyHelper(keyCode)
-      }
+      this.enterSeen = true
+    } else {
+      this.enterSeen = false
     }
   }
 
-  notifyHelper(keyCode) {
+  emit(keyCode) {
     setTimeout(() => {
       for (const listener of this.listeners) {
         listener(keyCode)
@@ -164,7 +176,7 @@ export default class ControlUnit {
     state = stackLift ? this.alu.liftStack(state) : state
 
     state = fn(state)
-    const { stack, buffer } =state
+    const { stack, buffer } = state
     const [x] = stack
 
     return {
