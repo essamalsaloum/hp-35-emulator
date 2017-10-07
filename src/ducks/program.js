@@ -21,15 +21,15 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CLEAR_PROGRAM:
-      return { ...state, text: '' }
+      return { ...state, text: '', isMarkdown: false }
     case REFRESH_PROGRAM_TEXT:
       return { ...state, text: payload, isMarkdown: false }
     case LOAD_MARKDOWN_TEXT:
       return { ...state, text: payload, isMarkdown: true, isRecording: false }
     case SET_RECORDING:
-      return { ...state, isRecording: true }
+      return { ...state, isRecording: true, isMarkdown: false }
     case CLEAR_RECORDING:
-      return { ...state, isRecording: false }
+      return { ...state, isRecording: false, isMarkdown: false }
     default:
       return state
   }
