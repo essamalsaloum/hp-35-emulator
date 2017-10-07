@@ -159,20 +159,18 @@ export default class ControlUnit {
       return state
     }
 
-    const { entry, stackLift, fn } = microCode
-    if (entry) {
-      state = state.stackLift === true ? this.alu.liftStack(state) : state
-    }
+    const { stackLift: nextStackLift, fn } = microCode
+    const { stackLift } = state
+    state = stackLift ? this.alu.liftStack(state) : state
 
-    const newState = fn(state)
-    const { stack, buffer } = newState
+    state = fn(state)
+    const { stack, buffer } =state
     const [x] = stack
 
     return {
-      ...newState,
-      entry: entry !== null ? entry : state.entry,
-      buffer: entry ? buffer : formatNumber(x),
-      stackLift: stackLift !== null ? stackLift : state.stackLift
+      ...state,
+      buffer: state.entry ? buffer : formatNumber(x),
+      stackLift: nextStackLift !== null ? nextStackLift : stackLift
     }
   }
 

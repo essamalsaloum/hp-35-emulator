@@ -43,7 +43,8 @@ const digit = digit => state => {
   return {
     ...state,
     buffer,
-    stack: bufferToStack(buffer, state.stack)
+    stack: bufferToStack(buffer, state.stack),
+    entry: true
   }
 }
 
@@ -56,7 +57,8 @@ const decimal = state => {
   return {
     ...state,
     buffer,
-    stack: bufferToStack(buffer, state.stack)
+    stack: bufferToStack(buffer, state.stack),
+    entry: true
   }
 }
 
@@ -68,7 +70,8 @@ const enterExponent = state => {
   return {
     ...state,
     buffer: buffer === '0' ? '1e+0' : buffer.concat('e+0'),
-    stack: bufferToStack(buffer, state.stack)
+    stack: bufferToStack(buffer, state.stack),
+    entry: true
   }
 }
 
@@ -100,23 +103,24 @@ const pi = state => {
   return {
     ...state,
     stack: [pi, x, y, z],
-    buffer: util.formatNumber(pi)
+    buffer: util.formatNumber(pi),
+    entry: false
   }
 }
 
 export default {
-  [K.CHS]: { entry: null, stackLift: null, fn: changeSign },
-  [K.DOT]: { entry: true, stackLift: false, fn: decimal },
-  [K.D0]: { entry: true, stackLift: false, fn: digit('0') },
-  [K.D1]: { entry: true, stackLift: false, fn: digit('1') },
-  [K.D2]: { entry: true, stackLift: false, fn: digit('2') },
-  [K.D3]: { entry: true, stackLift: false, fn: digit('3') },
-  [K.D4]: { entry: true, stackLift: false, fn: digit('4') },
-  [K.D5]: { entry: true, stackLift: false, fn: digit('5') },
-  [K.D6]: { entry: true, stackLift: false, fn: digit('6') },
-  [K.D7]: { entry: true, stackLift: false, fn: digit('7') },
-  [K.D8]: { entry: true, stackLift: false, fn: digit('8') },
-  [K.D9]: { entry: true, stackLift: false, fn: digit('9') },
-  [K.EEX]: { entry: true, stackLift: false, fn: enterExponent },
-  [K.PI]: { entry: false, stackLift: true, fn: pi }
+  [K.CHS]: { stackLift: null, fn: changeSign },
+  [K.DOT]: { stackLift: false, fn: decimal },
+  [K.D0]: { stackLift: false, fn: digit('0') },
+  [K.D1]: { stackLift: false, fn: digit('1') },
+  [K.D2]: { stackLift: false, fn: digit('2') },
+  [K.D3]: { stackLift: false, fn: digit('3') },
+  [K.D4]: { stackLift: false, fn: digit('4') },
+  [K.D5]: { stackLift: false, fn: digit('5') },
+  [K.D6]: { stackLift: false, fn: digit('6') },
+  [K.D7]: { stackLift: false, fn: digit('7') },
+  [K.D8]: { stackLift: false, fn: digit('8') },
+  [K.D9]: { stackLift: false, fn: digit('9') },
+  [K.EEX]: { stackLift: false, fn: enterExponent },
+  [K.PI]: {  stackLift: true, fn: pi }
 }

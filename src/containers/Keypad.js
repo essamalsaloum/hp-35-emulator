@@ -91,7 +91,7 @@ class Keypad extends React.PureComponent {
           <Key keyCode={K.LOG} />
           <Key keyCode={K.LN} />
           <Key keyCode={K.EXP} shiftCodes={{ [K.SHIFT_UP]: K.ALOG }} />
-          <Key keyCode={K.CLR} />
+          <Key keyCode={K.CLR} shiftCodes={{ [K.SHIFT_DOWN]: K.RESET }}/>
         </div>
         <div className="Keypad--row">
           <Key keyCode={K.SQRT} />

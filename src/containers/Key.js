@@ -49,6 +49,7 @@ const keyLabels = {
   [K.PCTCHG]: '%chg',
   [K.PI]: 'π',
   [K.POW]: 'y<sup>x</sup>',
+  [K.RESET]: 'RESET',
   [K.ROLL_DOWN]: 'R↓',
   [K.SHIFT_DOWN]: 'g',
   [K.SHIFT_UP]: 'f',
@@ -101,6 +102,8 @@ class Key extends React.PureComponent {
         break
       case K.CONV:
         setMainPanel(C.CONVERSIONS_PANEL)
+        break
+      case K.RESET:
         break
       default:
         if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {

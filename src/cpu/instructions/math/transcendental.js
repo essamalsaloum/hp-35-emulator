@@ -16,6 +16,8 @@ const alog = x => math.pow(10, x)
 const asin = x => math.abs(x) > 1 ? new Error('invalid data') : radiansToDegrees(math.asin(x))
 const atan = x => radiansToDegrees(math.atan(x))
 const cos = x => math.abs(degrees360(x) - 90) % 180 === 0 ? 0 : math.cos(degreesToRadians(degrees360(x)))
+const ln = x => x < 0 ? new Error('invalid data') : math.log(x)
+const log = x => x < 0 ? new Error('invalid data') : math.log10(x)
 const sin = x => math.sin(degreesToRadians(degrees360(x)))
 const sq = x => x * x
 const sqrt = x => x < 0 ? new Error('√(negative)') : math.sqrt(x)
@@ -29,8 +31,8 @@ export default {
   [K.ATAN]: monadic(atan),
   [K.COS]: monadic(cos),
   [K.EXP]: monadic(math.exp),
-  [K.LN]: monadic(math.log),
-  [K.LOG]: monadic(math.log10),
+  [K.LN]: monadic(ln),
+  [K.LOG]: monadic(log),
   [K.POW]: dyadic(math.pow),
   [K.SIN]: monadic(sin),
   [K.SQ]: monadic(sq),

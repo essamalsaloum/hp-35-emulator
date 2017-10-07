@@ -40,11 +40,11 @@ export const stopProgram = () => (dispatch) => {
 
 const initialState = {
   stack: [0, 0, 0, 0],
-  stackLift: false,
+  stackLift: true,
+  entry: false,
   memory: [],
   keyCodes: [],
   ip: 0,
-  entry: true,
   buffer: '0',
   isRunning: false,
   isDelayed: false

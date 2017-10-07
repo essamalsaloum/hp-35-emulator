@@ -16,7 +16,8 @@ export default class ALU {
     const [x, y, z] = state.stack
     return {
       ...state,
-      stack: [x, x, y, z]
+      stack: [x, x, y, z],
+      entry: false
     }
   }
 
@@ -26,6 +27,10 @@ export default class ALU {
       throw new Error(`alu: not implemented [${keyCode}]`)
     }
     const { stackLift, fn } = microCode
-    return { ...fn(state), stackLift }
+    return {
+      ...fn(state),
+      stackLift,
+      entry: false
+    }
   }
 }

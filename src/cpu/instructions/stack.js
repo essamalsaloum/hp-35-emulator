@@ -15,7 +15,9 @@ const clx = state => ({
 
 const clr = state => ({
   ...state,
-  stack: [0, 0, 0, 0]
+  stack: [0, 0, 0, 0],
+  stackLift: false,
+  entry: true
 })
 
 const swap = state => {

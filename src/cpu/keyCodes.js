@@ -155,6 +155,7 @@ export default {
   PI: 'pi',
   POW: 'y^x',
   RCL: 'rcl',
+  RESET: 'reset',
   ROLL_DOWN: 'rollDown',
   SIN: 'sin',
   SQRT: 'sqrt',
