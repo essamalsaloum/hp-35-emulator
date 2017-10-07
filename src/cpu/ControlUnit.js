@@ -43,6 +43,8 @@ export default class ControlUnit {
     }
   }
 
+  // TODO: fix ENTER key processing
+
   notify(newState, oldState, keyCode) {
     if (newState.stack[0] instanceof Error) {
       return
@@ -67,6 +69,7 @@ export default class ControlUnit {
   }
 
   emit(keyCode) {
+    console.log(keyCode)
     setTimeout(() => {
       for (const listener of this.listeners) {
         listener(keyCode)
