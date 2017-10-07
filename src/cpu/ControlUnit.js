@@ -69,7 +69,6 @@ export default class ControlUnit {
   }
 
   emit(keyCode) {
-    console.log(keyCode)
     setTimeout(() => {
       for (const listener of this.listeners) {
         listener(keyCode)
