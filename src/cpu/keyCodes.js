@@ -43,20 +43,28 @@ const physicsConstants = {
 }
 
 const conversions = {
-  FROM_HMS: 'hms->',    // Convert hh:mm:ss to decimal fraction
-  TO_CM: '->cm',        // Convert inches to cm
-  TO_DEG: '->deg',      // Convert radians to degrees
-  TO_DEGREE_C: '->K',   // Convert degree F -> K
-  TO_DEGREE_F: '->F',   // Convert degree K -> F
-  TO_GAL: '->gal',      // Convert liters to gallons
-  TO_HMS: '->hms',      // Converts x from a decimal fraction to hh:mm:ss format
-  TO_IN: '->in',        // Converts inches to cm
-  TO_KG: '->kg',        // Converts pounds to kg
-  TO_KM: '->km',        // Converts miles to km
-  TO_L: '->l',          // Converts gallons to liters
-  TO_LB: '->lb',        // Converts kilograms to pounds
-  TO_MILE: '->mile',    // Converts kilometers to miles
-  TO_RAD: '->rad',      // Degrees to radians. Returns (2π/360) x
+  // distance
+  IN_TO_CM: 'in->cm',       // Convert inches to cm
+  CM_TO_IN: 'cm->in',       // Converts inches to cm
+  FT_TO_M: 'ft->m',
+  M_TO_FT: 'm->ft',
+  MILE_TO_KM: 'mile->km',   // Converts miles to km
+  KM_TO_MILE: 'km->mile',   // Converts kilometers to miles
+  YD_TO_M: 'yd->m',
+  M_TO_YD: 'm->yd',
+
+  // weight
+  LB_TO_KG: 'lb->kg',       // Converts pounds to kg
+  KG_TO_LB: 'kg->lb',       // Converts kilograms to pounds
+  OZ_TO_G: 'oz->g',
+  G_TO_OZ: 'g-oz',
+  C_TO_F: 'C->F',           // Convert degree C -> F
+  GAL_TO_L: 'gal->l',       // Converts gallons to liters
+  L_TO_GAL: 'l->gal',        // Convert liters to gallons
+  DEG_TO_RAD: 'deg->rad',   // Degrees to radians. Returns (2π/360) x
+  RAD_TO_DEG: 'rad->deg',   // Degrees to radians. Returns (2π/360) x
+  HMS_TO_FRAC: 'hms->frac', // Convert hh:mm:ss to decimal fraction
+  FRAC_TO_HMS: 'frac->hms', // Converts x from a decimal fraction to hh:mm:ss format
 }
 
 const memory = {
@@ -172,7 +180,7 @@ export default {
   COSH: 'cosh',         // Hyperbolic cosine
   FACT: '!',            // Factorial
   FP: 'fp',             // Fractional part of x
-  FROM_HMS: 'hms->',    // Converts x from hours–minutes– seconds format to a decimal fraction
+  HMS_TO_FRAC: 'hms->',    // Converts x from hours–minutes– seconds format to a decimal fraction
   IDIV: 'idiv',         // Integer division
   INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
   INV: '1/x',           // Reciprocal of x
