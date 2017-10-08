@@ -3,12 +3,12 @@ import cpu from '../cpu/reducer'
 import ui from './ui'
 import library from './library'
 import program from './program'
-import recent from './recent'
+import preferences from './preferences'
 
 export const rootReducer = combineReducers({
   cpu,
   ui,
   library,
   program,
-  recent,
+  preferences,
 })

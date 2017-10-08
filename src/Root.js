@@ -11,8 +11,8 @@ import App from './App'
 const THROTTLE_WAIT_MS = 1000
 
 const saveStateHelper = () => {
-  const { cpu, program, recent } = store.getState()
-  saveState({ cpu, program, recent })
+  const { cpu, program, preferences } = store.getState()
+  saveState({ cpu, program, preferences })
 }
 
 const saveStateThrottled = throttle(saveStateHelper, THROTTLE_WAIT_MS)
