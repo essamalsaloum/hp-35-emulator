@@ -52,7 +52,7 @@ export default class ControlUnit {
 
     if (oldState.entry && !newState.entry) {
       this.emit(formatNumber(oldState.stack[0]))
-    }
+      }
 
     if (!newState.entry && newState.stackLift) {
       this.emit(keyCode)
