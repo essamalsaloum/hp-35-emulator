@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { stackSelector, bufferSelector, isDelayedSelector, isRunningSelector } from '../cpu/reducer'
-import math from 'mathjs'
+import { stackSelector, bufferSelector, isDelayedSelector, isRunningSelector, errorSelector } from '../cpu/reducer'
+import {formatNumber} from '../cpu/util'
 import './Display.css'
 
 const labels = ['x', 'y', 'z', 't']
@@ -12,6 +12,7 @@ class Display extends React.Component {
   static propTypes = {
     stack: PropTypes.array,
     buffer: PropTypes.string,
+    error: PropTypes.object,
     isDelayed: PropTypes.bool.isRequired,
     isRunning: PropTypes.bool.isRequired,
   }
@@ -25,9 +26,10 @@ class Display extends React.Component {
       this.props.isDelayed
   }
 
-  renderStack(stack, buffer) {
+  renderStack(stack, buffer, error) {
     return stack.map((register, index) => {
-      const value = index === 0 ? buffer : math.format(register, { precision: 14 })
+      const displayX = error ? error.message : buffer
+      const value = index === 0 ? displayX : formatNumber(register)
       return (
         <div key={index} className="Display--row">
           {`${labels[index]}: ${value}`}
@@ -37,10 +39,10 @@ class Display extends React.Component {
   }
 
   render() {
-    const { stack, buffer } = this.props
+    const { stack, buffer, error } = this.props
     return (
       <div className="Display">
-        {this.renderStack(stack, buffer)}
+        {this.renderStack(stack, buffer, error)}
       </div>
     )
   }
@@ -49,6 +51,7 @@ class Display extends React.Component {
 const mapStateToProps = state => ({
   stack: stackSelector(state),
   buffer: bufferSelector(state),
+  error: errorSelector(state),
   isDelayed: isDelayedSelector(state),
   isRunning: isRunningSelector(state),
 })

@@ -11,8 +11,8 @@ import {
   isRunningSelector,
   programStarting,
   programStopping,
-  processorSelector,
-  stackSelector,
+  cpuSelector,
+  errorSelector,
   updateState,
   isDelayedSelector,
 } from './reducer'
@@ -20,7 +20,7 @@ import {
 const DELAY = 500
 
 const NUMERIC_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
-const isValidNumber = num => NUMERIC_REGEX.test(num)
+const isNumeric = num => NUMERIC_REGEX.test(num)
 
 export default class ControlUnit {
   alu = new ALU()
@@ -46,7 +46,7 @@ export default class ControlUnit {
   // TODO: fix ENTER key processing
 
   notify(newState, oldState, keyCode) {
-    if (newState.stack[0] instanceof Error) {
+    if (newState.error) {
       return
     }
 
@@ -77,8 +77,7 @@ export default class ControlUnit {
   }
 
   async startProgram(dispatch, getState) {
-    const [x] = stackSelector(getState())
-    if (x instanceof Error) {
+    if (errorSelector(getState())) {
       return
     }
 
@@ -88,8 +87,7 @@ export default class ControlUnit {
     while (ipSelector(getState()) < keyCodes.length && !interrupted) {
       if (isRunningSelector(getState())) {
         await this.executeNext(dispatch, getState, isDelayedSelector(getState()) ? DELAY : 0)
-        const [x] = stackSelector(getState())
-        if (x instanceof Error) {
+        if (errorSelector(getState())) {
           interrupted = true
         }
       } else {
@@ -117,9 +115,9 @@ export default class ControlUnit {
         const keyCodes = keyCodesSelector(getState())
         const ip = ipSelector(getState())
         const keyCode = keyCodes[ip]
-        let cpu = processorSelector(getState())
-        cpu = this.execute(cpu, keyCode)
-        dispatch(updateState({ ...cpu, ip: ip + 1 }))
+        let state = cpuSelector(getState())
+        state = this.execute(state, keyCode)
+        dispatch(updateState({ ...state, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -127,20 +125,19 @@ export default class ControlUnit {
   }
 
   execute(state, keyCode) {
-    const [x, y, z, t] = state.stack
-    if (x instanceof Error) {
-      return {
-        stack: [0, y, z, t],
-        stackLift: false,
-        buffer: '0',
-        isRunning: false,
-        entry: false
-      }
+    if (state.error && !(keyCode === K.CLX || keyCode === K.CLR || keyCode === K.CANCEL) ) {
+      return state
     }
 
-    if (isValidNumber(keyCode)) {
+    if (isNumeric(keyCode)) {
       const [x, y, z] = state.stack
       const num = parseFloat(keyCode)
+      if (!Number.isFinite(num)) {
+        return {
+          ...state,
+          error: {message: 'range error'}
+        }
+      }
       return {
         ...state,
         stack: [num, x, y, z],
@@ -161,8 +158,7 @@ export default class ControlUnit {
 
   aluExecute(state, keyCode) {
     const newState = this.alu.execute(state, keyCode)
-    const [x] = newState.stack
-    const buffer = x instanceof Error ? x.message : formatNumber(x)
+    const buffer = formatNumber(newState.stack[0])
     return { ...newState, buffer, entry: false }
   }
 
@@ -189,6 +185,6 @@ export default class ControlUnit {
   }
 
   isValidInstruction(keyCode) {
-    return isValidNumber(keyCode) || this.validInstructions.has(keyCode)
+    return isNumeric(keyCode) || this.validInstructions.has(keyCode)
   }
 }

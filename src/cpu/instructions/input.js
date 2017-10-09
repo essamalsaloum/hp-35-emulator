@@ -1,8 +1,8 @@
 import K from '../keyCodes'
-import * as util from '../../cpu/util'
+import { formatNumber, MAX_SIGNIFICANT_DIGITS } from '../../cpu/util'
 
 const splitNumber = buffer => {
-  const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]{1,2}))?$/)
+  const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]+))?$/)
   if (!parts) {
     return [buffer, '']
   }
@@ -27,23 +27,37 @@ const digit = digit => state => {
       exponent = '+' + digit
     } else if (exponent === '-0') {
       exponent = '-' + digit
-    } else if (/^[+-]?\d$/.test(exponent)) {
+    } else if (/^[+-]\d{1,2}$/.test(exponent)) {
       exponent += digit
     }
-  } else if (mantissa === '0') {
-    mantissa = digit
-  } else if (mantissa === '-0') {
-    mantissa = '-' + digit
   } else {
-    mantissa += digit
+    if (mantissa === '0') {
+      mantissa = digit
+    } else if (mantissa === '-0') {
+      mantissa = '-' + digit
+    } else {
+      mantissa += digit
+    }
+    const maxMantissaLength = MAX_SIGNIFICANT_DIGITS +
+      (mantissa.startsWith('-') ? 1 : 0) +
+      (mantissa.includes('.') ? 1 : 0)
+    mantissa = mantissa.slice(0, maxMantissaLength)
   }
 
   buffer = joinNumber(mantissa, exponent)
+  const stack = bufferToStack(buffer, state.stack)
+
+  if (!Number.isFinite(stack[0])) {
+    return {
+      ...state,
+      error: { message: 'invalid data' }
+    }
+  }
 
   return {
     ...state,
     buffer,
-    stack: bufferToStack(buffer, state.stack),
+    stack,
     entry: true
   }
 }
@@ -103,7 +117,7 @@ const pi = state => {
   return {
     ...state,
     stack: [pi, x, y, z],
-    buffer: util.formatNumber(pi),
+    buffer: formatNumber(pi),
     entry: false
   }
 }
@@ -122,5 +136,5 @@ export default {
   [K.D8]: { stackLift: false, fn: digit('8') },
   [K.D9]: { stackLift: false, fn: digit('9') },
   [K.EEX]: { stackLift: false, fn: enterExponent },
-  [K.PI]: {  stackLift: true, fn: pi }
+  [K.PI]: { stackLift: true, fn: pi }
 }

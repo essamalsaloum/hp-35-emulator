@@ -20,8 +20,17 @@ const compute = keyCode => state => {
   let { stack } = state
   stack = fn(stack)
   const [x] = stack
-  if (typeof x !== 'object') {
-    stack[0] = Number.isFinite(x) ? x : new Error('Error')
+  if (typeof x === 'object' && x instanceof Error) {
+    return {
+      ...state,
+      error: { message: x.message }
+    }
+  }
+  if (!Number.isFinite(x)) {
+    return {
+      ...state,
+      error: { message: 'range error' }
+    }
   }
   return { ...state, stack }
 }

@@ -10,12 +10,16 @@ export const liftStack = state => {
 
 const clx = state => ({
   ...state,
-  stack: [0, ...state.stack.slice(1)]
+  stack: [0, ...state.stack.slice(1)],
+  error: null,
+  stackLift: false,
+  entry: true
 })
 
 const clr = state => ({
   ...state,
   stack: [0, 0, 0, 0],
+  error: null,
   stackLift: false,
   entry: true
 })

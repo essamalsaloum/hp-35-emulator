@@ -6,13 +6,13 @@ import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Avatar from 'material-ui/Avatar'
 import { indigoA200, pinkA700, grey400 } from 'material-ui/styles/colors'
-import math from 'mathjs'
 import MemoryUpdateButton from '../components/MemoryUpdateButton'
 import ChildToolbar from '../components/ChildToolbar'
 import C from '../constants'
 import K from '../cpu/keyCodes'
 import { executeKeyCode, memorySelector } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
+import { formatNumber } from '../cpu/util'
 import './MemoryPanel.css'
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -65,7 +65,7 @@ class MemoryPanel extends React.PureComponent {
     const { memory } = this.props
     const num = memory[index]
     if (Number.isFinite(num)) {
-      return <div style={{ color: pinkA700 }}>{math.format(num, { precision: 14 })}</div>
+      return <div style={{ color: pinkA700 }}>{formatNumber(num)}</div>
     } else {
       return <div style={{ opacity: 0.5 }}>-</div>
     }
