@@ -2,11 +2,11 @@ import K from '../keyCodes'
 import { formatNumber, MAX_SIGNIFICANT_DIGITS } from '../../cpu/util'
 
 const splitNumber = buffer => {
-  const parts = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]+))?$/)
-  if (!parts) {
+  const matches = buffer.match(/^([-]?[.0-9]+)(?:e([+-]?[0-9]+))?$/)
+  if (!matches) {
     return [buffer, '']
   }
-  const [, mantissa, exponent = ''] = parts
+  const [, mantissa, exponent = ''] = matches
   return [mantissa, exponent]
 }
 
@@ -47,17 +47,13 @@ const digit = digit => state => {
   buffer = joinNumber(mantissa, exponent)
   const stack = bufferToStack(buffer, state.stack)
 
-  if (!Number.isFinite(stack[0])) {
-    return {
-      ...state,
-      error: { message: 'invalid data' }
-    }
-  }
+  const error = Number.isFinite(stack[0]) ? null : { message: 'invalid data' }
 
   return {
     ...state,
-    buffer,
     stack,
+    buffer,
+    error,
     entry: true
   }
 }
@@ -111,6 +107,46 @@ const changeSign = state => {
   }
 }
 
+const del = state => {
+  if (state.error) {
+    return { ...state, error: null }
+  }
+
+  let [mantissa, exponent] = splitNumber(state.buffer)
+  if (exponent) {
+    exponent = exponent.slice(0, -1)
+    exponent = /^[+-]$/.test(exponent) ? '' : exponent
+  } else {
+    mantissa = mantissa.slice(0, -1)
+    mantissa = mantissa.length === 0 || mantissa === '-' ? '0' : mantissa
+  }
+
+  const buffer = joinNumber(mantissa, exponent)
+  const stack = bufferToStack(buffer, state.stack)
+
+  return {
+    ...state,
+    stack,
+    buffer,
+    stackLift: false,
+    entry: true
+  }
+}
+
+const cancel = state => {
+  if (state.error) {
+    return { ...state, error: null }
+  }
+  const [, y, z, t] = state.stack
+  return {
+    ...state,
+    stack: [0, y, z, t],
+    buffer: '0',
+    stackLift: false,
+    entry: true
+  }
+}
+
 const pi = state => {
   const pi = Math.PI
   const [x, y, z] = state.stack
@@ -135,6 +171,8 @@ export default {
   [K.D7]: { stackLift: false, fn: digit('7') },
   [K.D8]: { stackLift: false, fn: digit('8') },
   [K.D9]: { stackLift: false, fn: digit('9') },
+  [K.DEL]: { stackLift: false, fn: del },
   [K.EEX]: { stackLift: false, fn: enterExponent },
-  [K.PI]: { stackLift: true, fn: pi }
+  [K.PI]: { stackLift: true, fn: pi },
+  [K.CANCEL]: { stackLift: false, fn: cancel },
 }

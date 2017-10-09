@@ -6,7 +6,7 @@ describe('cpu', () => {
 
   describe('stack functions', () => {
 
-    it('should clear X on CLX', () => {
+    it('should clear X on DEL', () => {
       const state = {
         stack: [1, 2, 3, 4],
         buffer: '1',
@@ -17,7 +17,7 @@ describe('cpu', () => {
         buffer: '0',
         stackLift: false
       }
-      const newState = cpu.execute(state, K.CLX)
+      const newState = cpu.execute(state, K.DEL)
       expect(newState).to.deep.include(expectState)
     })
 

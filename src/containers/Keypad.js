@@ -88,7 +88,7 @@ class Keypad extends React.PureComponent {
           <Key keyCode={K.ENTER} />
           <Key keyCode={K.CHS} />
           <Key keyCode={K.EEX} />
-          <Key keyCode={K.CLX} />
+          <Key keyCode={K.DEL} />
         </div>
         <div className="Keypad--row">
           <Key keyCode={K.MEM} shiftCodes={{ [K.SHIFT_DOWN]: K.CONST, [K.SHIFT_UP]: K.CONV }} />

@@ -20,7 +20,7 @@ const keyCodeToOpcode = {
   '±': K.CHS,
   'e': K.EEX,
   Enter: K.ENTER,
-  Backspace: K.CLX
+  Backspace: K.DEL
 }
 
 export default keyboardEvent => keyCodeToOpcode[keyboardEvent.key]

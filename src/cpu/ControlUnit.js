@@ -22,6 +22,8 @@ const DELAY = 500
 const NUMERIC_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 const isNumeric = num => NUMERIC_REGEX.test(num)
 
+const stackLiftCancelers = new Set([K.DEL, K.CANCEL])
+
 export default class ControlUnit {
   alu = new ALU()
   timeoutID = null
@@ -125,7 +127,7 @@ export default class ControlUnit {
   }
 
   execute(state, keyCode) {
-    if (state.error && !(keyCode === K.CLX || keyCode === K.CLR || keyCode === K.CANCEL) ) {
+    if (state.error && !(keyCode === K.DEL || keyCode === K.CLR || keyCode === K.CANCEL) ) {
       return state
     }
 
@@ -171,7 +173,7 @@ export default class ControlUnit {
 
     const { stackLift: nextStackLift, fn } = microCode
     const { stackLift } = state
-    state = stackLift ? this.alu.liftStack(state) : state
+    state = stackLift && !stackLiftCancelers.has(keyCode) ? this.alu.liftStack(state) : state
 
     state = fn(state)
     const { stack, buffer } = state
