@@ -83,8 +83,8 @@ class Key extends React.PureComponent {
     this.onClick = this.onClick.bind(this)
   }
 
-  onClick() {
-    const keyCode = this.getShiftedKeyCode()
+  onClick(ev) {
+    const keyCode = this.getShiftedKeyCode(ev)
     const { shiftKey, shiftCodes, setShiftKey, executeKeyCode, setMainPanel } = this.props
 
     switch (keyCode) {
@@ -116,9 +116,15 @@ class Key extends React.PureComponent {
     }
   }
 
-  getShiftedKeyCode() {
+  getShiftedKeyCode(ev) {
     const { keyCode } = this.props
-    const { shiftKey, shiftCodes } = this.props
+    const { shiftCodes } = this.props
+    let { shiftKey } = this.props
+    if (ev.shiftKey) {
+      shiftKey = K.SHIFT_UP
+    } else if (ev.altKey) {
+      shiftKey = K.SHIFT_DOWN
+    }
     return shiftKey && shiftCodes[shiftKey] ? shiftCodes[shiftKey] : keyCode
   }
 

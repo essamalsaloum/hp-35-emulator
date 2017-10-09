@@ -44,34 +44,12 @@ class Keypad extends React.PureComponent {
     }
   }
 
-  bodyKeyUpHandler = ev => {
-    const { shiftKey, setShiftKey } = this.props
-    ev.preventDefault()
-    if (ev.key === 'Shift' && shiftKey === K.SHIFT_UP) {
-      setShiftKey(null)
-    } else if (ev.key === 'Alt' && shiftKey === K.SHIFT_DOWN) {
-      setShiftKey(null)
-    }
-  }
-
-  bodyKeyDownHandler = ev => {
-    const { setShiftKey } = this.props
-    if (ev.key === 'Shift') {
-      ev.preventDefault()
-      setShiftKey(K.SHIFT_UP)
-    } else if (ev.key === 'Alt') {
-      ev.preventDefault()
-      setShiftKey(K.SHIFT_DOWN)
-    }
-  }
-
   componentDidMount() {
     const elem = document.querySelector('.CalculatorPanel')
     if (elem) {
       elem.addEventListener('keyup', this.keyUpHandler)
     }
     document.body.addEventListener('keyup', this.bodyKeyUpHandler)
-    document.body.addEventListener('keydown', this.bodyKeyDownHandler)
   }
 
   componentWillUnmount() {
@@ -80,7 +58,6 @@ class Keypad extends React.PureComponent {
       elem.removeEventListener('keyup', this.keyUpHandler)
     }
     document.body.removeEventListener('keyup', this.bodyKeyUpHandler)
-    document.body.removeEventListener('keydown', this.bodyKeyDownHandler)
   }
 
   render() {
