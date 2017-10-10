@@ -32,24 +32,11 @@ class Keypad extends React.PureComponent {
     }
   }
 
-  keyDownHandler = ev => {
-    console.log(ev)
-    const { setShiftKey } = this.props
-    if (ev.key === 'Shift') {
-      ev.preventDefault()
-      setShiftKey(K.SHIFT_UP)
-    } else if (ev.key === 'Alt') {
-      ev.preventDefault()
-      setShiftKey(K.SHIFT_DOWN)
-    }
-  }
-
   componentDidMount() {
     const elem = document.querySelector('.CalculatorPanel')
     if (elem) {
       elem.addEventListener('keyup', this.keyUpHandler)
     }
-    document.body.addEventListener('keyup', this.bodyKeyUpHandler)
   }
 
   componentWillUnmount() {
@@ -57,7 +44,6 @@ class Keypad extends React.PureComponent {
     if (elem) {
       elem.removeEventListener('keyup', this.keyUpHandler)
     }
-    document.body.removeEventListener('keyup', this.bodyKeyUpHandler)
   }
 
   render() {
@@ -72,8 +58,8 @@ class Keypad extends React.PureComponent {
         </div>
         <div className="Keypad--row">
           <Key keyCode={K.SQRT} />
-          <Key keyCode={K.SQR} />
-          <Key keyCode={K.SIN} shiftCodes={{ [K.SHIFT_UP]: K.ASIN }} />
+          <Key keyCode={K.SQ} />
+          <Key keyCode={K.SIN} shiftCodes={{ [K.SHIFT_UP]: K.ASIN, [K.SHIFT_DOWN]: K.HYPER }} />
           <Key keyCode={K.COS} shiftCodes={{ [K.SHIFT_UP]: K.ACOS }} />
           <Key keyCode={K.TAN} shiftCodes={{ [K.SHIFT_UP]: K.ATAN }} />
         </div>

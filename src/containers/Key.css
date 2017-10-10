@@ -69,13 +69,11 @@
 }
 
 .Key--color-shiftUp {
-  color: white;
-  background-color: #66BB6A;
+  background-color: #B9F6CA;
 }
 
 .Key--color-shiftDown {
-  color: white;
-  background-color: #FFA726;
+  background-color: #FFD180;
 }
 
 sup {

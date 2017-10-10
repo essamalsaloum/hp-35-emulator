@@ -184,6 +184,7 @@ const math = {
   SUB: '-',
   TAN: 'tan',
   TANH: 'tanh',         // Hyperbolic tangent
+  XROOT: 'xRoot',       // x-th root of y
 }
 
 export default {
@@ -193,11 +194,12 @@ export default {
 
   SHIFT_UP: 'shiftUp',        // Activates up-shifted key functions
   SHIFT_DOWN: 'shiftDown',    // Activates down-shifted key functions
+  HYPER: 'hyper',
+  NOOP: 'noop',
 
   // New math functions. See page G2 ff. of the HP 35 Users Guide
   ABS: 'abs',           // Absolute value
   HMS_TO_FRAC: 'hms->',    // Converts x from hours–minutes– seconds format to a decimal fraction
-  XROOT: 'xRoot',       // x-th root of y
 
   // extensions
 

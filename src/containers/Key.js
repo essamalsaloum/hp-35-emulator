@@ -53,6 +53,7 @@ const keyLabels = {
   [K.RESET]: 'RESET',
   [K.ROLL_DOWN]: 'R↓',
   [K.SHIFT_DOWN]: 'g',
+  [K.HYPER]: 'HYP',
   [K.SHIFT_UP]: 'f',
   [K.SIN]: 'SIN',
   [K.SQ]: 'x<sup>2</sup',
