@@ -6,6 +6,10 @@
       "REPO",
       "SHIFTKEY",
       "Unmount",
-      "deserializing"
+      "deserializing",
+      "lastx",
+      "rolldown",
+      "shiftdown",
+      "shiftup"
     ]
   }

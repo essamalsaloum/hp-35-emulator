@@ -11,16 +11,20 @@ import './Key.css'
 
 const keyLabels = {
   [K.ACOS]: 'ACOS',
+  [K.ACOSH]: '<small>ACOSH</small>',
   [K.ADD]: '+',
   [K.ALOG]: '10<sup>x</sup>',
   [K.ASIN]: 'ASIN',
+  [K.ASINH]: '<small>ASINH</small>',
   [K.ATAN]: 'ATAN',
+  [K.ATANH]: '<small>ATANH</small>',
   [K.CANCEL]: 'C',
   [K.CHS]: '+/-',
   [K.CLR]: 'CLR',
   [K.CONST]: 'Const',
   [K.CONV]: 'Conv',
   [K.COS]: 'COS',
+  [K.COSH]: '<small>COSH</small>',
   [K.D0]: '0',
   [K.D1]: '1',
   [K.D2]: '2',
@@ -45,6 +49,7 @@ const keyLabels = {
   [K.MEM]: 'MEM',
   [K.MUL]: '×',
   [K.NCR]: 'nCr',
+  [K.NOOP]: '',
   [K.NPR]: 'nPr',
   [K.PCT]: '%',
   [K.PCTCHG]: '%chg',
@@ -56,11 +61,13 @@ const keyLabels = {
   [K.HYPER]: 'HYP',
   [K.SHIFT_UP]: 'f',
   [K.SIN]: 'SIN',
+  [K.SINH]: '<small>SINH</small>',
   [K.SQ]: 'x<sup>2</sup',
   [K.SQRT]: '√x',
   [K.SUB]: '−',
   [K.SWAP]: 'x↔︎y',
   [K.TAN]: 'TAN',
+  [K.TANH]: '<small>TANH</small>',
 }
 
 const createMarkup = label => ({ __html: label })
@@ -69,15 +76,18 @@ class Key extends React.PureComponent {
 
   static propTypes = {
     keyCode: PropTypes.string.isRequired,
-    shiftCodes: PropTypes.object,
+    up: PropTypes.string,
+    down: PropTypes.string,
     executeKeyCode: PropTypes.func,
     shiftKey: PropTypes.string,
     setShiftKey: PropTypes.func.isRequired,
     setMainPanel: PropTypes.func.isRequired,
+    className: PropTypes.string
   }
 
   static defaultProps = {
-    shiftCodes: {}
+    shiftCodes: {},
+    className: '',
   }
 
   constructor(props) {
@@ -85,16 +95,18 @@ class Key extends React.PureComponent {
     this.onClick = this.onClick.bind(this)
   }
 
-  onClick(ev) {
-    const keyCode = this.getShiftedKeyCode(ev)
-    const { shiftKey, shiftCodes, setShiftKey, executeKeyCode, setMainPanel } = this.props
-
+  onClick() {
+    const { keyCode, setShiftKey, executeKeyCode, setMainPanel } = this.props
+    let shiftKey = null
     switch (keyCode) {
       case K.SHIFT_UP:
-        setShiftKey(shiftKey === K.SHIFT_UP ? null : K.SHIFT_UP)
+        shiftKey = this.props.shiftKey === K.SHIFT_UP ? null : K.SHIFT_UP
         break
       case K.SHIFT_DOWN:
-        setShiftKey(shiftKey === K.SHIFT_DOWN ? null : K.SHIFT_DOWN)
+        shiftKey = this.props.shiftKey === K.SHIFT_DOWN ? null : K.SHIFT_DOWN
+        break
+      case K.HYPER:
+        shiftKey = this.props.shiftKey === K.HYPER ? null : K.HYPER
         break
       case K.MEM:
         setMainPanel(C.MEMORY_PANEL)
@@ -105,62 +117,52 @@ class Key extends React.PureComponent {
       case K.CONV:
         setMainPanel(C.CONVERSIONS_PANEL)
         break
+      case K.NOOP:
+        break
+      case K.CANCEL:
+        if (shiftKey) {
+          shiftKey = null
+        } else {
+          executeKeyCode(K.CANCEL)
+        }
+        break
       case K.RESET:
         break
       default:
-        if (!shiftKey || (shiftKey && shiftCodes[shiftKey])) {
-          executeKeyCode(keyCode)
-        }
+        executeKeyCode(keyCode)
     }
-
-    if (shiftKey && keyCode !== K.SHIFT_UP && keyCode !== K.SHIFT_DOWN) {
-      setShiftKey(null)
-    }
-  }
-
-  getShiftedKeyCode(ev) {
-    const { keyCode } = this.props
-    const { shiftCodes } = this.props
-    let { shiftKey } = this.props
-    if (ev.shiftKey) {
-      shiftKey = K.SHIFT_UP
-    } else if (ev.altKey) {
-      shiftKey = K.SHIFT_DOWN
-    }
-    return shiftKey && shiftCodes[shiftKey] ? shiftCodes[shiftKey] : keyCode
+    setShiftKey(shiftKey)
   }
 
   renderTopLabel() {
-    const { shiftCodes, shiftKey } = this.props
-    const keyCodeUp = shiftCodes[K.SHIFT_UP]
-    return keyCodeUp && !shiftKey ? (
-      <div className="Key--label-top" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeUp])}></div>
+    const { up, shiftKey } = this.props
+    return up && !shiftKey ? (
+      <div className="Key--label-top" >
+        <div dangerouslySetInnerHTML={createMarkup(keyLabels[up])} />
+      </div>
     ) : (<div className="Key--label-top"></div>)
   }
 
   renderBottomLabel() {
-    const { shiftCodes, shiftKey } = this.props
-    const keyCodeDown = shiftCodes[K.SHIFT_DOWN]
-    return keyCodeDown && !shiftKey ? (
-      <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(keyLabels[keyCodeDown])}></div>
+    const { down, shiftKey } = this.props
+    return down && !shiftKey ? (
+      <div className="Key--label-bottom" dangerouslySetInnerHTML={createMarkup(keyLabels[down])}></div>
     ) : (<div className="Key--label-bottom"></div>)
   }
 
   render() {
-    const { keyCode, shiftKey = 'none', shiftCodes } = this.props
-    let label = keyLabels[keyCode]
-    let colorModifier = 'none'
+    const { keyCode, shiftKey = 'none', className } = this.props
+    const label = keyLabels[keyCode]
+    let colorModifier = shiftKey
 
-    if (shiftKey === K.SHIFT_UP) {
-      label = keyLabels[keyCode === K.SHIFT_UP ? K.SHIFT_UP : shiftCodes[K.SHIFT_UP]]
-      colorModifier = shiftCodes[K.SHIFT_UP] ? K.SHIFT_UP : colorModifier
-    } else if (shiftKey === K.SHIFT_DOWN) {
-      label = keyLabels[keyCode === K.SHIFT_DOWN ? K.SHIFT_DOWN : shiftCodes[K.SHIFT_DOWN]]
-      colorModifier = shiftCodes[K.SHIFT_DOWN] ? K.SHIFT_DOWN : colorModifier
+    if (keyCode === K.NOOP) {
+      colorModifier = K.NOOP
+    } else if (keyCode === K.CANCEL) {
+      colorModifier = 'none'
     }
 
     return (
-      <div className={`Key Key--keyCode-${keyCode}`}>
+      <div className={`Key Key--keyCode-${keyCode} ${className}`}>
         <button
           type="button"
           className={`Key--button Key--color-${colorModifier || 'none'} Key--button-keyCode-${keyCode}`}
@@ -170,7 +172,7 @@ class Key extends React.PureComponent {
         >
           <div className="Key--label-container">
             {this.renderTopLabel()}
-            <div className={`Key--label-main Key--label-keyCode-${keyCode}`} dangerouslySetInnerHTML={createMarkup(label)}></div>
+            <div className={`Key--label-main Key--label-keyCode-${keyCode}`} dangerouslySetInnerHTML={createMarkup(label)} />
             {this.renderBottomLabel()}
           </div>
         </button>
@@ -187,7 +189,7 @@ const mapDispatchToProps = dispatch =>
   }, dispatch)
 
 const mapStateToProps = state => ({
-  shiftKey: shiftKeySelector(state)
+  shiftKey: shiftKeySelector(state),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Key)

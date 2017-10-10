@@ -44,27 +44,27 @@ const physicsConstants = {
 
 const conversions = {
   // distance
-  IN_TO_CM: 'in->cm',       // Convert inches to cm
-  CM_TO_IN: 'cm->in',       // Converts inches to cm
-  FT_TO_M: 'ft->m',
-  M_TO_FT: 'm->ft',
-  MILE_TO_KM: 'mile->km',   // Converts miles to km
-  KM_TO_MILE: 'km->mile',   // Converts kilometers to miles
-  YD_TO_M: 'yd->m',
-  M_TO_YD: 'm->yd',
+  IN_TO_CM: 'in2cm',       // Convert inches to cm
+  CM_TO_IN: 'cm2in',       // Converts inches to cm
+  FT_TO_M: 'ft2m',
+  M_TO_FT: 'm2ft',
+  MILE_TO_KM: 'mile2km',   // Converts miles to km
+  KM_TO_MILE: 'km2mile',   // Converts kilometers to miles
+  YD_TO_M: 'yd2m',
+  M_TO_YD: 'm2yd',
 
   // weight
-  LB_TO_KG: 'lb->kg',       // Converts pounds to kg
-  KG_TO_LB: 'kg->lb',       // Converts kilograms to pounds
-  OZ_TO_G: 'oz->g',
-  G_TO_OZ: 'g-oz',
-  C_TO_F: 'C->F',           // Convert degree C -> F
-  GAL_TO_L: 'gal->l',       // Converts gallons to liters
-  L_TO_GAL: 'l->gal',        // Convert liters to gallons
-  DEG_TO_RAD: 'deg->rad',   // Degrees to radians. Returns (2π/360) x
-  RAD_TO_DEG: 'rad->deg',   // Degrees to radians. Returns (2π/360) x
-  HMS_TO_FRAC: 'hms->frac', // Convert hh:mm:ss to decimal fraction
-  FRAC_TO_HMS: 'frac->hms', // Converts x from a decimal fraction to hh:mm:ss format
+  LB_TO_KG: 'lb2kg',       // Converts pounds to kg
+  KG_TO_LB: 'kg2lb',       // Converts kilograms to pounds
+  OZ_TO_G: 'oz2g',
+  G_TO_OZ: 'g2oz',
+  C_TO_F: 'c2f',           // Convert degree C -> F
+  GAL_TO_L: 'gal2l',       // Converts gallons to liters
+  L_TO_GAL: 'l2gal',        // Convert liters to gallons
+  DEG_TO_RAD: 'deg2rad',   // Degrees to radians. Returns (2π/360) x
+  RAD_TO_DEG: 'rad2deg',   // Degrees to radians. Returns (2π/360) x
+  HMS_TO_FRAC: 'hms2frac', // Convert hh:mm:ss to decimal fraction
+  FRAC_TO_HMS: 'frac2hms', // Converts x from a decimal fraction to hh:mm:ss format
 }
 
 const memory = {
@@ -145,9 +145,9 @@ const input = {
 const stack = {
   CLR: 'clr',
   ENTER: 'enter',
-  LAST_X: 'lastX',
-  ROLL_DOWN: 'rollDown',
-  SWAP: '<>',
+  LAST_X: 'lastx',
+  ROLL_DOWN: 'rolldown',
+  SWAP: 'swap',
 }
 
 const math = {
@@ -156,35 +156,35 @@ const math = {
   ALOG: 'alog',
   ASIN: 'asin',
   ASINH: 'asinh',
-  ADD: '+',
+  ADD: 'add',
   ATAN: 'atan',
   ATANH: 'atanh',
   COS: 'cos',
   COSH: 'cosh',
-  DIV: '/',
-  EXP: 'e^x',
-  FACT: '!',
+  DIV: 'div',
+  EXP: 'exp',
+  FACT: 'fact',
   FP: 'fp',             // Fractional part of x
   IDIV: 'idiv',         // Integer division
   IP: 'ip',             // Integer part of x
   INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
-  INV: '1/x',           // Reciprocal of x
+  INV: 'inv',           // Reciprocal of x
   LN: 'ln',
   LOG: 'log',
-  MUL: '*',
-  NCR: 'nCr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
-  NPR: 'nPr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
-  PCT: '%',             // (y × x) / 100
-  PCTCHG: '%chg',       // (x - y) (100 / y)
-  POW: 'y^x',
+  MUL: 'mul',
+  NCR: 'ncr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
+  NPR: 'npr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
+  PCT: 'pct',             // (y × x) / 100
+  PCTCHG: 'pctchg',       // (x - y) (100 / y)
+  POW: 'pow',
   SIN: 'sin',
   SINH: 'sinh',         // Hyperbolic sine
-  SQ: 'x^2',
+  SQ: 'sq',
   SQRT: 'sqrt',
-  SUB: '-',
+  SUB: 'sub',
   TAN: 'tan',
   TANH: 'tanh',         // Hyperbolic tangent
-  XROOT: 'xRoot',       // x-th root of y
+  XROOT: 'xroot',       // x-th root of y
 }
 
 export default {
@@ -192,14 +192,14 @@ export default {
   CONV: 'conv',
   RESET: 'reset',
 
-  SHIFT_UP: 'shiftUp',        // Activates up-shifted key functions
-  SHIFT_DOWN: 'shiftDown',    // Activates down-shifted key functions
+  SHIFT_UP: 'shiftup',        // Activates up-shifted key functions
+  SHIFT_DOWN: 'shiftdown',    // Activates down-shifted key functions
   HYPER: 'hyper',
   NOOP: 'noop',
 
   // New math functions. See page G2 ff. of the HP 35 Users Guide
   ABS: 'abs',           // Absolute value
-  HMS_TO_FRAC: 'hms->',    // Converts x from hours–minutes– seconds format to a decimal fraction
+  HMS_TO_FRAC: 'hms2frac',    // Converts x from hours–minutes– seconds format to a decimal fraction
 
   // extensions
 

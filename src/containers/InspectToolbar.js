@@ -13,6 +13,7 @@ import { compile } from '../cpu/compiler'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadKeyCodes,
+  clearKeyCodes,
   keyCodesSelector,
   singleStep,
   startProgram,
@@ -48,7 +49,8 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadKeyCodes, isMarkdown } = this.props
+    const { programText, loadKeyCodes,clearKeyCodes, isMarkdown } = this.props
+    clearKeyCodes()
     compile(programText, isMarkdown ? 'markdown' : 'text')
       .then(keyCodes => loadKeyCodes(keyCodes))
       .catch(error => console.log(error.message))
@@ -101,6 +103,7 @@ class InspectToolbar extends React.PureComponent {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     loadKeyCodes,
+    clearKeyCodes,
     singleStep,
     startProgram,
     stopProgram,

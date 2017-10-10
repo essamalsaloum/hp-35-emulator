@@ -25,11 +25,11 @@
   font-variant: small-caps;
 }
 
-.Key--button-keyCode-shiftUp {
+.Key--button-keyCode-shiftup {
   color: #2E7D32;
 }
 
-.Key--button-keyCode-shiftDown {
+.Key--button-keyCode-shiftdown {
   color: #EF6C00;
 }
 
@@ -38,19 +38,28 @@
 }
 
 .Key--label-main {
-  line-height: 1.2rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
   font-weight: bold;
 }
 
+.Key--label-main sup {
+  vertical-align: top;
+  font-size: 0.6rem;
+  position: relative;
+  top: -0.3rem;
+}
+
 .Key--label-top {
-  height: 1em;
-  line-height: 1em;
-  font-size: 11px;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  font-size: 0.7rem;
   color: #2E7D32;
+  margin-bottom: 2px;
 }
 
 .Key--label-bottom {
+  margin-top: 2px;
   height: 0.7rem;
   line-height: 0.7rem;
   font-size: 0.7rem;
@@ -68,15 +77,25 @@
   font-size: 1rem;
 }
 
-.Key--color-shiftUp {
-  background-color: #B9F6CA;
+.Key--color-shiftup {
+  color: #2E7D32;
 }
 
-.Key--color-shiftDown {
-  background-color: #FFD180;
+.Key--color-shiftdown {
+  color: #EF6C00;
+}
+
+.Key--color-hyper {
+  color: #283593;
+}
+
+.Key--color-noop {
+  background-color: #EEEEEE;
 }
 
 sup {
-  vertical-align: super;
-  font-size: small;
+  vertical-align: top;
+  font-size: 0.6rem;
+  position: relative;
+  top: -0.2rem;
 }

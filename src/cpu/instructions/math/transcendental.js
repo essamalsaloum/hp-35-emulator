@@ -26,18 +26,24 @@ const xRoot = (y, x) => math.pow(y, 1 / x)
 
 export default {
   [K.ACOS]: monadic(acos),
+  [K.ACOSH]: monadic(math.acosh),
   [K.ALOG]: monadic(alog),
   [K.ASIN]: monadic(asin),
+  [K.ASINH]: monadic(math.asinh),
   [K.ATAN]: monadic(atan),
+  [K.ATANH]: monadic(math.atanh),
   [K.COS]: monadic(cos),
+  [K.COSH]: monadic(math.cosh),
   [K.EXP]: monadic(math.exp),
   [K.LN]: monadic(ln),
   [K.LOG]: monadic(log),
   [K.POW]: dyadic(math.pow),
   [K.SIN]: monadic(sin),
+  [K.SINH]: monadic(math.sinh),
   [K.SQ]: monadic(sq),
   [K.SQRT]: monadic(sqrt),
   [K.TAN]: monadic(tan),
+  [K.TANH]: monadic(math.tanh),
   [K.XROOT]: dyadic(xRoot),
 }
 

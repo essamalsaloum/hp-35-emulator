@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { showGitHubPanel } from '../ducks/ui'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
-import { loadKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
+import { loadKeyCodes, clearKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
 import { compile, extractProgramText } from '../cpu/compiler'
 import { setLoading, clearLoading } from '../ducks/library'
 
@@ -24,6 +24,7 @@ class ProgramToolbar extends React.PureComponent {
     isRunning: PropTypes.bool.isRequired,
     programText: PropTypes.string,
     loadKeyCodes: PropTypes.func,
+    clearKeyCodes: PropTypes.func,
     clearProgram: PropTypes.func,
     refreshProgramText: PropTypes.func,
     startProgram: PropTypes.func,
@@ -61,6 +62,7 @@ class ProgramToolbar extends React.PureComponent {
     const {
       programText,
       loadKeyCodes,
+      clearKeyCodes,
       isRunning,
       startProgram,
       stopProgram,
@@ -78,6 +80,7 @@ class ProgramToolbar extends React.PureComponent {
     if (isRunning) {
       stopProgram()
     } else {
+      clearKeyCodes()
       clearDelayed()
       setLoading()
       compile(programText, isMarkdown ? 'markdown' : 'text')
@@ -155,6 +158,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({
     showGitHubPanel,
     loadKeyCodes,
+    clearKeyCodes,
     clearProgram,
     refreshProgramText,
     startProgram,
