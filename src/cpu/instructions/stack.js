@@ -10,6 +10,7 @@ export const liftStack = state => {
 const clr = state => ({
   ...state,
   stack: [0, 0, 0, 0],
+  lastX: 0,
   error: null,
   stackLift: false,
   entry: true
@@ -32,9 +33,18 @@ const rollDown = state => {
   }
 }
 
+const lastX = state => {
+  const [x, y, z] = state.stack
+  return {
+    ...state,
+    stack: [state.lastX, x, y, z]
+  }
+}
+
 export default {
-  [K.ENTER]: { stackLift: false, fn: liftStack },
   [K.CLR]: { stackLift: false, fn: clr },
-  [K.SWAP]: { stackLift: true, fn: swap },
+  [K.ENTER]: { stackLift: false, fn: liftStack },
+  [K.LAST_X]: {stackLift: true, fn: lastX},
   [K.ROLL_DOWN]: { stackLift: true, fn: rollDown },
+  [K.SWAP]: { stackLift: true, fn: swap },
 }

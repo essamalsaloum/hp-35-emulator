@@ -123,18 +123,9 @@ const memory = {
   RCL_Z: 'rcl.z',
 }
 
-export default {
-  ACOS: 'acos',
-  ADD: '+',
-  ASIN: 'asin',
-  ATAN: 'atan',
+const input = {
+  CANCEL: 'cancel',
   CHS: 'chs',
-  CLR: 'clr',
-  CONST: 'const',
-  CONV: 'conv',
-  COS: 'cos',
-  DEL: 'del',
-  DOT: 'dot',
   D0: 'd0',
   D1: 'd1',
   D2: 'd2',
@@ -145,62 +136,77 @@ export default {
   D7: 'd7',
   D8: 'd8',
   D9: 'd9',
-  DIV: '/',
+  DEL: 'del',
+  DOT: 'dot',
   EEX: 'eex',
+  PI: 'pi',
+}
+
+const stack = {
+  CLR: 'clr',
   ENTER: 'enter',
+  LAST_X: 'lastX',
+  ROLL_DOWN: 'rollDown',
+  SWAP: '<>',
+}
+
+const math = {
+  ACOS: 'acos',
+  ACOSH: 'acosh',
+  ALOG: 'alog',
+  ASIN: 'asin',
+  ASINH: 'asinh',
+  ADD: '+',
+  ATAN: 'atan',
+  ATANH: 'atanh',
+  COS: 'cos',
+  COSH: 'cosh',
+  DIV: '/',
   EXP: 'e^x',
+  FACT: '!',
+  FP: 'fp',             // Fractional part of x
+  IDIV: 'idiv',         // Integer division
+  IP: 'ip',             // Integer part of x
+  INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
+  INV: '1/x',           // Reciprocal of x
   LN: 'ln',
   LOG: 'log',
   MUL: '*',
-  PI: 'pi',
+  NCR: 'nCr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
+  NPR: 'nPr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
+  PCT: '%',             // (y × x) / 100
+  PCTCHG: '%chg',       // (x - y) (100 / y)
   POW: 'y^x',
-  RCL: 'rcl',
-  RESET: 'reset',
-  ROLL_DOWN: 'rollDown',
   SIN: 'sin',
+  SINH: 'sinh',         // Hyperbolic sine
+  SQ: 'x^2',
   SQRT: 'sqrt',
-  STO: 'sto',
   SUB: '-',
-  SWAP: '<>',
   TAN: 'tan',
+  TANH: 'tanh',         // Hyperbolic tangent
+}
 
-  // deprecated:
-  ARC: 'arc',                 // Replaced by SHIFT_UP and SHIFT_DOWN
-  RECIPROCAL: 'reciprocal',   // Replaced by INV
-  SQR: 'x^2',                 // Replaced by SQ
+export default {
+  CONST: 'const',
+  CONV: 'conv',
+  RESET: 'reset',
 
   SHIFT_UP: 'shiftUp',        // Activates up-shifted key functions
   SHIFT_DOWN: 'shiftDown',    // Activates down-shifted key functions
 
   // New math functions. See page G2 ff. of the HP 35 Users Guide
   ABS: 'abs',           // Absolute value
-  ACOSH: 'acosh',       // Hyperbolic arc cosine
-  ALOG: 'alog',         // 10^x (also known as antilog)
-  ASINH: 'asinh',       // Hyperbolic arc sine
-  ATANH: 'atanh',       // Hyperbolic arc tangent
-  COSH: 'cosh',         // Hyperbolic cosine
-  FACT: '!',            // Factorial
-  FP: 'fp',             // Fractional part of x
   HMS_TO_FRAC: 'hms->',    // Converts x from hours–minutes– seconds format to a decimal fraction
-  IDIV: 'idiv',         // Integer division
-  INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
-  INV: '1/x',           // Reciprocal of x
-  IP: 'ip',             // Integer part of x
-  NCR: 'nCr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
-  NPR: 'nPr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
-  PCT: '%',             // (y × x) / 100
-  PCTCHG: '%chg',       // (x - y) (100 / y)
-  SINH: 'sinh',         // Hyperbolic sine
-  SQ: 'x^2',            // x^2
-  TANH: 'tanh',         // Hyperbolic tangent
   XROOT: 'xRoot',       // x-th root of y
 
   // extensions
 
-  CANCEL: 'cancel',
   HELP: 'help',
 
+  ...input,
+  ...stack,
   ...memory,
+  ...math,
   ...physicsConstants,
   ...conversions,
 }

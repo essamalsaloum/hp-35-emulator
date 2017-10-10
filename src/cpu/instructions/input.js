@@ -162,8 +162,8 @@ const pi = state => {
 }
 
 export default {
+  [K.CANCEL]: { stackLift: false, fn: cancel },
   [K.CHS]: { stackLift: null, fn: changeSign },
-  [K.DOT]: { stackLift: false, fn: decimal },
   [K.D0]: { stackLift: false, fn: digit('0') },
   [K.D1]: { stackLift: false, fn: digit('1') },
   [K.D2]: { stackLift: false, fn: digit('2') },
@@ -175,7 +175,7 @@ export default {
   [K.D8]: { stackLift: false, fn: digit('8') },
   [K.D9]: { stackLift: false, fn: digit('9') },
   [K.DEL]: { stackLift: false, fn: del },
+  [K.DOT]: { stackLift: false, fn: decimal },
   [K.EEX]: { stackLift: false, fn: enterExponent },
   [K.PI]: { stackLift: true, fn: pi },
-  [K.CANCEL]: { stackLift: false, fn: cancel },
 }

@@ -68,14 +68,14 @@ class Keypad extends React.PureComponent {
           <Key keyCode={K.LOG} />
           <Key keyCode={K.LN} />
           <Key keyCode={K.EXP} shiftCodes={{ [K.SHIFT_UP]: K.ALOG }} />
-          <Key keyCode={K.CLR} shiftCodes={{ [K.SHIFT_DOWN]: K.RESET }}/>
+          <Key keyCode={K.CLR} shiftCodes={{ [K.SHIFT_DOWN]: K.RESET }} />
         </div>
         <div className="Keypad--row">
           <Key keyCode={K.SQRT} />
           <Key keyCode={K.SQR} />
-          <Key keyCode={K.SIN} shiftCodes={{ [K.SHIFT_DOWN]: K.ASIN }} />
-          <Key keyCode={K.COS} shiftCodes={{ [K.SHIFT_DOWN]: K.ACOS }} />
-          <Key keyCode={K.TAN} shiftCodes={{ [K.SHIFT_DOWN]: K.ATAN }} />
+          <Key keyCode={K.SIN} shiftCodes={{ [K.SHIFT_UP]: K.ASIN }} />
+          <Key keyCode={K.COS} shiftCodes={{ [K.SHIFT_UP]: K.ACOS }} />
+          <Key keyCode={K.TAN} shiftCodes={{ [K.SHIFT_UP]: K.ATAN }} />
         </div>
         <div className="Keypad--row">
           <Key keyCode={K.SWAP} />
@@ -85,7 +85,7 @@ class Keypad extends React.PureComponent {
           <Key keyCode={K.PCT} shiftCodes={{ [K.SHIFT_DOWN]: K.PCTCHG }} />
         </div>
         <div className="Keypad--row">
-          <Key keyCode={K.ENTER} />
+          <Key keyCode={K.ENTER} shiftCodes={{ [K.SHIFT_UP]: K.LAST_X }} />
           <Key keyCode={K.CHS} />
           <Key keyCode={K.EEX} />
           <Key keyCode={K.DEL} />

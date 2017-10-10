@@ -39,6 +39,7 @@ const keyLabels = {
   [K.EXP]: 'e<sup>x</sup>',
   [K.FACT]: '!',
   [K.INV]: '1/x',
+  [K.LAST_X]: 'LASTx',
   [K.LN]: 'LN',
   [K.LOG]: 'LOG',
   [K.MEM]: 'MEM',

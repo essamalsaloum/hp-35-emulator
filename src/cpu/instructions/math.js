@@ -18,6 +18,7 @@ const compute = keyCode => state => {
     throw new Error(`math: not implemented [${keyCode}]`)
   }
   let { stack } = state
+  const lastX = stack[0]
   stack = fn(stack)
   const [x] = stack
   if (typeof x === 'object' && x instanceof Error) {
@@ -32,7 +33,7 @@ const compute = keyCode => state => {
       error: { message: 'range error' }
     }
   }
-  return { ...state, stack }
+  return { ...state, stack, lastX }
 }
 
 export default Object.keys(funcs).reduce((prev, keyCode) => {
