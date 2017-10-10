@@ -12,15 +12,6 @@ export default class ALU {
     return new Set(Object.keys(this.instructionSet))
   }
 
-  liftStack(state) {
-    const [x, y, z] = state.stack
-    return {
-      ...state,
-      stack: [x, x, y, z],
-      entry: false
-    }
-  }
-
   execute(state, keyCode) {
     const microCode = this.instructionSet[keyCode]
     if (!microCode) {

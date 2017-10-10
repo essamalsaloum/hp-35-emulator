@@ -19,7 +19,8 @@ const swap = state => {
   const [x, y, z, t] = state.stack
   return {
     ...state,
-    stack: [y, x, z, t]
+    stack: [y, x, z, t],
+    entry: false
   }
 }
 

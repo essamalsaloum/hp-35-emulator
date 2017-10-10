@@ -108,6 +108,9 @@ const changeSign = state => {
 }
 
 const del = state => {
+  if (!state.entry) {
+    return cancel(state)
+  }
   if (state.error) {
     return { ...state, error: null }
   }

@@ -2,6 +2,7 @@ import K from './keyCodes'
 import ALU from './ALU'
 import input from './instructions/input'
 import memory from './instructions/memory'
+import { liftStack } from './instructions/stack'
 import { formatNumber } from './util'
 // import { playSuccessSound } from '../services/audio'
 import {
@@ -54,7 +55,7 @@ export default class ControlUnit {
 
     if (oldState.entry && !newState.entry) {
       this.emit(formatNumber(oldState.stack[0]))
-      }
+    }
 
     if (!newState.entry && newState.stackLift) {
       this.emit(keyCode)
@@ -127,7 +128,7 @@ export default class ControlUnit {
   }
 
   execute(state, keyCode) {
-    if (state.error && !(keyCode === K.DEL || keyCode === K.CLR || keyCode === K.CANCEL) ) {
+    if (state.error && !(keyCode === K.DEL || keyCode === K.CLR || keyCode === K.CANCEL)) {
       return state
     }
 
@@ -137,7 +138,7 @@ export default class ControlUnit {
       if (!Number.isFinite(num)) {
         return {
           ...state,
-          error: {message: 'range error'}
+          error: { message: 'range error' }
         }
       }
       return {
@@ -173,7 +174,7 @@ export default class ControlUnit {
 
     const { stackLift: nextStackLift, fn } = microCode
     const { stackLift } = state
-    state = stackLift && !stackLiftCancelers.has(keyCode) ? this.alu.liftStack(state) : state
+    state = stackLift && !stackLiftCancelers.has(keyCode) ? liftStack(state) : state
 
     state = fn(state)
     const { stack, buffer } = state
