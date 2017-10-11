@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions'
 import cpu from '../cpu'
+import { RESET } from '../ducks'
 
 const EXECUTE_KEYCODE = 'rpnext/cpu/EXECUTE_KEYCODE'
 const RAISE_ERROR = 'rpnext/cpu/RAISE_ERROR'
@@ -62,6 +63,8 @@ function alu(state, payload) {
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
+    case RESET:
+      return { ...initialState }
     case LOAD_KEYCODES:
       return { ...state, keyCodes: payload }
     case CLEAR_KEYCODES:

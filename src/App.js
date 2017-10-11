@@ -11,6 +11,12 @@ class App extends React.PureComponent {
     test: PropTypes.bool
   }
 
+  componentWillMount() {
+    if (/iPhone/.test(navigator.userAgent)) {
+      document.querySelector('html').style.fontSize = '18px'
+    }
+  }
+
   render() {
     // tabIndex needed to allow div to receive focus
     return (

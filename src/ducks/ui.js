@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions'
 import C from '../constants'
+import { RESET } from './index'
 
 const SET_MAIN_PANEL = 'rpnext/ui/SET_MAIN_PANEL'
 const SET_SHIFT_KEY = 'rpnext/ui/SET_SHIFT_KEY'
@@ -19,6 +20,8 @@ export const showGitHubPanel = createAction(SHOW_GITHUB_PANEL)
 
 export default function reduce(state = initialState, { type, payload }) {
   switch (type) {
+    case RESET:
+      return { ...initialState }
     case SET_MAIN_PANEL:
       return { ...state, mainPanel: payload }
     case SET_SHIFT_KEY:

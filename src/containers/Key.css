@@ -3,6 +3,14 @@
   flex: 1;
 }
 
+.Key button:focus {
+  outline: 0;
+}
+
+.Key button:active {
+  background-color: #EEEEEE;
+}
+
 .Key--button {
   flex: 1;
   padding: 0;
@@ -51,18 +59,18 @@
 }
 
 .Key--label-top {
-  height: 0.7rem;
-  line-height: 0.7rem;
-  font-size: 0.7rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  font-size: 0.8rem;
   color: #2E7D32;
   margin-bottom: 2px;
 }
 
 .Key--label-bottom {
   margin-top: 2px;
-  height: 0.7rem;
-  line-height: 0.7rem;
-  font-size: 0.7rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  font-size: 0.8rem;
   color: #EF6C00;
 }
 
@@ -77,16 +85,13 @@
   font-size: 1rem;
 }
 
-.Key--color-shiftup {
+.Key--color-shiftup,
+.Key--color-hyper {
   color: #2E7D32;
 }
 
 .Key--color-shiftdown {
   color: #EF6C00;
-}
-
-.Key--color-hyper {
-  color: #283593;
 }
 
 .Key--color-noop {

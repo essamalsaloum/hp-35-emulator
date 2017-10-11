@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { executeKeyCode } from '../cpu/reducer'
 import { setShiftKey, shiftKeySelector } from '../ducks/ui'
 import { setMainPanel } from '../ducks/ui'
+import { reset } from '../ducks'
 import K from '../cpu/keyCodes'
 import C from '../constants'
 import './Key.css'
@@ -39,7 +40,7 @@ const keyLabels = {
   [K.DIV]: '÷',
   [K.DOT]: '•',
   [K.EEX]: 'EEX',
-  [K.ENTER]: 'ENTER ↑',
+  [K.ENTER]: 'ENTER',
   [K.EXP]: 'e<sup>x</sup>',
   [K.FACT]: '!',
   [K.INV]: '1/x',
@@ -82,7 +83,8 @@ class Key extends React.PureComponent {
     shiftKey: PropTypes.string,
     setShiftKey: PropTypes.func.isRequired,
     setMainPanel: PropTypes.func.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    reset: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -96,7 +98,7 @@ class Key extends React.PureComponent {
   }
 
   onClick() {
-    const { keyCode, setShiftKey, executeKeyCode, setMainPanel } = this.props
+    const { keyCode, setShiftKey, executeKeyCode, setMainPanel, reset } = this.props
     let shiftKey = null
     switch (keyCode) {
       case K.SHIFT_UP:
@@ -120,18 +122,21 @@ class Key extends React.PureComponent {
       case K.NOOP:
         break
       case K.CANCEL:
-        if (shiftKey) {
+        if (this.props.shiftKey) {
           shiftKey = null
         } else {
           executeKeyCode(K.CANCEL)
         }
         break
       case K.RESET:
+        reset()
         break
       default:
         executeKeyCode(keyCode)
     }
-    setShiftKey(shiftKey)
+    if (shiftKey !== this.props.shiftKey) {
+      setShiftKey(shiftKey)
+    }
   }
 
   renderTopLabel() {
@@ -186,6 +191,7 @@ const mapDispatchToProps = dispatch =>
     executeKeyCode,
     setShiftKey,
     setMainPanel,
+    reset,
   }, dispatch)
 
 const mapStateToProps = state => ({

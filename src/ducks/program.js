@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions'
-import {clearKeyCodes} from '../cpu/reducer'
+import { clearKeyCodes } from '../cpu/reducer'
+import { RESET } from './index'
 
 const REFRESH_PROGRAM_TEXT = 'rpnext/program/REFRESH_PROGRAM_TEXT'
 const LOAD_MARKDOWN_TEXT = 'rpnext/program/LOAD_MARKDOWN_TEXT'
@@ -8,7 +9,7 @@ const SET_RECORDING = 'rpnext/program/SET_RECORDING'
 const CLEAR_RECORDING = 'rpnext/program/CLEAR_RECORDING'
 
 export const clearProgram = () => dispatch => {
-  dispatch({type: CLEAR_PROGRAM})
+  dispatch({ type: CLEAR_PROGRAM })
   dispatch(clearKeyCodes())
 }
 
@@ -25,6 +26,8 @@ const initialState = {
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
+    case RESET:
+      return { ...initialState }
     case CLEAR_PROGRAM:
       return { ...state, text: '', isMarkdown: false }
     case REFRESH_PROGRAM_TEXT:

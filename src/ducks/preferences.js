@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions'
+import { RESET } from './index'
 
 const SET_RECENT_CONSTANT = 'rpnext/preferences/SET_RECENT_CONSTANT'
 const SET_RECENT_CONVERSION = 'rpnext/preferences/SET_RECENT_CONVERSION'
@@ -15,6 +16,8 @@ export const setRecentConversion = createAction(SET_RECENT_CONVERSION)
 export default function reduce(state = initialState, { type, payload }) {
   let { recentConstants, recentConversions } = state
   switch (type) {
+    case RESET:
+      return { ...initialState }
     case SET_RECENT_CONSTANT:
       recentConstants = recentConstants.filter(keyCode => payload !== keyCode)
       recentConstants.unshift(payload)
