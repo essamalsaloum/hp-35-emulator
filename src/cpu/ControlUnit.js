@@ -128,7 +128,7 @@ export default class ControlUnit {
   }
 
   execute(state, keyCode) {
-    if (state.error && !(keyCode === K.DEL || keyCode === K.CLR || keyCode === K.CANCEL)) {
+    if (state.error && keyCode !== K.CANCEL) {
       return state
     }
 

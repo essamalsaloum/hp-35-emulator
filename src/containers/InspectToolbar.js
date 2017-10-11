@@ -10,6 +10,7 @@ import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
 import { compile } from '../cpu/compiler'
+import { resetKeypad } from '../ducks/ui'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadKeyCodes,
@@ -30,6 +31,7 @@ class InspectToolbar extends React.PureComponent {
   static propTypes = {
     programText: PropTypes.string.isRequired,
     keyCodes: PropTypes.array.isRequired,
+    clearKeyCodes: PropTypes.func.isRequired,
     isRunning: PropTypes.bool.isRequired,
     loadKeyCodes: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
@@ -40,16 +42,18 @@ class InspectToolbar extends React.PureComponent {
     setDelayed: PropTypes.func.isRequired,
     clearDelayed: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
+    resetKeypad: PropTypes.func.isRequired,
   }
 
   constructor() {
     super()
     this.toggleDelayed = this.toggleDelayed.bind(this)
     this.runStop = this.runStop.bind(this)
+    this.singleStep = this.singleStep.bind(this)
   }
 
   componentWillMount() {
-    const { programText, loadKeyCodes,clearKeyCodes, isMarkdown } = this.props
+    const { programText, loadKeyCodes, clearKeyCodes, isMarkdown } = this.props
     clearKeyCodes()
     compile(programText, isMarkdown ? 'markdown' : 'text')
       .then(keyCodes => loadKeyCodes(keyCodes))
@@ -65,16 +69,22 @@ class InspectToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { isRunning, startProgram, stopProgram } = this.props
+    const { isRunning, startProgram, stopProgram, resetKeypad } = this.props
     if (isRunning) {
       stopProgram()
     } else {
+      resetKeypad()
       startProgram()
     }
   }
 
+  singleStep() {
+    this.props.resetKeypad()
+    this.props.singleStep()
+  }
+
   render() {
-    const { keyCodes, isRunning, singleStep, gotoProgramTop, isDelayed } = this.props
+    const { keyCodes, isRunning, gotoProgramTop, isDelayed } = this.props
     return (
       <Toolbar>
         <ToolbarGroup firstChild={true} style={{ paddingLeft: 8 }}>
@@ -90,7 +100,7 @@ class InspectToolbar extends React.PureComponent {
           <IconButton onClick={() => gotoProgramTop()} disabled={keyCodes.length === 0 || isRunning} >
             <Refresh color={grey700} />
           </IconButton>
-          <IconButton onClick={() => singleStep()} disabled={keyCodes.length === 0 || isRunning} >
+          <IconButton onClick={this.singleStep} disabled={keyCodes.length === 0 || isRunning} >
             <Redo color={grey700} />
           </IconButton>
           <RunStopButton onClick={this.runStop} disabled={keyCodes.length === 0} isRunning={isRunning} />
@@ -109,7 +119,8 @@ const mapDispatchToProps = dispatch =>
     stopProgram,
     gotoProgramTop,
     setDelayed,
-    clearDelayed
+    clearDelayed,
+    resetKeypad,
   }, dispatch)
 
 const mapStateToProps = state => ({

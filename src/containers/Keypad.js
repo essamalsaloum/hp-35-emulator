@@ -6,6 +6,7 @@ import DefaultKeypad from '../components/keypads/DefaultKeypad'
 import ShiftUpKeypad from '../components/keypads/ShiftUpKeypad'
 import ShiftDownKeypad from '../components/keypads/ShiftDownKeypad'
 import HyperbolicKeypad from '../components/keypads/HyperbolicKeypad'
+import ConversionsKeypad from '../components/keypads/ConversionsKeypad'
 import { setShiftKey, shiftKeySelector } from '../ducks/ui'
 import { executeKeyCode } from '../cpu/reducer'
 import mapKeyboardEvent from '../cpu/keyboardEventMapper'
@@ -52,6 +53,8 @@ class Keypad extends React.PureComponent {
         return <ShiftDownKeypad />
       case K.HYPER:
         return <HyperbolicKeypad />
+      case K.CONV:
+        return <ConversionsKeypad />
       default:
         return <DefaultKeypad />
     }

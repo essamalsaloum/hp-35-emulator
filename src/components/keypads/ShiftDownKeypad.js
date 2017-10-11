@@ -16,8 +16,8 @@ export default function ShiftDownKeypad() {
       <div className="Keypad--row">
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.RAD2DEG} />
+        <Key keyCode={K.DEG2RAD} />
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
@@ -28,14 +28,7 @@ export default function ShiftDownKeypad() {
         <Key keyCode={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.NOOP} className="Key--keyCode-enter" />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-      </div>
-      <div className="Keypad--row">
-        <Key keyCode={K.CONST} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.LAST_X} className="Key--keyCode-enter" />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
@@ -48,7 +41,14 @@ export default function ShiftDownKeypad() {
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.SHIFT_DOWN} />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+      </div>
+      <div className="Keypad--row">
+        <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />

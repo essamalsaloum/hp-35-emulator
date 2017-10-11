@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Delete from 'material-ui/svg-icons/action/delete'
 import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
-import { showGitHubPanel } from '../ducks/ui'
+import { showGitHubPanel, resetKeypad } from '../ducks/ui'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
 import { loadKeyCodes, clearKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
 import { compile, extractProgramText } from '../cpu/compiler'
@@ -36,6 +36,7 @@ class ProgramToolbar extends React.PureComponent {
     clearDelayed: PropTypes.func.isRequired,
     setLoading: PropTypes.func.isRequired,
     clearLoading: PropTypes.func.isRequired,
+    resetKeypad: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -73,6 +74,7 @@ class ProgramToolbar extends React.PureComponent {
       clearDelayed,
       setLoading,
       clearLoading,
+      resetKeypad,
     } = this.props
     if (recording) {
       clearRecording()
@@ -80,6 +82,7 @@ class ProgramToolbar extends React.PureComponent {
     if (isRunning) {
       stopProgram()
     } else {
+      resetKeypad()
       clearKeyCodes()
       clearDelayed()
       setLoading()
@@ -168,6 +171,7 @@ const mapDispatchToProps = dispatch =>
     clearDelayed,
     setLoading,
     clearLoading,
+    resetKeypad,
   }, dispatch)
 
 const mapStateToProps = state => ({

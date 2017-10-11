@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { stackSelector, bufferSelector, isDelayedSelector, isRunningSelector, errorSelector } from '../cpu/reducer'
-import {formatNumber} from '../cpu/util'
+import { stackSelector, bufferSelector, isDelayedSelector, isRunningSelector, errorSelector, entrySelector } from '../cpu/reducer'
+import { formatNumber } from '../cpu/util'
 import './Display.css'
 
 const labels = ['x', 'y', 'z', 't']
@@ -15,6 +15,7 @@ class Display extends React.Component {
     error: PropTypes.object,
     isDelayed: PropTypes.bool.isRequired,
     isRunning: PropTypes.bool.isRequired,
+    entry: PropTypes.bool.isRequired,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -23,10 +24,21 @@ class Display extends React.Component {
       this.props.isDelayed
   }
 
-  renderStack(stack, buffer, error) {
+  renderStack() {
+    const { stack, buffer, error, entry } = this.props
     return stack.map((register, index) => {
-      const displayX = error ? error.message : buffer
-      const value = index === 0 ? displayX : formatNumber(register)
+      let value
+      if (index === 0) {
+        if (error) {
+          value = error.message
+        } else if (entry && buffer !== '0') {
+          value = buffer + '_'
+        } else {
+          value = buffer
+        }
+      } else {
+        value = formatNumber(register)
+      }
       return (
         <div key={index} className="Display--row">
           {`${labels[index]}: ${value}`}
@@ -36,10 +48,9 @@ class Display extends React.Component {
   }
 
   render() {
-    const { stack, buffer, error } = this.props
     return (
       <div className="Display">
-        {this.renderStack(stack, buffer, error)}
+        {this.renderStack()}
       </div>
     )
   }
@@ -51,6 +62,7 @@ const mapStateToProps = state => ({
   error: errorSelector(state),
   isDelayed: isDelayedSelector(state),
   isRunning: isRunningSelector(state),
+  entry: entrySelector(state),
 })
 
 export default connect(mapStateToProps)(Display)

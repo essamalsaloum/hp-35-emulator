@@ -101,3 +101,4 @@ export const ipSelector = state => state.cpu.ip
 export const isRunningSelector = state => state.cpu.isRunning
 export const isDelayedSelector = state => state.cpu.isDelayed
 export const keyCodesSelector = state => state.cpu.keyCodes
+export const entrySelector = state => state.cpu.entry

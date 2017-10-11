@@ -44,27 +44,28 @@ const physicsConstants = {
 
 const conversions = {
   // distance
-  IN_TO_CM: 'in2cm',       // Convert inches to cm
-  CM_TO_IN: 'cm2in',       // Converts inches to cm
-  FT_TO_M: 'ft2m',
-  M_TO_FT: 'm2ft',
-  MILE_TO_KM: 'mile2km',   // Converts miles to km
-  KM_TO_MILE: 'km2mile',   // Converts kilometers to miles
-  YD_TO_M: 'yd2m',
-  M_TO_YD: 'm2yd',
+  IN2CM: 'in2cm',       // Convert inches to cm
+  CM2IN: 'cm2in',       // Converts inches to cm
+  FT2M: 'ft2m',
+  M2FT: 'm2ft',
+  MI2KM: 'mi2km',       // Converts miles to km
+  KM2MI: 'km2mi',       // Converts kilometers to miles
+  YD2M: 'yd2m',
+  M2YD: 'm2yd',
 
   // weight
-  LB_TO_KG: 'lb2kg',       // Converts pounds to kg
-  KG_TO_LB: 'kg2lb',       // Converts kilograms to pounds
-  OZ_TO_G: 'oz2g',
-  G_TO_OZ: 'g2oz',
-  C_TO_F: 'c2f',           // Convert degree C -> F
-  GAL_TO_L: 'gal2l',       // Converts gallons to liters
-  L_TO_GAL: 'l2gal',        // Convert liters to gallons
-  DEG_TO_RAD: 'deg2rad',   // Degrees to radians. Returns (2π/360) x
-  RAD_TO_DEG: 'rad2deg',   // Degrees to radians. Returns (2π/360) x
-  HMS_TO_FRAC: 'hms2frac', // Convert hh:mm:ss to decimal fraction
-  FRAC_TO_HMS: 'frac2hms', // Converts x from a decimal fraction to hh:mm:ss format
+  LB2KG: 'lb2kg',       // Converts pounds to kg
+  KG2LB: 'kg2lb',       // Converts kilograms to pounds
+  OZ2G: 'oz2g',
+  G2OZ: 'g2oz',
+  C2F: 'c2f',           // Convert degree C -> F
+  F2C: 'f2c',           // Convert degree F -> C
+  GAL2L: 'gal2l',       // Converts gallons to liters
+  L2GAL: 'l2gal',       // Convert liters to gallons
+  DEG2RAD: 'deg2rad',   // Degrees to radians. Returns (2π/360) x
+  RAD2DEG: 'rad2deg',   // Degrees to radians. Returns (2π/360) x
+  HMS2FRAC: 'hms2frac', // Convert hh:mm:ss to decimal fraction
+  FRAC2HMS: 'frac2hms', // Converts x from a decimal fraction to hh:mm:ss format
 }
 
 const memory = {
@@ -163,6 +164,7 @@ const math = {
   COSH: 'cosh',
   DIV: 'div',
   EXP: 'exp',
+  EXPM: 'expm',
   FACT: 'fact',
   FP: 'fp',             // Fractional part of x
   IDIV: 'idiv',         // Integer division
@@ -170,6 +172,7 @@ const math = {
   INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
   INV: 'inv',           // Reciprocal of x
   LN: 'ln',
+  LNP1: 'lnp1',
   LOG: 'log',
   MUL: 'mul',
   NCR: 'ncr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
@@ -199,7 +202,7 @@ export default {
 
   // New math functions. See page G2 ff. of the HP 35 Users Guide
   ABS: 'abs',           // Absolute value
-  HMS_TO_FRAC: 'hms2frac',    // Converts x from hours–minutes– seconds format to a decimal fraction
+  HMS2FRAC: 'hms2frac',    // Converts x from hours–minutes– seconds format to a decimal fraction
 
   // extensions
 

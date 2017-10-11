@@ -7,8 +7,8 @@ export default function DefaultKeypad() {
   return (
     <div className="Keypad">
       <div className="Keypad--row">
-        <Key keyCode={K.POW} up={K.LOG} down={K.LN}/>
-        <Key keyCode={K.INV} up={K.ALOG} down={K.EXP}/>
+        <Key keyCode={K.POW} up={K.LOG} down={K.LN} />
+        <Key keyCode={K.INV} up={K.ALOG} down={K.EXP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.CLR} down={K.RESET} />
@@ -16,8 +16,8 @@ export default function DefaultKeypad() {
       <div className="Keypad--row">
         <Key keyCode={K.SQRT} />
         <Key keyCode={K.SQ} />
-        <Key keyCode={K.SIN} up={K.ASIN} />
-        <Key keyCode={K.COS} up={K.ACOS} />
+        <Key keyCode={K.SIN} up={K.ASIN} down={K.RAD2DEG} />
+        <Key keyCode={K.COS} up={K.ACOS} down={K.DEG2RAD} />
         <Key keyCode={K.TAN} up={K.ATAN} />
       </div>
       <div className="Keypad--row">
@@ -28,15 +28,15 @@ export default function DefaultKeypad() {
         <Key keyCode={K.PCT} down={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.ENTER} up={K.LAST_X} />
-        <Key keyCode={K.CHS} up={K.HYPER} />
+        <Key keyCode={K.ENTER} down={K.LAST_X} />
+        <Key keyCode={K.CHS} />
         <Key keyCode={K.EEX} />
         <Key keyCode={K.DEL} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.MEM} up={K.CONV} down={K.CONST} />
-        <Key keyCode={K.D7} />
-        <Key keyCode={K.D8} />
+        <Key keyCode={K.MEM} up={K.CONST} />
+        <Key keyCode={K.D7} up={K.CONV} />
+        <Key keyCode={K.D8} up={K.HYPER} />
         <Key keyCode={K.D9} />
         <Key keyCode={K.DIV} />
       </div>

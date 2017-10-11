@@ -30,30 +30,30 @@ const oz2g = x => x * 31.1034768
 const g2oz = x => x / 31.1034768
 
 const distance = {
-  [K.IN_TO_CM]: monadic(in2cm),
-  [K.CM_TO_IN]: monadic(cm2in),
-  [K.FT_TO_M]: monadic(ft2m),
-  [K.M_TO_FT]: monadic(m2ft),
-  [K.YD_TO_M]: monadic(yd2m),
-  [K.M_TO_YD]: monadic(m2yd),
-  [K.MILE_TO_KM]: monadic(mile2km),
-  [K.KM_TO_MILE]: monadic(km2mile),
+  [K.IN2CM]: monadic(in2cm),
+  [K.CM2IN]: monadic(cm2in),
+  [K.FT2M]: monadic(ft2m),
+  [K.M2FT]: monadic(m2ft),
+  [K.YD2M]: monadic(yd2m),
+  [K.M2YD]: monadic(m2yd),
+  [K.MI2KM]: monadic(mile2km),
+  [K.KM2MI]: monadic(km2mile),
 }
 
 const weight = {
-  [K.LB_TO_KG]: monadic(lb2kg),
-  [K.KG_TO_LB]: monadic(kg2lb),
-  [K.OZ_TO_G]: monadic(oz2g),
-  [K.G_TO_OZ]: monadic(g2oz),
+  [K.LB2KG]: monadic(lb2kg),
+  [K.KG2LB]: monadic(kg2lb),
+  [K.OZ2G]: monadic(oz2g),
+  [K.G2OZ]: monadic(g2oz),
 }
 export default {
   ...distance,
   ...weight,
 
-  [K.RAD_TO_DEG]: monadic(radiansToDegrees),
+  [K.RAD2DEG]: monadic(radiansToDegrees),
   [K.F_TO_C]: monadic(F2C),
-  [K.C_TO_F]: monadic(C2F),
-  [K.L_TO_GAL]: monadic(l2gal),
-  [K.GAL_TO_L]: monadic(gal2l),
-  [K.DEG_TO_RAD]: monadic(degreesToRadians),
+  [K.C2F]: monadic(C2F),
+  [K.L2GAL]: monadic(l2gal),
+  [K.GAL2L]: monadic(gal2l),
+  [K.DEG2RAD]: monadic(degreesToRadians),
 }

@@ -10,7 +10,7 @@ export default function ShiftUpKeypad() {
         <Key keyCode={K.LOG} />
         <Key keyCode={K.ALOG} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.ALOG} />
+        <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
@@ -28,20 +28,20 @@ export default function ShiftUpKeypad() {
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.LAST_X} className="Key--keyCode-enter" />
+        <Key keyCode={K.NOOP} className="Key--keyCode-enter" />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.NOOP} />
+      </div>
+      <div className="Keypad--row">
+        <Key keyCode={K.CONST} />
+        <Key keyCode={K.CONV} />
         <Key keyCode={K.HYPER} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.CONV} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-      </div>
-      <div className="Keypad--row">
-        <Key keyCode={K.SHIFT_UP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
