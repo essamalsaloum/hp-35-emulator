@@ -37,6 +37,6 @@ const compute = keyCode => state => {
 }
 
 export default Object.keys(funcs).reduce((prev, keyCode) => {
-  prev[keyCode] = { stackLift: true, fn: compute(keyCode) }
+  prev[keyCode] = compute(keyCode)
   return prev
 }, {})

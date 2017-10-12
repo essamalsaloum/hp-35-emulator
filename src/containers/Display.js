@@ -31,10 +31,8 @@ class Display extends React.Component {
       if (index === 0) {
         if (error) {
           value = error.message
-        } else if (entry && buffer !== '0') {
-          value = buffer + '_'
-        } else {
-          value = buffer
+        } else  {
+          value = entry ? buffer + '_' : buffer
         }
       } else {
         value = formatNumber(register)

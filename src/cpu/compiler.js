@@ -1,13 +1,13 @@
 import cpu from './index'
 import * as github from '../services/github'
 import { Tokenizer, TokenType } from './Tokenizer'
-import aliases from './aliases'
+// import aliases from './aliases'
 
 const CONTEXT_TRUNCATE_AT = 50
 
 const isBlankOrComment = line => line === '' || /^\s*\/\//.test(line)
 
-export async function compile(text, mode = 'text', aliasMap = aliases) {
+export async function compile(text, mode = 'text', aliasMap = {}) {
   // console.log('compile', mode, text)
   return mode === 'markdown'
     ? compileMarkDownProgram(text, aliasMap)

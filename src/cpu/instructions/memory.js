@@ -62,19 +62,18 @@ const swapMem = (state, operand) => {
     stack: [memValue, ...rest],
     memory: [...memory]
   }
-
 }
 
 export default {
-  [K.STO]: { stackLift: false, fn: store },
-  [K.RCL]: { stackLift: true, fn: recall },
-  [K.RCL_ADD]: {stackLift: false, fn: recallFn(math.add)},
-  [K.RCL_SUB]: {stackLift: false, fn: recallFn(math.subtract)},
-  [K.RCL_MUL]: {stackLift: false, fn: recallFn(math.multiply)},
-  [K.RCL_DIV]: {stackLift: false, fn: recallFn(math.divide)},
-  [K.STO_ADD]: {stackLift: false, fn: storeFn(math.add)},
-  [K.STO_SUB]: {stackLift: false, fn: storeFn(math.subtract)},
-  [K.STO_MUL]: {stackLift: false, fn: storeFn(math.multiply)},
-  [K.STO_DIV]: {stackLift: false, fn: storeFn(math.divide)},
-  [K.MEM_SWAP]: {stackLift: false, fn: swapMem},
+  [K.STO]: store ,
+  [K.RCL]: recall,
+  [K.RCL_ADD]: recallFn(math.add),
+  [K.RCL_SUB]: recallFn(math.subtract),
+  [K.RCL_MUL]: recallFn(math.multiply),
+  [K.RCL_DIV]: recallFn(math.divide),
+  [K.STO_ADD]: storeFn(math.add),
+  [K.STO_SUB]: storeFn(math.subtract),
+  [K.STO_MUL]: storeFn(math.multiply),
+  [K.STO_DIV]: storeFn(math.divide),
+  [K.MEM_SWAP]: swapMem,
 }

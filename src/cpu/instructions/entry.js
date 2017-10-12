@@ -1,68 +1,6 @@
 import K from '../keyCodes'
 import { MAX_SIGNIFICANT_DIGITS } from '../../cpu/util'
 
-const enter = state => {
-  const [x, y, z] = state.stack
-  return {
-    ...state,
-    stack: [x, x, y, z],
-    stackLift: false,
-    entry: false
-  }
-}
-
-const cancel = state => {
-  if (state.error) {
-    return { ...state, error: null }
-  }
-  const [, y, z, t] = state.stack
-  return {
-    ...state,
-    stack: [0, y, z, t],
-    buffer: '0',
-    stackLift: false,
-    entry: false
-  }
-}
-
-const clr = state => ({
-  ...state,
-  stack: [0, 0, 0, 0],
-  buffer: '0',
-  lastX: 0,
-  error: null,
-  stackLift: false,
-  entry: false
-})
-
-const del = state => {
-  if (!state.entry) {
-    return cancel(state)
-  }
-
-  if (state.error) {
-    return { ...state, error: null }
-  }
-
-  let [mantissa, exponent] = splitNumber(state.buffer)
-  if (exponent) {
-    exponent = exponent.slice(0, -1)
-    exponent = /^[+-]$/.test(exponent) ? '' : exponent
-  } else {
-    mantissa = mantissa.slice(0, -1)
-    mantissa = mantissa.length === 0 || mantissa === '-' ? '0' : mantissa
-  }
-
-  const buffer = joinNumber(mantissa, exponent)
-  const stack = bufferToStack(buffer, state.stack)
-
-  return {
-    ...state,
-    stack,
-    buffer
-  }
-}
-
 const digit = digit => state => {
   let buffer = state.entry ? state.buffer : '0'
   let [mantissa, exponent] = splitNumber(buffer)
@@ -136,7 +74,7 @@ const changeSign = state => {
   }
 
   let [mantissa, exponent] = splitNumber(state.buffer)
-  if (exponent && state.entry) {
+  if (exponent) {
     const sign = exponent.startsWith('-') ? '+' : '-'
     exponent = sign + exponent.slice(1)
   } else {
@@ -148,8 +86,7 @@ const changeSign = state => {
   return {
     ...state,
     buffer,
-    stack: bufferToStack(buffer, state.stack),
-    stackLift: true
+    stack: bufferToStack(buffer, state.stack)
   }
 }
 

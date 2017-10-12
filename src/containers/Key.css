@@ -76,13 +76,6 @@
   color: #EF6C00;
 }
 
-.Key--label-keyCode-div,
-.Key--label-keyCode-mul,
-.Key--label-keyCode-sub,
-.Key--label-keyCode-add {
-  font-size: 20px;
-}
-
 .Key small {
   font-size: 1rem;
 }

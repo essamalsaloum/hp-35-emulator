@@ -1,8 +1,9 @@
 import K from './keyCodes'
-import ALU from './ALU'
-import input from './instructions/input'
-import memory from './instructions/memory'
-import { liftStack } from './instructions/stack'
+import inputInstructions from './instructions/input'
+import memoryInstructions from './instructions/memory'
+import stackInstructions from './instructions/stack'
+import mathInstructions from './instructions/math'
+
 import { formatNumber } from './util'
 // import { playSuccessSound } from '../services/audio'
 import {
@@ -18,26 +19,32 @@ import {
   isDelayedSelector,
 } from './reducer'
 
+const stackLiftEnablingInstructions = {
+  ...stackInstructions,
+  ...mathInstructions,
+  ...memoryInstructions,
+}
+
 const SLOW_EXECUTION_DELAY_MS = 500
 
 const numericRegExp = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 const isNumericString = num => numericRegExp.test(num)
 
-const entryKeyCodes = new Set([K.D0, K.D1, K.D2, K.D3, K.D4, K.D5, K.D6, K.D7, K.D8, K.D9, K.DOT, K.EEX, K.CHS])
-const cancelStackLiftKeyCodes = new Set([K.DEL, K.CANCEL])
+const validInstructions = new Set([
+  ...Object.keys(inputInstructions),
+  ...Object.keys(stackLiftEnablingInstructions)
+])
+
+const stackLiftDisablers = new Set([K.ENTER, K.DEL, K.CANCEL, K.CHS])
+
+const liftStack = state => {
+  const [x, y, z] = state.stack
+  return { ...state, stack: [x, x, y, z] }
+}
 
 export default class ControlUnit {
-  alu = new ALU()
   timeoutID = null
   enterSeen = false
-
-  instructionSet = {
-    ...input,
-    ...memory
-  }
-
-  validInstructions = new Set([...Object.keys(this.instructionSet), ...this.alu.getInstructions()])
-
   listeners = new Set()
 
   subscribe(listener) {
@@ -134,71 +141,59 @@ export default class ControlUnit {
     }
 
     if (isNumericString(keyCode)) {
-      const [x, y, z] = state.stack
-      const num = parseFloat(keyCode)
-      if (!Number.isFinite(num)) {
-        return {
-          ...state,
-          error: { message: 'range error' }
-        }
-      }
-      return {
-        ...state,
-        stack: [num, x, y, z],
-        stackLift: true,
-        buffer: formatNumber(num),
-        entry: false
-      }
+      return this.enterNumber(state, keyCode)
     }
 
     const pos = keyCode.indexOf('.')
-    const instruction = pos === -1 ? { keyCode } : {
-      keyCode: keyCode.slice(0, pos),
-      operand: keyCode.slice(pos + 1)
+    let operand = null
+    if (pos !== -1) {
+      operand = keyCode.slice(pos + 1)
+      keyCode = keyCode.slice(0, pos)
     }
 
-    const newState = this.alu.getInstructions().has(instruction.keyCode)
-      ? this.aluExecute(state, instruction)
-      : this.inputExecute(state, instruction)
-
-    this.notify(newState, state, keyCode)
-
-    return newState
-  }
-
-  aluExecute(state, instruction) {
-    const newState = this.alu.execute(state, instruction)
-    const buffer = formatNumber(newState.stack[0])
-    return { ...newState, buffer, entry: false }
-  }
-
-  inputExecute(state, instruction) {
-    const { keyCode, operand } = instruction
-    const microCode = this.instructionSet[keyCode]
-    if (!microCode) {
-      console.error(`controlUnit: not implemented '${keyCode}'`)
-      return state
+    const inputFn = inputInstructions[keyCode]
+    if (inputFn) {
+      const { error, entry, stackLift } = state
+      if (stackLift && !error && !entry && !stackLiftDisablers.has(keyCode)) {
+        state = liftStack(state)
+      }
+      return inputFn(state)
     }
 
-    const { stackLift: stackListNext, fn } = microCode
-    const { stackLift } = state
-    state = stackLift && !cancelStackLiftKeyCodes.has(keyCode) ? liftStack(state) : state
+    const stackLiftEnablingFn = stackLiftEnablingInstructions[keyCode]
+    if (stackLiftEnablingFn) {
+      state = stackLiftEnablingFn(state, operand)
+      const [x] = state.stack
+      const buffer = formatNumber(x)
+      return { ...state, buffer, stackLift: true, entry: false }
+    }
 
-    state = fn(state, operand)
-    const { stack, buffer } = state
-    const [x] = stack
+    console.error(`controlUnit: not implemented '${keyCode}'`)
+    return state
 
-    const entry = entryKeyCodes.has(keyCode) ? state.entry : false
+    // this.notify(newState, state, keyCode)
+  }
 
+  enterNumber(state, numericString) {
+    const [x, y, z] = state.stack
+    const num = parseFloat(numericString)
+    if (!Number.isFinite(num)) {
+      return {
+        ...state,
+        error: { message: 'range error' }
+      }
+    }
     return {
       ...state,
-      buffer: entry ? buffer : formatNumber(x),
-      entry,
-      stackLift: stackListNext !== null ? stackListNext : stackLift
+      stack: [num, x, y, z],
+      stackLift: true,
+      buffer: formatNumber(num),
+      entry: false
     }
+
   }
 
   isValidInstruction(keyCode) {
-    return isNumericString(keyCode) || this.validInstructions.has(keyCode)
+    return isNumericString(keyCode) || validInstructions.has(keyCode)
   }
 }
