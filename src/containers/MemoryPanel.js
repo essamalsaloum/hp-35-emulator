@@ -78,7 +78,6 @@ class MemoryPanel extends React.PureComponent {
               {letter}
             </Avatar>
           }
-          onClick={type === 'used' ? () => this.onMenuAction(K.RCL, i) : null}
           primaryText={this.renderText(i)}
           rightIconButton={memoryIconMenu(i, hasValue, this.onMenuAction)}
         />

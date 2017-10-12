@@ -116,12 +116,12 @@ const math = {
   ALOG: 'alog',
   ASIN: 'asin',
   ASINH: 'asinh',
-  ADD: 'add',
+  ADD: '+',
   ATAN: 'atan',
   ATANH: 'atanh',
   COS: 'cos',
   COSH: 'cosh',
-  DIV: 'div',
+  DIV: '/',
   EXP: 'exp',
   EXPM: 'expm',
   FACT: 'fact',
@@ -133,17 +133,17 @@ const math = {
   LN: 'ln',
   LNP1: 'lnp1',
   LOG: 'log',
-  MUL: 'mul',
+  MUL: '*',
   NCR: 'ncr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
   NPR: 'npr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
   PCT: 'pct',             // (y × x) / 100
   PCTCHG: 'pctchg',       // (x - y) (100 / y)
-  POW: 'pow',
+  POW: 'y^x',
   SIN: 'sin',
   SINH: 'sinh',         // Hyperbolic sine
-  SQ: 'sq',
+  SQ: 'x^2',
   SQRT: 'sqrt',
-  SUB: 'sub',
+  SUB: '-',
   TAN: 'tan',
   TANH: 'tanh',         // Hyperbolic tangent
   XROOT: 'xroot',       // x-th root of y

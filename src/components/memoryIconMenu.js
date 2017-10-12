@@ -27,22 +27,24 @@ export default function memoryIconMenu(index, hasValue, onClick) {
       <MenuItem key={K.MEM_SWAP} value={K.MEM_SWAP} disabled={!hasValue} onClick={() => onClick(K.MEM_SWAP, index)}>{`SWAP ${ALPHABET[index]}↔︎x`}</MenuItem>
       <MenuItem
         primaryText="RCL..."
+        disabled={!hasValue}
         rightIcon={<ArrowDropRight />}
         menuItems={[
-          <MenuItem key={K.RCL_ADD} value={K.RCL_ADD} disabled={!hasValue} primaryText="RCL +" onClick={() => onClick(K.RCL_ADD, index)} />,
-          <MenuItem key={K.RCL_SUB} value={K.RCL_SUB} disabled={!hasValue} primaryText="RCL −" onClick={() => onClick(K.RCL_SUB, index)} />,
-          <MenuItem key={K.RCL_MUL} value={K.RCL_MUL} disabled={!hasValue} primaryText="RCL ×" onClick={() => onClick(K.RCL_MUL, index)} />,
-          <MenuItem key={K.RCL_DIV} value={K.RCL_DIV} disabled={!hasValue} primaryText="RCL ÷" onClick={() => onClick(K.RCL_DIV, index)} />,
+          <MenuItem key={K.RCL_ADD} value={K.RCL_ADD} primaryText="RCL +" onClick={() => onClick(K.RCL_ADD, index)} />,
+          <MenuItem key={K.RCL_SUB} value={K.RCL_SUB} primaryText="RCL −" onClick={() => onClick(K.RCL_SUB, index)} />,
+          <MenuItem key={K.RCL_MUL} value={K.RCL_MUL} primaryText="RCL ×" onClick={() => onClick(K.RCL_MUL, index)} />,
+          <MenuItem key={K.RCL_DIV} value={K.RCL_DIV} primaryText="RCL ÷" onClick={() => onClick(K.RCL_DIV, index)} />,
         ]}
       />
       <MenuItem
         primaryText="STO..."
+        disabled={!hasValue}
         rightIcon={<ArrowDropRight />}
         menuItems={[
-          <MenuItem key={K.STO_ADD} value={K.STO_ADD} disabled={!hasValue} primaryText="STO +" onClick={() => onClick(K.STO_ADD, index)} />,
-          <MenuItem key={K.STO_SUB} value={K.STO_SUB} disabled={!hasValue} primaryText="STO −" onClick={() => onClick(K.STO_SUB, index)} />,
-          <MenuItem key={K.STO_MUL} value={K.STO_MUL} disabled={!hasValue} primaryText="STO ×" onClick={() => onClick(K.STO_MUL, index)} />,
-          <MenuItem key={K.STO_DIV} value={K.STO_DIV} disabled={!hasValue} primaryText="STO ÷" onClick={() => onClick(K.STO_DIV, index)} />,
+          <MenuItem key={K.STO_ADD} value={K.STO_ADD} primaryText="STO +" onClick={() => onClick(K.STO_ADD, index)} />,
+          <MenuItem key={K.STO_SUB} value={K.STO_SUB} primaryText="STO −" onClick={() => onClick(K.STO_SUB, index)} />,
+          <MenuItem key={K.STO_MUL} value={K.STO_MUL} primaryText="STO ×" onClick={() => onClick(K.STO_MUL, index)} />,
+          <MenuItem key={K.STO_DIV} value={K.STO_DIV} primaryText="STO ÷" onClick={() => onClick(K.STO_DIV, index)} />,
         ]}
       />
     </IconMenu>

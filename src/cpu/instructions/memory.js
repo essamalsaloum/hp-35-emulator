@@ -3,11 +3,16 @@ import K from '../keyCodes'
 
 const CHAR_CODE_A = 'a'.charCodeAt(0)
 
-const store = (state, operand) => {
+const letterToIndex = operand => {
   const index = operand.charCodeAt(0) - CHAR_CODE_A
   if (index < 0 || index >= 26) {
     throw new Error('operand out of range')
   }
+  return index
+}
+
+const store = (state, operand) => {
+  const index = letterToIndex(operand)
   const { stack, memory } = state
   memory[index] = stack[0]
   return {
@@ -17,10 +22,7 @@ const store = (state, operand) => {
 }
 
 const storeFn = fn => (state, operand) => {
-  const index = operand.charCodeAt(0) - CHAR_CODE_A
-  if (index < 0 || index >= 26) {
-    throw new Error('operand out of range')
-  }
+  const index = letterToIndex(operand)
   const { stack, memory } = state
   memory[index] = fn(memory[index], stack[0])
   return {
@@ -30,10 +32,7 @@ const storeFn = fn => (state, operand) => {
 }
 
 const recall = (state, operand) => {
-  const index = operand.charCodeAt(0) - CHAR_CODE_A
-  if (index < 0 || index >= 26) {
-    throw new Error('operand out of range')
-  }
+  const index = letterToIndex(operand)
   const { stack, memory } = state
   const [x, y, z] = stack
   return {
@@ -43,16 +42,27 @@ const recall = (state, operand) => {
 }
 
 const recallFn = fn => (state, operand) => {
-  const index = operand.charCodeAt(0) - CHAR_CODE_A
-  if (index < 0 || index >= 26) {
-    throw new Error('operand out of range')
-  }
+  const index = letterToIndex(operand)
   const { stack, memory } = state
   const [x, ...rest] = stack
   return {
     ...state,
     stack: [fn(x, memory[index]), ...rest]
   }
+}
+
+const swapMem = (state, operand) => {
+  const index = letterToIndex(operand)
+  const { stack, memory } = state
+  const [x, ...rest] = stack
+  const memValue = memory[index]
+  memory[index] = x
+  return {
+    ...state,
+    stack: [memValue, ...rest],
+    memory: [...memory]
+  }
+
 }
 
 export default {
@@ -66,4 +76,5 @@ export default {
   [K.STO_SUB]: {stackLift: false, fn: storeFn(math.subtract)},
   [K.STO_MUL]: {stackLift: false, fn: storeFn(math.multiply)},
   [K.STO_DIV]: {stackLift: false, fn: storeFn(math.divide)},
+  [K.MEM_SWAP]: {stackLift: false, fn: swapMem},
 }

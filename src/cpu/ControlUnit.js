@@ -18,12 +18,13 @@ import {
   isDelayedSelector,
 } from './reducer'
 
-const DELAY = 500
+const SLOW_EXECUTION_DELAY_MS = 500
 
-const NUMERIC_REGEX = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
-const isNumeric = num => NUMERIC_REGEX.test(num)
+const numericRegExp = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
+const isNumericString = num => numericRegExp.test(num)
 
-const stackLiftCancelers = new Set([K.DEL, K.CANCEL])
+const entryKeyCodes = new Set([K.D0, K.D1, K.D2, K.D3, K.D4, K.D5, K.D6, K.D7, K.D8, K.D9, K.DOT, K.EEX, K.CHS])
+const cancelStackLiftKeyCodes = new Set([K.DEL, K.CANCEL])
 
 export default class ControlUnit {
   alu = new ALU()
@@ -89,7 +90,7 @@ export default class ControlUnit {
     dispatch(programStarting())
     while (ipSelector(getState()) < keyCodes.length && !interrupted) {
       if (isRunningSelector(getState())) {
-        await this.executeNext(dispatch, getState, isDelayedSelector(getState()) ? DELAY : 0)
+        await this.executeNext(dispatch, getState, isDelayedSelector(getState()) ? SLOW_EXECUTION_DELAY_MS : 0)
         if (errorSelector(getState())) {
           interrupted = true
         }
@@ -132,7 +133,7 @@ export default class ControlUnit {
       return state
     }
 
-    if (isNumeric(keyCode)) {
+    if (isNumericString(keyCode)) {
       const [x, y, z] = state.stack
       const num = parseFloat(keyCode)
       if (!Number.isFinite(num)) {
@@ -151,16 +152,12 @@ export default class ControlUnit {
     }
 
     const pos = keyCode.indexOf('.')
-    const instruction = pos !== -1 ?
-      {
-        opCode: keyCode.slice(0, pos),
-        operand: keyCode.slice(pos + 1)
-      } :
-      {
-        opCode: keyCode
-      }
+    const instruction = pos === -1 ? { keyCode } : {
+      keyCode: keyCode.slice(0, pos),
+      operand: keyCode.slice(pos + 1)
+    }
 
-    const newState = this.alu.getInstructions().has(instruction.opCode)
+    const newState = this.alu.getInstructions().has(instruction.keyCode)
       ? this.aluExecute(state, instruction)
       : this.inputExecute(state, instruction)
 
@@ -176,30 +173,32 @@ export default class ControlUnit {
   }
 
   inputExecute(state, instruction) {
-    const { opCode, operand } = instruction
-    const microCode = this.instructionSet[opCode]
+    const { keyCode, operand } = instruction
+    const microCode = this.instructionSet[keyCode]
     if (!microCode) {
-      console.error(`controlUnit: not implemented '${opCode}'`)
+      console.error(`controlUnit: not implemented '${keyCode}'`)
       return state
     }
 
     const { stackLift: stackListNext, fn } = microCode
     const { stackLift } = state
-    state = stackLift && !stackLiftCancelers.has(opCode) ? liftStack(state) : state
+    state = stackLift && !cancelStackLiftKeyCodes.has(keyCode) ? liftStack(state) : state
 
     state = fn(state, operand)
     const { stack, buffer } = state
     const [x] = stack
 
+    const entry = entryKeyCodes.has(keyCode) ? state.entry : false
+
     return {
       ...state,
-      buffer: state.entry ? buffer : formatNumber(x),
-      entry: stackListNext === true ? false : state.entry,
+      buffer: entry ? buffer : formatNumber(x),
+      entry,
       stackLift: stackListNext !== null ? stackListNext : stackLift
     }
   }
 
   isValidInstruction(keyCode) {
-    return isNumeric(keyCode) || this.validInstructions.has(keyCode)
+    return isNumericString(keyCode) || this.validInstructions.has(keyCode)
   }
 }
