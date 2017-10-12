@@ -8,13 +8,13 @@ const pct = (y, x) => y * x / 100
 const pctChg = (y, x) => (x - y) * (100 / y)
 
 export default {
-  [K.ADD]: dyadic((y, x) => y + x),
+  [K.ADD]: dyadic(math.add),
   [K.DIV]: dyadic(div),
   [K.INTG]: monadic(math.floor),
   [K.INV]: monadic(inv),
   [K.IP]: monadic(math.fix),
   [K.IP]: monadic(math.floor),
-  [K.MUL]: dyadic((y, x) => y * x),
+  [K.MUL]: dyadic(math.multiply),
   [K.PCT]: dyadic2(pct),
   [K.PCTCHG]: dyadic2(pctChg),
   [K.SUB]: dyadic((y, x) => y - x),

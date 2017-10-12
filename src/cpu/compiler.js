@@ -100,7 +100,9 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
         } else {
           const tokens = expandAlias(node.value.text, aliasMap)
           for (const token of tokens) {
-            if (!cpu.isValidInstruction(token)) {
+            const pos = token.indexOf('.')
+            const opCode = pos !== -1 ? token.slice(0, pos) : token
+            if (!cpu.isValidInstruction(opCode)) {
               throw createError(`syntax error: '${token}'`, node.value.context)
             }
             keyCodes.push(token)
@@ -112,9 +114,6 @@ async function compilePlainTextProgram(text, aliasMap = {}) {
       }
     }
     return keyCodes.filter(keyCode => keyCode.length !== 0)
-  // } catch (err) {
-  //   return Promise.reject(err)
-  // }
 }
 
 export function extractProgramText(text) {

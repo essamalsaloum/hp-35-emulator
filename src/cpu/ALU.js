@@ -12,14 +12,15 @@ export default class ALU {
     return new Set(Object.keys(this.instructionSet))
   }
 
-  execute(state, keyCode) {
-    const microCode = this.instructionSet[keyCode]
+  execute(state, instruction) {
+    const { opCode, operand } = instruction
+    const microCode = this.instructionSet[opCode]
     if (!microCode) {
-      throw new Error(`alu: not implemented [${keyCode}]`)
+      throw new Error(`alu: not implemented [${opCode}]`)
     }
     const { stackLift, fn } = microCode
     return {
-      ...fn(state),
+      ...fn(state, operand),
       stackLift,
       entry: false
     }

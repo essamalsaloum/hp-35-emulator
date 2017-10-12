@@ -5,9 +5,11 @@
       "Horiz",
       "REPO",
       "SHIFTKEY",
+      "Selectable",
       "Unmount",
       "deserializing",
       "lastx",
+      "memswap",
       "rolldown",
       "shiftdown",
       "shiftup"

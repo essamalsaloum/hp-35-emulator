@@ -117,7 +117,7 @@ export default class ControlUnit {
       this.timeoutID = setTimeout(() => {
         const keyCodes = keyCodesSelector(getState())
         const ip = ipSelector(getState())
-        const keyCode = keyCodes[ip]
+        const keyCode = keyCodes[ip].toLowerCase()
         let state = cpuSelector(getState())
         state = this.execute(state, keyCode)
         dispatch(updateState({ ...state, ip: ip + 1 }))
@@ -150,40 +150,52 @@ export default class ControlUnit {
       }
     }
 
-    const newState = this.alu.getInstructions().has(keyCode)
-      ? this.aluExecute(state, keyCode)
-      : this.inputExecute(state, keyCode)
+    const pos = keyCode.indexOf('.')
+    const instruction = pos !== -1 ?
+      {
+        opCode: keyCode.slice(0, pos),
+        operand: keyCode.slice(pos + 1)
+      } :
+      {
+        opCode: keyCode
+      }
+
+    const newState = this.alu.getInstructions().has(instruction.opCode)
+      ? this.aluExecute(state, instruction)
+      : this.inputExecute(state, instruction)
 
     this.notify(newState, state, keyCode)
 
     return newState
   }
 
-  aluExecute(state, keyCode) {
-    const newState = this.alu.execute(state, keyCode)
+  aluExecute(state, instruction) {
+    const newState = this.alu.execute(state, instruction)
     const buffer = formatNumber(newState.stack[0])
     return { ...newState, buffer, entry: false }
   }
 
-  inputExecute(state, keyCode) {
-    const microCode = this.instructionSet[keyCode]
+  inputExecute(state, instruction) {
+    const { opCode, operand } = instruction
+    const microCode = this.instructionSet[opCode]
     if (!microCode) {
-      console.error(`controlUnit: not implemented '${keyCode}'`)
+      console.error(`controlUnit: not implemented '${opCode}'`)
       return state
     }
 
-    const { stackLift: nextStackLift, fn } = microCode
+    const { stackLift: stackListNext, fn } = microCode
     const { stackLift } = state
-    state = stackLift && !stackLiftCancelers.has(keyCode) ? liftStack(state) : state
+    state = stackLift && !stackLiftCancelers.has(opCode) ? liftStack(state) : state
 
-    state = fn(state)
+    state = fn(state, operand)
     const { stack, buffer } = state
     const [x] = stack
 
     return {
       ...state,
       buffer: state.entry ? buffer : formatNumber(x),
-      stackLift: nextStackLift !== null ? nextStackLift : stackLift
+      entry: stackListNext === true ? false : state.entry,
+      stackLift: stackListNext !== null ? stackListNext : stackLift
     }
   }
 

@@ -6,45 +6,23 @@ import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Avatar from 'material-ui/Avatar'
 import { indigoA200, pinkA700, grey400 } from 'material-ui/styles/colors'
-import MemoryUpdateButton from '../components/MemoryUpdateButton'
-import ChildToolbar from '../components/ChildToolbar'
-import C from '../constants'
+import MemoryToolbar from '../components/MemoryToolbar'
+import memoryIconMenu from '../components/memoryIconMenu'
 import K from '../cpu/keyCodes'
+import C from '../constants'
 import { executeKeyCode, memorySelector } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
 import { formatNumber } from '../cpu/util'
 import './MemoryPanel.css'
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-const keyCodes = [
-  [K.RCL_A, K.STO_A],
-  [K.RCL_B, K.STO_B],
-  [K.RCL_C, K.STO_C],
-  [K.RCL_D, K.STO_D],
-  [K.RCL_E, K.STO_E],
-  [K.RCL_F, K.STO_F],
-  [K.RCL_G, K.STO_G],
-  [K.RCL_H, K.STO_H],
-  [K.RCL_I, K.STO_I],
-  [K.RCL_J, K.STO_J],
-  [K.RCL_K, K.STO_K],
-  [K.RCL_L, K.STO_L],
-  [K.RCL_M, K.STO_M],
-  [K.RCL_N, K.STO_N],
-  [K.RCL_O, K.STO_O],
-  [K.RCL_P, K.STO_P],
-  [K.RCL_Q, K.STO_Q],
-  [K.RCL_R, K.STO_R],
-  [K.RCL_S, K.STO_S],
-  [K.RCL_T, K.STO_T],
-  [K.RCL_U, K.STO_U],
-  [K.RCL_V, K.STO_V],
-  [K.RCL_W, K.STO_W],
-  [K.RCL_X, K.STO_X],
-  [K.RCL_Y, K.STO_Y],
-  [K.RCL_Z, K.STO_Z],
-]
+const RCL_KEYCODES = new Set([
+  K.RCL,
+  K.RCL_ADD,
+  K.RCL_SUB,
+  K.RCL_DIV,
+  K.RCL_MUL
+])
 
 class MemoryPanel extends React.PureComponent {
 
@@ -54,11 +32,9 @@ class MemoryPanel extends React.PureComponent {
     setMainPanel: PropTypes.func.isRequired,
   }
 
-  onClick(keyCode, goBack = true) {
-    this.props.executeKeyCode(keyCode)
-    if (goBack) {
-      this.props.setMainPanel(C.KEYPAD_PANEL)
-    }
+  constructor(props) {
+    super(props)
+    this.onMenuAction = this.onMenuAction.bind(this)
   }
 
   renderText(index) {
@@ -71,12 +47,22 @@ class MemoryPanel extends React.PureComponent {
     }
   }
 
+  onMenuAction(keyCode, index) {
+    const { executeKeyCode, setMainPanel } = this.props
+    const instruction = `${keyCode}.${ALPHABET[index]}`.toLowerCase()
+    executeKeyCode(instruction)
+    if (RCL_KEYCODES.has(keyCode)) {
+      setMainPanel(C.KEYPAD_PANEL)
+    }
+  }
+
   renderListByUsage(type = 'used') {
     const { memory } = this.props
     const list = []
     for (let i = 0; i < ALPHABET.length; i++) {
       const letter = ALPHABET.charAt(i)
-      const skip = type === 'used' ? memory[i] === undefined : memory[i] !== undefined
+      const hasValue = Number.isFinite(memory[i])
+      const skip = type === 'used' ? !hasValue : hasValue
       if (skip) {
         continue
       }
@@ -92,15 +78,9 @@ class MemoryPanel extends React.PureComponent {
               {letter}
             </Avatar>
           }
+          onClick={type === 'used' ? () => this.onMenuAction(K.RCL, i) : null}
           primaryText={this.renderText(i)}
-          onClick={type === 'used' ? () => this.onClick(keyCodes[i][0]) : null}
-          rightIconButton={
-            <MemoryUpdateButton
-              onClick={() => this.onClick(keyCodes[i][1], false)}
-              tooltip="assign"
-              tooltipPosition="bottom-left"
-            />
-          }
+          rightIconButton={memoryIconMenu(i, hasValue, this.onMenuAction)}
         />
       )
     }
@@ -133,7 +113,7 @@ class MemoryPanel extends React.PureComponent {
   render() {
     return (
       <div className="MemoryPanel">
-        <ChildToolbar title="Memory Registers" onBackClick={() => this.props.setMainPanel('keypad')} />
+        <MemoryToolbar onBackClick={() => this.props.setMainPanel('keypad')} />
         <List className="MemoryPanel--list">
           {this.renderList()}
         </List>
