@@ -27,13 +27,14 @@ export const resetKeypad = createAction(RESET_KEYPAD)
 export const keyPressed = keyCode => (dispatch, getState) => {
   const state = getState()
   const shiftKey = shiftKeySelector(state)
+  const lastKeyCode = lastKeyCodeSelector(state)
 
-  if (shiftKey === K.ALPHA) {
-    const lastKeyCode = lastKeyCodeSelector(state)
-    keyCode = `${lastKeyCode}.${keyCode}`.toLowerCase()
-    dispatch(setShiftKey(null))
+  const submitKeyCode = () => {
+    dispatch({ type: KEY_PRESSED, payload: keyCode })
     dispatch(executeKeyCode(keyCode))
-    return
+    if (shiftKey) {
+      dispatch(setShiftKey(null))
+    }
   }
 
   switch (keyCode) {
@@ -72,11 +73,50 @@ export const keyPressed = keyCode => (dispatch, getState) => {
       dispatch({ type: KEY_PRESSED, payload: keyCode })
       dispatch(setShiftKey(K.ALPHA))
       break
+    case K.ADD:
+      if (lastKeyCode === K.STO) {
+        dispatch({ type: KEY_PRESSED, payload: K.STO_ADD })
+      } else if (lastKeyCode === K.RCL) {
+        dispatch({ type: KEY_PRESSED, payload: K.RCL_ADD })
+      } else {
+        submitKeyCode()
+      }
+      break
+    case K.SUB:
+      if (lastKeyCode === K.STO) {
+        dispatch({ type: KEY_PRESSED, payload: K.STO_SUB })
+      } else if (lastKeyCode === K.RCL) {
+        dispatch({ type: KEY_PRESSED, payload: K.RCL_SUB })
+      } else {
+        submitKeyCode()
+      }
+      break
+    case K.MUL:
+      if (lastKeyCode === K.STO) {
+        dispatch({ type: KEY_PRESSED, payload: K.STO_MUL })
+      } else if (lastKeyCode === K.RCL) {
+        dispatch({ type: KEY_PRESSED, payload: K.RCL_MUL })
+      } else {
+        submitKeyCode()
+      }
+      break
+    case K.DIV:
+      if (lastKeyCode === K.STO) {
+        dispatch({ type: KEY_PRESSED, payload: K.STO_DIV })
+      } else if (lastKeyCode === K.RCL) {
+        dispatch({ type: KEY_PRESSED, payload: K.RCL_DIV })
+      } else {
+        submitKeyCode()
+      }
+      break
     default:
-      dispatch({ type: KEY_PRESSED, payload: keyCode })
-      dispatch(executeKeyCode(keyCode))
-      if (shiftKey) {
+      if (shiftKey === K.ALPHA) {
+        const lastKeyCode = lastKeyCodeSelector(state)
+        keyCode = `${lastKeyCode}.${keyCode}`.toLowerCase()
         dispatch(setShiftKey(null))
+        dispatch(executeKeyCode(keyCode))
+      } else {
+        submitKeyCode()
       }
   }
 }

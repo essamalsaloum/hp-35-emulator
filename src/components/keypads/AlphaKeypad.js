@@ -39,28 +39,28 @@ export default function LetterKeypad() {
         <Key keyCode={K.ALPHA_V} />
         <Key keyCode={K.ALPHA_W} />
         <Key keyCode={K.ALPHA_X} />
-        <Key keyCode={K.ALPHA_Y} />
+        <Key keyCode={K.DIV} />
       </div>
       <div className="Keypad--row">
+        <Key keyCode={K.ALPHA_Y} />
         <Key keyCode={K.ALPHA_Z} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.MUL} />
       </div>
       <div className="Keypad--row">
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.SUB} />
       </div>
       <div className="Keypad--row">
         <Key keyCode={K.CANCEL} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.ADD} />
       </div>
     </div>
   )

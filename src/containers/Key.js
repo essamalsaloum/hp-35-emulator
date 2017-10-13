@@ -8,6 +8,13 @@ import { keyPressed } from '../ducks/ui'
 import K from '../cpu/keyCodes'
 import './Key.css'
 
+const keyNames = {
+  [K.DIV]: 'div',
+  [K.MUL]: 'mul',
+  [K.SUB]: 'sub',
+  [K.ADD]: 'add'
+}
+
 const keyLabels = {
   [K.ACOS]: 'ACOS',
   [K.ACOSH]: '<small>ACOSH</small>',
@@ -153,9 +160,10 @@ class Key extends React.PureComponent {
     if (error && keyCode !== K.CANCEL) {
       return null
     }
+    const keyName = keyNames[keyCode] || keyCode
     return (
       <div
-        className={`Key--label-main Key--label-keyCode-${keyCode}`}
+        className={`Key--label-main Key--label-main-${keyName}`}
         dangerouslySetInnerHTML={createMarkup(label)}
       />
     )
