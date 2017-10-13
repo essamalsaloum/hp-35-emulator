@@ -90,6 +90,7 @@ const keyLabels = {
   [K.SWAP]: 'x↔︎y',
   [K.TAN]: 'TAN',
   [K.TANH]: '<small>TANH</small>',
+  [K.XROOT]: '<sup>x</sup>√y',
   [K.YD2M]: '<small>yd→m<small>',
 }
 

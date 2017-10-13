@@ -14,21 +14,21 @@ export default function MainKeypad() {
         <Key keyCode={K.CLR} down={K.RESET} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.RCL} down={K.STO} />
-        <Key keyCode={K.SQRT} down={K.SQ}/>
+        <Key keyCode={K.INV} />
+        <Key keyCode={K.SQRT} up={K.XROOT} down={K.SQ} />
         <Key keyCode={K.SIN} up={K.ASIN} down={K.RAD2DEG} />
         <Key keyCode={K.COS} up={K.ACOS} down={K.DEG2RAD} />
         <Key keyCode={K.TAN} up={K.ATAN} />
       </div>
       <div className="Keypad--row">
+        <Key keyCode={K.RCL} down={K.STO} />
         <Key keyCode={K.SWAP} />
         <Key keyCode={K.ROLL_DOWN} />
-        <Key keyCode={K.INV} />
         <Key keyCode={K.FACT} up={K.NCR} down={K.NPR} />
         <Key keyCode={K.PCT} down={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.ENTER} down={K.LAST_X} className="Key--enter"/>
+        <Key keyCode={K.ENTER} down={K.LAST_X} className="Key--enter" />
         <Key keyCode={K.CHS} />
         <Key keyCode={K.EEX} />
         <Key keyCode={K.DEL} />

@@ -10,8 +10,7 @@ import ChildToolbar from '../components/ChildToolbar'
 import WikiButton from '../components/WikiButton'
 import { physicsConstantDefs } from '../cpu/instructions/physicsConstants'
 import { setRecentConstant, recentConstantsSelector } from '../ducks/preferences'
-import { executeKeyCode } from '../cpu/reducer'
-import { setMainPanel } from '../ducks/ui'
+import { setMainPanel, keyPressed } from '../ducks/ui'
 import C from '../constants'
 import './ConstantsPanel.css'
 
@@ -22,7 +21,7 @@ const createMarkup = ({ symb, value, unit }) => ({ __html: `${symb} = ${value} $
 class ConstantsPanel extends React.PureComponent {
 
   static propTypes = {
-    executeKeyCode: PropTypes.func.isRequired,
+    keyPressed: PropTypes.func.isRequired,
     setMainPanel: PropTypes.func.isRequired,
     setRecentConstant: PropTypes.func.isRequired,
     recentConstants: PropTypes.array.isRequired,
@@ -30,7 +29,7 @@ class ConstantsPanel extends React.PureComponent {
 
   onItemClick(keyCode) {
     this.props.setRecentConstant(keyCode)
-    this.props.executeKeyCode(keyCode)
+    this.props.keyPressed(keyCode)
     this.props.setMainPanel(C.KEYPAD_PANEL)
   }
 
@@ -89,7 +88,7 @@ class ConstantsPanel extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    executeKeyCode,
+    keyPressed,
     setMainPanel,
     setRecentConstant,
   }, dispatch)

@@ -14,14 +14,14 @@ export default function ShiftDownKeypad() {
         <Key keyCode={K.RESET} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.STO} />
+        <Key keyCode={K.NOOP} />
         <Key keyCode={K.SQ} />
         <Key keyCode={K.RAD2DEG} />
         <Key keyCode={K.DEG2RAD} />
         <Key keyCode={K.NOOP} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.STO} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NPR} />

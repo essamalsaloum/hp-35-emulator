@@ -15,7 +15,7 @@ export default function ShiftUpKeypad() {
       </div>
       <div className="Keypad--row">
         <Key keyCode={K.NOOP} />
-        <Key keyCode={K.NOOP} />
+        <Key keyCode={K.XROOT} />
         <Key keyCode={K.ASIN} />
         <Key keyCode={K.ACOS} />
         <Key keyCode={K.ATAN} />

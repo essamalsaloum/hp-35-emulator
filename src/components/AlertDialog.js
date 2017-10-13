@@ -25,7 +25,6 @@ export default function AlertDialog({ prompt, open, handleClose }) {
         modal={false}
         open={open}
         onRequestClose={() => handleClose(false)}
-        style={{width: '50%'}}
       >
         {prompt}
       </Dialog>
