@@ -38,7 +38,7 @@
   color: #EF6C00;
 }
 
-.Key--keyCode-enter {
+.Key--enter {
   flex: 2;
 }
 
@@ -88,6 +88,10 @@
 
 .Key--color-shiftdown {
   color: #EF6C00;
+}
+
+.Key--color-alpha {
+  color: #D50000;
 }
 
 .Key--color-noop {

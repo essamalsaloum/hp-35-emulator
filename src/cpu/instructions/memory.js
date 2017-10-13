@@ -11,6 +11,8 @@ const letterToIndex = operand => {
   return index
 }
 
+const getMem = (state, index) => state.memory[index] || 0
+
 const store = (state, operand) => {
   const index = letterToIndex(operand)
   const { stack, memory } = state
@@ -33,21 +35,21 @@ const storeFn = fn => (state, operand) => {
 
 const recall = (state, operand) => {
   const index = letterToIndex(operand)
-  const { stack, memory } = state
+  const { stack } = state
   const [x, y, z] = stack
   return {
     ...state,
-    stack: [memory[index] || 0, x, y, z]
+    stack: [getMem(state, index), x, y, z]
   }
 }
 
 const recallFn = fn => (state, operand) => {
   const index = letterToIndex(operand)
-  const { stack, memory } = state
+  const { stack } = state
   const [x, ...rest] = stack
   return {
     ...state,
-    stack: [fn(x, memory[index]), ...rest]
+    stack: [fn(x, getMem(state, index)), ...rest]
   }
 }
 
@@ -55,7 +57,7 @@ const swapMem = (state, operand) => {
   const index = letterToIndex(operand)
   const { stack, memory } = state
   const [x, ...rest] = stack
-  const memValue = memory[index]
+  const memValue = getMem(state, index)
   memory[index] = x
   return {
     ...state,

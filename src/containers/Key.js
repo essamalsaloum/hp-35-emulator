@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { executeKeyCode, errorSelector } from '../cpu/reducer'
-import { setShiftKey, shiftKeySelector, setMainPanel } from '../ducks/ui'
-import { reset } from '../ducks'
+import { errorSelector } from '../cpu/reducer'
+import { shiftKeySelector } from '../ducks/ui'
+import { keyPressed } from '../ducks/ui'
 import K from '../cpu/keyCodes'
-import C from '../constants'
 import './Key.css'
 
 const keyLabels = {
@@ -77,6 +76,7 @@ const keyLabels = {
   [K.PI]: 'π',
   [K.POW]: 'y<sup>x</sup>',
   [K.RAD2DEG]: '→DEG',
+  [K.RCL]: 'RCL',
   [K.RESET]: 'RESET',
   [K.ROLL_DOWN]: 'R↓',
   [K.SHIFT_DOWN]: 'g',
@@ -85,12 +85,13 @@ const keyLabels = {
   [K.SINH]: '<small>SINH</small>',
   [K.SQ]: 'x<sup>2</sup',
   [K.SQRT]: '√x',
+  [K.STO]: 'STO',
   [K.SUB]: '−',
   [K.SWAP]: 'x↔︎y',
   [K.TAN]: 'TAN',
   [K.TANH]: '<small>TANH</small>',
   [K.YD2M]: '<small>yd→m<small>',
-  }
+}
 
 const createMarkup = label => ({ __html: label })
 
@@ -98,15 +99,12 @@ class Key extends React.PureComponent {
 
   static propTypes = {
     keyCode: PropTypes.string.isRequired,
-    error: PropTypes.object,
     up: PropTypes.string,
     down: PropTypes.string,
-    executeKeyCode: PropTypes.func,
-    shiftKey: PropTypes.string,
-    setShiftKey: PropTypes.func.isRequired,
-    setMainPanel: PropTypes.func.isRequired,
     className: PropTypes.string,
-    reset: PropTypes.func.isRequired,
+    keyPressed: PropTypes.func.isRequired,
+    error: PropTypes.bool,
+    shiftKey: PropTypes.string,
   }
 
   static defaultProps = {
@@ -120,43 +118,8 @@ class Key extends React.PureComponent {
   }
 
   onClick() {
-    const { keyCode, error, setShiftKey, executeKeyCode, setMainPanel, reset } = this.props
-    let shiftKey = null
-    switch (keyCode) {
-      case K.SHIFT_UP:
-        shiftKey = this.props.shiftKey === K.SHIFT_UP ? null : K.SHIFT_UP
-        break
-      case K.SHIFT_DOWN:
-        shiftKey = this.props.shiftKey === K.SHIFT_DOWN ? null : K.SHIFT_DOWN
-        break
-      case K.HYPER:
-        shiftKey = K.HYPER
-        break
-      case K.CONV:
-        shiftKey = K.CONV
-        break
-      case K.MEM:
-        setMainPanel(C.MEMORY_PANEL)
-        break
-      case K.CONST:
-        setMainPanel(C.CONSTANTS_PANEL)
-        break
-      case K.NOOP:
-        return
-      case K.CANCEL:
-        if (!this.props.shiftKey || error) {
-          executeKeyCode(K.CANCEL)
-        }
-        break
-      case K.RESET:
-        reset()
-        break
-      default:
-        executeKeyCode(keyCode)
-    }
-    if (shiftKey !== this.props.shiftKey) {
-      setShiftKey(shiftKey)
-    }
+    const { keyCode, keyPressed } = this.props
+    keyPressed(keyCode)
   }
 
   renderTopLabel() {
@@ -198,8 +161,8 @@ class Key extends React.PureComponent {
   }
 
   render() {
-    const { keyCode, error, shiftKey, className } = this.props
-    const label = keyLabels[keyCode]
+    const { keyCode, shiftKey, error, className } = this.props
+    const label = keyLabels[keyCode] || (keyCode !== K.NOOP ? keyCode : null)
     let colorModifier = shiftKey
 
     if (keyCode === K.NOOP) {
@@ -231,15 +194,11 @@ class Key extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    executeKeyCode,
-    setShiftKey,
-    setMainPanel,
-    reset,
+    keyPressed,
   }, dispatch)
 
-const mapStateToProps = state => ({
-  shiftKey: shiftKeySelector(state),
-  error: errorSelector(state),
-})
-
+  const mapStateToProps = state => ({
+    shiftKey: shiftKeySelector(state),
+    error: errorSelector(state),
+  })
 export default connect(mapStateToProps, mapDispatchToProps)(Key)

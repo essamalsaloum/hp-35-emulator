@@ -151,6 +151,35 @@ const math = {
   XROOT: 'xroot',       // x-th root of y
 }
 
+const alphabet = {
+  ALPHA_A: 'A',
+  ALPHA_B: 'B',
+  ALPHA_C: 'C',
+  ALPHA_D: 'D',
+  ALPHA_E: 'E',
+  ALPHA_F: 'F',
+  ALPHA_G: 'G',
+  ALPHA_H: 'H',
+  ALPHA_I: 'I',
+  ALPHA_J: 'J',
+  ALPHA_K: 'K',
+  ALPHA_L: 'L',
+  ALPHA_M: 'M',
+  ALPHA_N: 'N',
+  ALPHA_O: 'O',
+  ALPHA_P: 'P',
+  ALPHA_Q: 'Q',
+  ALPHA_R: 'R',
+  ALPHA_S: 'S',
+  ALPHA_T: 'T',
+  ALPHA_U: 'U',
+  ALPHA_V: 'V',
+  ALPHA_W: 'W',
+  ALPHA_X: 'X',
+  ALPHA_Y: 'Y',
+  ALPHA_Z: 'Z',
+}
+
 export default {
   CONST: 'const',
   CONV: 'conv',
@@ -159,6 +188,7 @@ export default {
   SHIFT_UP: 'shiftup',        // Activates up-shifted key functions
   SHIFT_DOWN: 'shiftdown',    // Activates down-shifted key functions
   HYPER: 'hyper',
+  ALPHA: 'alpha',
   NOOP: 'noop',
 
   // New math functions. See page G2 ff. of the HP 35 Users Guide
@@ -175,4 +205,5 @@ export default {
   ...math,
   ...physicsConstants,
   ...conversions,
+  ...alphabet
 }

@@ -3,7 +3,7 @@ import K from '../../cpu/keyCodes'
 import Key from '../../containers/Key'
 import './Keypad.css'
 
-export default function DefaultKeypad() {
+export default function MainKeypad() {
   return (
     <div className="Keypad">
       <div className="Keypad--row">
@@ -14,8 +14,8 @@ export default function DefaultKeypad() {
         <Key keyCode={K.CLR} down={K.RESET} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.SQRT} />
-        <Key keyCode={K.SQ} />
+        <Key keyCode={K.RCL} down={K.STO} />
+        <Key keyCode={K.SQRT} down={K.SQ}/>
         <Key keyCode={K.SIN} up={K.ASIN} down={K.RAD2DEG} />
         <Key keyCode={K.COS} up={K.ACOS} down={K.DEG2RAD} />
         <Key keyCode={K.TAN} up={K.ATAN} />
@@ -28,7 +28,7 @@ export default function DefaultKeypad() {
         <Key keyCode={K.PCT} down={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.ENTER} down={K.LAST_X} />
+        <Key keyCode={K.ENTER} down={K.LAST_X} className="Key--enter"/>
         <Key keyCode={K.CHS} />
         <Key keyCode={K.EEX} />
         <Key keyCode={K.DEL} />
