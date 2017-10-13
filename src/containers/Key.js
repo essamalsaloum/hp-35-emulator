@@ -111,7 +111,7 @@ class Key extends React.PureComponent {
     down: PropTypes.string,
     className: PropTypes.string,
     keyPressed: PropTypes.func.isRequired,
-    error: PropTypes.bool,
+    error: PropTypes.object,
     shiftKey: PropTypes.string,
   }
 
