@@ -14,7 +14,7 @@ export default function MainKeypad() {
         <Key keyCode={K.CLR} down={K.RESET} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.INV} />
+        <Key keyCode={K.NOOP} />
         <Key keyCode={K.SQRT} up={K.XROOT} down={K.SQ} />
         <Key keyCode={K.SIN} up={K.ASIN} down={K.RAD2DEG} />
         <Key keyCode={K.COS} up={K.ACOS} down={K.DEG2RAD} />
