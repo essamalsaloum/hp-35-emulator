@@ -64,7 +64,8 @@ const del = state => {
 }
 
 const digit = digit => state => {
-  let buffer = state.entry ? state.buffer : '0'
+  const { stack, entry } = state
+  const buffer = entry ? state.buffer : '0'
   let [mantissa, exponent] = splitNumber(buffer)
 
   if (exponent) {
@@ -89,15 +90,14 @@ const digit = digit => state => {
     mantissa = mantissa.slice(0, maxMantissaLength)
   }
 
-  buffer = joinNumber(mantissa, exponent)
-  const stack = bufferToStack(buffer, state.stack)
-
-  const error = Number.isFinite(stack[0]) ? null : { message: 'invalid data' }
+  const newBuffer = joinNumber(mantissa, exponent)
+  const newStack = bufferToStack(newBuffer, stack)
+  const error = Number.isFinite(newStack[0]) ? null : { message: 'invalid data' }
 
   return {
     ...state,
-    stack,
-    buffer,
+    stack: error ? stack : newStack,
+    buffer: error ? buffer : newBuffer,
     error,
     entry: true
   }
