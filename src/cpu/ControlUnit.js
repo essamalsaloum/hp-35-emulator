@@ -44,7 +44,7 @@ const liftStack = state => {
 
 export default class ControlUnit {
   timeoutID = null
-  enterSeen = false
+  lastKeyCode = null
   listeners = new Set()
 
   subscribe(listener) {
@@ -54,32 +54,7 @@ export default class ControlUnit {
     }
   }
 
-  // TODO: fix ENTER key processing
-
-  notify(newState, oldState, keyCode) {
-    if (newState.error) {
-      return
-    }
-
-    if (oldState.entry && !newState.entry) {
-      this.emit(formatNumber(oldState.stack[0]))
-    }
-
-    if (!newState.entry && newState.stackLift) {
-      this.emit(keyCode)
-    }
-
-    if (keyCode === K.ENTER) {
-      if (this.enterSeen || oldState.stackLift) {
-        this.emit(K.ENTER)
-      }
-      this.enterSeen = true
-    } else {
-      this.enterSeen = false
-    }
-  }
-
-  emit(keyCode) {
+  notify(keyCode) {
     setTimeout(() => {
       for (const listener of this.listeners) {
         listener(keyCode)
@@ -136,7 +111,9 @@ export default class ControlUnit {
   }
 
   execute(state, keyCode) {
-    if (state.error && keyCode !== K.CANCEL) {
+    const { error, entry, stackLift } = state
+
+    if (error && keyCode !== K.CANCEL) {
       return state
     }
 
@@ -153,25 +130,34 @@ export default class ControlUnit {
 
     const inputFn = inputInstructions[keyCode]
     if (inputFn) {
-      const { error, entry, stackLift } = state
       if (stackLift && !error && !entry && !stackLiftDisablers.has(keyCode)) {
         state = liftStack(state)
       }
+      if (keyCode === K.ENTER) {
+        this.notify(entry ? state.stack[0] : K.ENTER)
+      }
+      // this.lastKeyCode = keyCode
       return inputFn(state)
     }
 
     const stackLiftEnablingFn = stackLiftEnablingInstructions[keyCode]
     if (stackLiftEnablingFn) {
+      if (entry) {
+        this.notify(state.stack[0])
+      }
+      if (this.lastKeyCode === K.ENTER) {
+        this.notify(K.ENTER)
+      }
+      this.notify(keyCode)
       state = stackLiftEnablingFn(state, operand)
       const [x] = state.stack
       const buffer = formatNumber(x)
+      this.lastKeyCode = keyCode
       return { ...state, buffer, stackLift: true, entry: false }
     }
 
     console.error(`controlUnit: not implemented '${keyCode}'`)
     return state
-
-    // this.notify(newState, state, keyCode)
   }
 
   enterNumber(state, numericString) {
