@@ -21,12 +21,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "rimraf build/**/*.map",
+    "postbuild": "rimraf build/**/*.map && copyfiles public/assets build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "chai": "^4.1.1",
+    "copyfiles": "^1.2.0",
     "rimraf": "^2.6.2"
   }
 }

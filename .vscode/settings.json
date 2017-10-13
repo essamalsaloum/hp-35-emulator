@@ -10,6 +10,7 @@
       "Unmount",
       "deserializing",
       "lastx",
+      "memclr",
       "memswap",
       "rolldown",
       "shiftdown",

@@ -1,3 +1,4 @@
+import math from 'mathjs'
 import K from '../keyCodes'
 
 export const physicsConstantDefs = {
@@ -286,6 +287,12 @@ export const physicsConstantDefs = {
     value: '2.71828182846',
     unit: '',
     wiki: 'https://en.wikipedia.org/wiki/Natural_logarithm'
+  },
+  [K.PI]: {
+    symb: 'π',
+    text: 'Mathematical constant π',
+    value: math.pi,
+    wiki: 'https://en.wikipedia.org/wiki/Pi'
   }
 }
 

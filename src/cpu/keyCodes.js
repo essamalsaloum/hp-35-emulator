@@ -71,6 +71,8 @@ const conversions = {
 const memory = {
   MEM: 'mem',
   STO: 'sto',
+  MEM_CLR: 'mem_clr',
+  MEM_CLR_ALL: 'mem_clr_all',
   STO_ADD: 'sto+',
   STO_SUB: 'sto-',
   STO_MUL: 'sto*',

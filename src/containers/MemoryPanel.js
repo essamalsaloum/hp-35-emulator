@@ -110,9 +110,14 @@ class MemoryPanel extends React.PureComponent {
   }
 
   render() {
+    const {memory, setMainPanel, executeKeyCode} = this.props
     return (
       <div className="MemoryPanel">
-        <MemoryToolbar onBackClick={() => this.props.setMainPanel('keypad')} />
+        <MemoryToolbar
+          disabled={memory.every(cell => !cell)}
+          onBackClick={() => setMainPanel('keypad')}
+          onClearAllClick={() => executeKeyCode(K.MEM_CLR_ALL)}
+        />
         <List className="MemoryPanel--list">
           {this.renderList()}
         </List>

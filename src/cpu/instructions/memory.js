@@ -64,9 +64,26 @@ const swapMem = (state, operand) => {
   }
 }
 
+const memClr = (state, operand) => {
+  const index = letterToIndex(operand)
+  const { memory } = state
+  memory[index] = null
+  return {
+    ...state,
+    memory: [...memory]
+  }
+}
+
+const memClrAll = state => ({
+  ...state,
+  memory: []
+})
+
 export default {
-  [K.STO]: store ,
+  [K.STO]: store,
   [K.RCL]: recall,
+  [K.MEM_CLR]: memClr,
+  [K.MEM_CLR_ALL]: memClrAll,
   [K.RCL_ADD]: recallFn(math.add),
   [K.RCL_SUB]: recallFn(math.subtract),
   [K.RCL_MUL]: recallFn(math.multiply),

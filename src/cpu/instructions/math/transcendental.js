@@ -27,7 +27,6 @@ const sq = x => x * x
 const sqrt = x => x < 0 ? new Error('√(negative)') : math.sqrt(x)
 const tan = x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
 const xRoot = (x, y) => math.pow(y, 1 / x)
-const pi = () => Math.PI
 
 export default {
   [K.ACOS]: monadic(acos),
@@ -44,7 +43,6 @@ export default {
   [K.LN]: monadic(math.log),
   [K.LNP1]: monadic(lnp1),
   [K.LOG]: monadic(log),
-  [K.PI]: monadic(pi),
   [K.POW]: dyadic(pow),
   [K.SIN]: monadic(sin),
   [K.SINH]: monadic(math.sinh),

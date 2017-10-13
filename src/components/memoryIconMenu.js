@@ -24,7 +24,8 @@ export default function memoryIconMenu(index, hasValue, onClick) {
     >
       <MenuItem key={K.RCL} value={K.RCL} disabled={!hasValue} primaryText="RCL" onClick={() => onClick(K.RCL, index)} />
       <MenuItem key={K.STO} value={K.STO} onClick={() => onClick(K.STO, index)} primaryText="STO" />
-      <MenuItem key={K.MEM_SWAP} value={K.MEM_SWAP} disabled={!hasValue} onClick={() => onClick(K.MEM_SWAP, index)}>{`SWAP ${ALPHABET[index]}↔︎x`}</MenuItem>
+      <MenuItem key={K.MEM_CLR} value={K.MEM_CLR} disabled={!hasValue} onClick={() => onClick(K.MEM_CLR, index)} primaryText="CLR" />
+      <MenuItem key={K.MEM_SWAP} value={K.MEM_SWAP} disabled={!hasValue} onClick={() => onClick(K.MEM_SWAP, index)}>{`SWAP ${ALPHABET[index]} ↔︎ x`}</MenuItem>
       <MenuItem
         primaryText="RCL..."
         disabled={!hasValue}
