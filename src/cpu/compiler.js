@@ -19,6 +19,14 @@ export const keyCodeMap = (() => {
 
 const isBlankOrComment = line => line === '' || /^\s*\/\//.test(line)
 
+const removeBlankAndCommentLines = text =>
+  text
+    .split(/\n/)
+    .map(line => line.trim())
+    .filter(line => !isBlankOrComment(line))
+    .join('\n')
+    .concat('\n')
+
 function throwError(message, context = 'end of program') {
   if (context.length > CONTEXT_TRUNCATE_AT) {
     if (/\s/.test(context[CONTEXT_TRUNCATE_AT])) {
@@ -46,7 +54,7 @@ export default class Compiler {
     return matches.reduce((buf, match) => {
       buf += match.slice(6, -3) + '\n'
       return buf
-    }, '').trim().concat('\n')
+    }, '')
   }
 
   async compile(text, mode = 'text') {
@@ -64,7 +72,7 @@ export default class Compiler {
   }
 
   async compileText(text) {
-    text = this.removeBlankAndCommentLines(text)
+    text = removeBlankAndCommentLines(text)
     const tokenizer = new Tokenizer(text)
     let node = await tokenizer.next()
     while (!node.done) {
@@ -72,11 +80,9 @@ export default class Compiler {
         switch (node.upper) {
           case IMPORT:
             await this.parseImport(tokenizer)
-            await assertEndOfLine(tokenizer)
             break
           case ALIAS:
             await this.parseAlias(tokenizer)
-            // await assertEndOfLine(tokenizer)
             break
           case K.STO:
           case K.STO_ADD:
@@ -90,7 +96,6 @@ export default class Compiler {
           case K.RCL_DIV:
           case K.LBL:
             await this.parseLabel(node, tokenizer)
-            await assertEndOfLine(tokenizer)
             break
           default:
             await this.parseOtherInstruction(node)
@@ -116,6 +121,7 @@ export default class Compiler {
       path = importTarget.slice(0, pos)
       name = importTarget.slice(pos + 1)
     }
+    await assertEndOfLine(tokenizer)
     const programs = await github.fetchFileList(path)
     const program = programs[name]
     if (!program) {
@@ -141,6 +147,7 @@ export default class Compiler {
     if (node.type !== TokenType.block) {
       throwError(`expected text block`, node.context)
     }
+    await assertEndOfLine(tokenizer)
     const compiler = new Compiler()
     const keyCodes = await compiler.compile(node.text)
     this.aliasMap[aliasName] = keyCodes
@@ -155,6 +162,7 @@ export default class Compiler {
       throwError('memory identifier A-Z expected', node.context)
     }
     this.keyCodes.push(keyCode + ' ' + node.upper)
+    await assertEndOfLine(tokenizer)
   }
 
   async parseOtherInstruction(node) {
@@ -174,11 +182,4 @@ export default class Compiler {
     }
   }
 
-  removeBlankAndCommentLines = text =>
-    text
-      .split(/\n/)
-      .map(line => line.trim())
-      .filter(line => !isBlankOrComment(line))
-      .join('\n')
-      .concat('\n')
 }

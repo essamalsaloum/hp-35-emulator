@@ -16,7 +16,7 @@ const tokenPatterns = [
 
 export class Tokenizer {
   constructor(text) {
-    this.text = text.trim()
+    this.text = text
   }
 
   nextSync() {
