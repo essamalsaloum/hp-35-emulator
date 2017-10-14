@@ -11,7 +11,7 @@ import RunStopButton from '../components/RunStopButton'
 import { grey700 } from 'material-ui/styles/colors'
 import { showGitHubPanel, resetKeypad } from '../ducks/ui'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
-import { loadKeyCodes, clearKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
+import { loadProgramMemory, clearProgramMemory, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
 import Compiler from '../cpu/compiler'
 import { setLoading, clearLoading } from '../ducks/library'
 
@@ -23,8 +23,8 @@ class ProgramToolbar extends React.PureComponent {
     showGitHubPanel: PropTypes.func.isRequired,
     isRunning: PropTypes.bool.isRequired,
     programText: PropTypes.string,
-    loadKeyCodes: PropTypes.func,
-    clearKeyCodes: PropTypes.func,
+    loadProgramMemory: PropTypes.func,
+    clearProgramMemory: PropTypes.func,
     clearProgram: PropTypes.func,
     refreshProgramText: PropTypes.func,
     startProgram: PropTypes.func,
@@ -62,8 +62,8 @@ class ProgramToolbar extends React.PureComponent {
   runStop() {
     const {
       programText,
-      loadKeyCodes,
-      clearKeyCodes,
+      loadProgramMemory,
+      clearProgramMemory,
       isRunning,
       startProgram,
       stopProgram,
@@ -83,7 +83,7 @@ class ProgramToolbar extends React.PureComponent {
       stopProgram()
     } else {
       resetKeypad()
-      clearKeyCodes()
+      clearProgramMemory()
       clearDelayed()
       setLoading()
       const compiler = new Compiler()
@@ -91,7 +91,7 @@ class ProgramToolbar extends React.PureComponent {
         .then(keyCodes => {
           setError(null)
           clearLoading()
-          loadKeyCodes(keyCodes)
+          loadProgramMemory(keyCodes)
           startProgram()
         })
         .catch(error => {
@@ -161,8 +161,8 @@ class ProgramToolbar extends React.PureComponent {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
     showGitHubPanel,
-    loadKeyCodes,
-    clearKeyCodes,
+    loadProgramMemory,
+    clearProgramMemory,
     clearProgram,
     refreshProgramText,
     startProgram,

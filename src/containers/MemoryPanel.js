@@ -49,8 +49,7 @@ class MemoryPanel extends React.PureComponent {
 
   onMenuAction(keyCode, index) {
     const { executeKeyCode, setMainPanel } = this.props
-    const instruction = `${keyCode} ${ALPHABET[index]}`
-    executeKeyCode(instruction)
+    executeKeyCode({opCode: keyCode, operand: ALPHABET[index]})
     if (RCL_KEYCODES.has(keyCode)) {
       setMainPanel(C.KEYPAD_PANEL)
     }
@@ -116,7 +115,7 @@ class MemoryPanel extends React.PureComponent {
         <MemoryToolbar
           disabled={memory.every(cell => !cell)}
           onBackClick={() => setMainPanel('keypad')}
-          onClearAllClick={() => executeKeyCode(K.MEM_CLR_ALL)}
+          onClearAllClick={() => executeKeyCode({opCode: K.MEM_CLR_ALL})}
         />
         <List className="MemoryPanel--list">
           {this.renderList()}

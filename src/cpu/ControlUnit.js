@@ -8,7 +8,7 @@ import branchInstructions from './instructions/branch'
 import { formatNumber } from './util'
 // import { playSuccessSound } from '../services/audio'
 import {
-  keyCodesSelector,
+  programMemorySelector,
   ipSelector,
   gotoProgramTop,
   isRunningSelector,
@@ -45,7 +45,7 @@ const liftStack = state => {
 
 export default class ControlUnit {
   timeoutID = null
-  lastKeyCode = null
+  lastOpCode = null
   listeners = new Set()
 
   subscribe(listener) {
@@ -68,10 +68,10 @@ export default class ControlUnit {
       return
     }
 
-    const keyCodes = keyCodesSelector(getState())
+    const instructions = programMemorySelector(getState())
     let interrupted = false
     dispatch(programStarting())
-    while (ipSelector(getState()) < keyCodes.length && !interrupted) {
+    while (ipSelector(getState()) < instructions.length && !interrupted) {
       if (isRunningSelector(getState())) {
         await this.executeNext(dispatch, getState, isDelayedSelector(getState()) ? SLOW_EXECUTION_DELAY_MS : 0)
         if (errorSelector(getState())) {
@@ -99,11 +99,11 @@ export default class ControlUnit {
   executeNext(dispatch, getState, delay) {
     return new Promise(resolve => {
       this.timeoutID = setTimeout(() => {
-        const keyCodes = keyCodesSelector(getState())
+        const instructions = programMemorySelector(getState())
         const ip = ipSelector(getState())
-        const keyCode = keyCodes[ip]
+        const instruction = instructions[ip]
         let state = cpuSelector(getState())
-        state = this.execute(state, keyCode)
+        state = this.execute(state, instruction)
         dispatch(updateState({ ...state, ip: ip + 1 }))
         this.timeoutID = null
         resolve()
@@ -111,58 +111,51 @@ export default class ControlUnit {
     })
   }
 
-  execute(state, keyCode) {
+  execute(state, instruction) {
     const { error, entry, stackLift } = state
+    const {opCode, operand} = instruction
 
-    if (error && keyCode !== K.CANCEL) {
+    if (error && opCode !== K.CANCEL) {
       return state
     }
 
-    if (isNumericString(keyCode)) {
-      return this.enterNumber(state, keyCode)
+    if (isNumericString(opCode)) {
+      return this.enterNumber(state, opCode)
     }
 
-    const pos = keyCode.indexOf(' ')
-    let operand = null
-    if (pos !== -1) {
-      operand = keyCode.slice(pos + 1).trim()
-      keyCode = keyCode.slice(0, pos)
-    }
-
-    const branchFn = branchInstructions[keyCode]
+    const branchFn = branchInstructions[opCode]
     if (branchFn) {
-      return branchFn(state)
+      return branchFn(state, operand)
     }
 
-    const inputFn = inputInstructions[keyCode]
+    const inputFn = inputInstructions[opCode]
     if (inputFn) {
-      if (stackLift && !error && !entry && !stackLiftDisablers.has(keyCode)) {
+      if (stackLift && !error && !entry && !stackLiftDisablers.has(instruction)) {
         state = liftStack(state)
       }
-      if (keyCode === K.ENTER) {
+      if (opCode === K.ENTER) {
         this.notify(entry ? state.stack[0] : K.ENTER)
       }
-      // this.lastKeyCode = keyCode
       return inputFn(state)
     }
 
-    const stackLiftEnablingFn = stackLiftEnablingInstructions[keyCode]
+    const stackLiftEnablingFn = stackLiftEnablingInstructions[opCode]
     if (stackLiftEnablingFn) {
       if (entry) {
         this.notify(state.stack[0])
       }
-      if (this.lastKeyCode === K.ENTER) {
+      if (this.lastOpCode === K.ENTER) {
         this.notify(K.ENTER)
       }
-      this.notify(keyCode)
+      this.notify(instruction)
       state = stackLiftEnablingFn(state, operand)
       const [x] = state.stack
       const buffer = formatNumber(x)
-      this.lastKeyCode = keyCode
+      this.lastOpCode = opCode
       return { ...state, buffer, stackLift: true, entry: false }
     }
 
-    console.error(`controlUnit: not implemented '${keyCode}'`)
+    console.error(`controlUnit: not implemented '${instruction}'`)
     return state
   }
 

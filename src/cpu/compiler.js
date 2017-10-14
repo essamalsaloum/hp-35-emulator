@@ -27,7 +27,7 @@ const removeBlankAndCommentLines = text =>
     .join('\n')
     .concat('\n')
 
-function throwError(message, context = 'end of program') {
+function throwError(message, context = '') {
   if (context.length > CONTEXT_TRUNCATE_AT) {
     if (/\s/.test(context[CONTEXT_TRUNCATE_AT])) {
       context = context.slice(0, 50)
@@ -46,8 +46,10 @@ async function assertEndOfLine(tokenizer) {
 }
 
 export default class Compiler {
-  keyCodes = []
+  instructions = []
   aliasMap = {}
+  currentLabel = null
+  labelCounter = 0
 
   static extractProgramText(text) {
     const matches = text.match(/^```txt[\s\S]+?```/gm)
@@ -94,6 +96,8 @@ export default class Compiler {
           case K.RCL_SUB:
           case K.RCL_MUL:
           case K.RCL_DIV:
+            await this.parseLabel(node, tokenizer)
+            break
           case K.LBL:
             await this.parseLabel(node, tokenizer)
             break
@@ -105,7 +109,7 @@ export default class Compiler {
       }
       node = await tokenizer.next()
     }
-    return this.keyCodes.filter(keyCode => keyCode.length !== 0)
+    return this.instructions.filter(instruction => instruction.length !== 0)
   }
 
   async parseImport(tokenizer) {
@@ -149,37 +153,49 @@ export default class Compiler {
     }
     await assertEndOfLine(tokenizer)
     const compiler = new Compiler()
-    const keyCodes = await compiler.compile(node.text)
-    this.aliasMap[aliasName] = keyCodes
+    const instructions = await compiler.compile(node.text)
+    this.aliasMap[aliasName] = instructions
   }
 
   async parseLabel(node, tokenizer) {
-    const keyCode = node.upper
+    const opCode = node.upper
     node = await tokenizer.nextToken()
     if (node.type !== TokenType.token ||
       node.upper.length !== 1 ||
       node.upper < 'A' || node.upper > 'Z') {
       throwError('memory identifier A-Z expected', node.context)
     }
-    this.keyCodes.push(keyCode + ' ' + node.upper)
+    const operand = node.upper
+    this.labelCounter = 0
+    this.currentLabel = operand
+    this.addInstruction({ opCode, operand })
     await assertEndOfLine(tokenizer)
   }
 
   async parseOtherInstruction(node) {
-    const keyCodes = this.aliasMap[node.text]
-    if (keyCodes) {
-      this.keyCodes = this.keyCodes.concat(keyCodes)
+    const instructions = this.aliasMap[node.text]
+    if (instructions) {
+      for (const instruction of instructions) {
+        this.addInstruction(instruction)
+      }
     } else {
-      const token = node.text
-      const pos = token.indexOf('.')
-      let opCode = pos !== -1 ? token.slice(0, pos) : token
-      opCode = opCode.toUpperCase()
-      opCode = keyCodeMap[opCode] || opCode
+      const opCode = node.text
       if (!cpu.isValidInstruction(opCode)) {
         throwError(`syntax error: '${opCode}'`, node.context)
       }
-      this.keyCodes.push(opCode)
+      this.addInstruction({ opCode })
     }
   }
 
+  addInstruction(instruction) {
+    this.labelCounter += 1
+    if (this.labelCounter > 999) {
+      throwError('program too large')
+    }
+    let label = this.labelCounter.toString().padStart(4, '0')
+    if (this.currentLabel) {
+      label = this.currentLabel + label.slice(1)
+    }
+    this.instructions.push({ ...instruction, label })
+  }
 }

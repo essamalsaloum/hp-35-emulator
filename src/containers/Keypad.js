@@ -42,12 +42,12 @@ class Keypad extends React.PureComponent {
       if (shiftKey) {
         setShiftKey(null)
       }
-      executeKeyCode(keyCode)
+      executeKeyCode({opCode: keyCode})
     }
   }
 
   onKeyPressed = keyCode => {
-    this.props.executeKeyCode(keyCode)
+    this.props.executeKeyCode({opCode: keyCode})
   }
 
   render() {

@@ -20,6 +20,10 @@
   padding: 0 8px;
 }
 
+.InspectTab--list-item-label {
+  color: #888;
+}
+
 .InspectTab--list-item-current {
   padding: 0 8px;
   background-color: lightgray;

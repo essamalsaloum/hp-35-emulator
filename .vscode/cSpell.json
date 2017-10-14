@@ -27,6 +27,7 @@
         "monospace",
         "MULT",
         "PCTCHG",
+        "PROGMEM",
         "reciproc",
         "remarcmij",
         "REPO",

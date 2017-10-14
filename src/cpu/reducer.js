@@ -11,8 +11,8 @@ const CLEAR_DELAYED = 'rpnext/cpu/CLEAR_DELAYED'
 const GOTO = 'rpnext/cpu/GOTO'
 const GOTO_PROGRAM_TOP = 'rpnext/cpu/GOTO_PROGRAM_TOP'
 const UPDATE = 'rpnext/cpu/UPDATE'
-const LOAD_KEYCODES = 'rpnext/cpu/LOAD_KEYCODES'
-const CLEAR_KEYCODES = 'rpnext/cpu/CLEAR_KEYCODES'
+const LOAD_PROGRAM_MEMORY = 'rpnext/cpu/LOAD_PROGRAM_MEMORY'
+const CLEAR_PROGRAM_MEMORY = 'rpnext/cpu/CLEAR_PROGRAM_MEMORY'
 
 export const executeKeyCode = createAction(EXECUTE_KEYCODE)
 export const raiseError = createAction(RAISE_ERROR)
@@ -20,9 +20,8 @@ export const setDelayed = createAction(SET_DELAYED)
 export const clearDelayed = createAction(CLEAR_DELAYED)
 export const gotoProgramTop = createAction(GOTO_PROGRAM_TOP)
 export const goto = createAction(GOTO)
-export const loadKeyCodes = createAction(LOAD_KEYCODES)
-export const clearKeyCodes = createAction(CLEAR_KEYCODES)
-
+export const loadProgramMemory = createAction(LOAD_PROGRAM_MEMORY)
+export const clearProgramMemory = createAction(CLEAR_PROGRAM_MEMORY)
 export const programStarting = createAction(PROGRAM_STARTING)
 export const programStopping = createAction(PROGRAM_STOPPING)
 export const updateState = createAction(UPDATE)
@@ -32,7 +31,7 @@ export const startProgram = () => (dispatch, getState) => {
 }
 
 export const singleStep = () => (dispatch, getState) => {
-  if (ipSelector(getState()) < keyCodesSelector(getState()).length) {
+  if (ipSelector(getState()) < programMemorySelector(getState()).length) {
     cpu.executeNext(dispatch, getState)
   } else {
     dispatch(gotoProgramTop())
@@ -51,7 +50,7 @@ const initialState = {
   entry: false,
   error: null,
   memory: [],
-  keyCodes: [],
+  programMemory: [],
   ip: 0,
   isRunning: false,
   isDelayed: false
@@ -65,10 +64,10 @@ export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case RESET:
       return { ...initialState }
-    case LOAD_KEYCODES:
-      return { ...state, keyCodes: payload }
-    case CLEAR_KEYCODES:
-      return { ...state, keyCodes: [] }
+    case LOAD_PROGRAM_MEMORY:
+      return { ...state, programMemory: payload }
+    case CLEAR_PROGRAM_MEMORY:
+      return { ...state, programMemory: [] }
     case EXECUTE_KEYCODE:
       return { ...state, ...alu(state, payload) }
     case RAISE_ERROR:
@@ -100,5 +99,5 @@ export const bufferSelector = state => state.cpu.buffer
 export const ipSelector = state => state.cpu.ip
 export const isRunningSelector = state => state.cpu.isRunning
 export const isDelayedSelector = state => state.cpu.isDelayed
-export const keyCodesSelector = state => state.cpu.keyCodes
+export const programMemorySelector = state => state.cpu.programMemory
 export const entrySelector = state => state.cpu.entry

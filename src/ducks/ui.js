@@ -31,7 +31,7 @@ export const keyPressed = keyCode => (dispatch, getState) => {
 
   const submitKeyCode = () => {
     dispatch({ type: KEY_PRESSED, payload: keyCode })
-    dispatch(executeKeyCode(keyCode))
+    dispatch(executeKeyCode({ opCode: keyCode }))
     if (shiftKey) {
       dispatch(setShiftKey(null))
     }
@@ -62,7 +62,7 @@ export const keyPressed = keyCode => (dispatch, getState) => {
       if (shiftKey) {
         dispatch(setShiftKey(null))
       } else {
-        dispatch(executeKeyCode(K.CANCEL))
+        dispatch(executeKeyCode({ opCode: K.CANCEL }))
       }
       break
     case K.RESET:
@@ -114,7 +114,7 @@ export const keyPressed = keyCode => (dispatch, getState) => {
         const lastKeyCode = lastKeyCodeSelector(state)
         keyCode = `${lastKeyCode} ${keyCode}`
         dispatch(setShiftKey(null))
-        dispatch(executeKeyCode(keyCode))
+        dispatch(executeKeyCode({ opCode: lastKeyCode, operand: keyCode }))
       } else {
         submitKeyCode()
       }

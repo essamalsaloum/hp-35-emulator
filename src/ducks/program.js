@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions'
-import { clearKeyCodes } from '../cpu/reducer'
+import { clearProgramMemory } from '../cpu/reducer'
 import { RESET } from './index'
 
 const REFRESH_PROGRAM_TEXT = 'rpnext/program/REFRESH_PROGRAM_TEXT'
@@ -10,7 +10,7 @@ const CLEAR_RECORDING = 'rpnext/program/CLEAR_RECORDING'
 
 export const clearProgram = () => dispatch => {
   dispatch({ type: CLEAR_PROGRAM })
-  dispatch(clearKeyCodes())
+  dispatch(clearProgramMemory())
 }
 
 export const refreshProgramText = createAction(REFRESH_PROGRAM_TEXT)

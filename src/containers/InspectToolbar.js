@@ -13,9 +13,9 @@ import Compiler from '../cpu/compiler'
 import { resetKeypad } from '../ducks/ui'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
-  loadKeyCodes,
-  clearKeyCodes,
-  keyCodesSelector,
+  loadProgramMemory,
+  clearProgramMemory,
+  programMemorySelector,
   singleStep,
   startProgram,
   stopProgram,
@@ -31,9 +31,9 @@ class InspectToolbar extends React.PureComponent {
   static propTypes = {
     programText: PropTypes.string.isRequired,
     keyCodes: PropTypes.array.isRequired,
-    clearKeyCodes: PropTypes.func.isRequired,
+    clearProgramMemory: PropTypes.func.isRequired,
     isRunning: PropTypes.bool.isRequired,
-    loadKeyCodes: PropTypes.func.isRequired,
+    loadProgramMemory: PropTypes.func.isRequired,
     singleStep: PropTypes.func.isRequired,
     startProgram: PropTypes.func.isRequired,
     stopProgram: PropTypes.func.isRequired,
@@ -53,11 +53,11 @@ class InspectToolbar extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { programText, loadKeyCodes, clearKeyCodes, isMarkdown } = this.props
-    clearKeyCodes()
+    const { programText, loadProgramMemory, clearProgramMemory, isMarkdown } = this.props
+    clearProgramMemory()
     const compiler = new Compiler()
     compiler.compile(programText, isMarkdown ? 'markdown' : 'text')
-      .then(keyCodes => loadKeyCodes(keyCodes))
+      .then(keyCodes => loadProgramMemory(keyCodes))
       .catch(error => console.log(error.message))
   }
 
@@ -113,8 +113,8 @@ class InspectToolbar extends React.PureComponent {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({
-    loadKeyCodes,
-    clearKeyCodes,
+    loadProgramMemory,
+    clearProgramMemory,
     singleStep,
     startProgram,
     stopProgram,
@@ -127,7 +127,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   isRunning: isRunningSelector(state),
   isDelayed: isDelayedSelector(state),
-  keyCodes: keyCodesSelector(state),
+  keyCodes: programMemorySelector(state),
   programText: programTextSelector(state),
   isMarkdown: isMarkdownSelector(state),
 })
