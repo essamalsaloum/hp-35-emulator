@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
-import { compile } from '../cpu/compiler'
+import Compiler from '../cpu/compiler'
 import { resetKeypad } from '../ducks/ui'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
@@ -55,7 +55,8 @@ class InspectToolbar extends React.PureComponent {
   componentWillMount() {
     const { programText, loadKeyCodes, clearKeyCodes, isMarkdown } = this.props
     clearKeyCodes()
-    compile(programText, isMarkdown ? 'markdown' : 'text')
+    const compiler = new Compiler()
+    compiler.compile(programText, isMarkdown ? 'markdown' : 'text')
       .then(keyCodes => loadKeyCodes(keyCodes))
       .catch(error => console.log(error.message))
   }

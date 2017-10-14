@@ -112,7 +112,7 @@ export const keyPressed = keyCode => (dispatch, getState) => {
     default:
       if (shiftKey === K.ALPHA) {
         const lastKeyCode = lastKeyCodeSelector(state)
-        keyCode = `${lastKeyCode}.${keyCode}`.toLowerCase()
+        keyCode = `${lastKeyCode} ${keyCode}`
         dispatch(setShiftKey(null))
         dispatch(executeKeyCode(keyCode))
       } else {

@@ -28,7 +28,7 @@ export default function MainKeypad() {
         <Key keyCode={K.PCT} down={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.ENTER} down={K.LAST_X} className="Key--enter" />
+        <Key keyCode={K.ENTER} down={K.LAST_X} className="Key--ENTER" />
         <Key keyCode={K.CHS} />
         <Key keyCode={K.EEX} />
         <Key keyCode={K.DEL} />

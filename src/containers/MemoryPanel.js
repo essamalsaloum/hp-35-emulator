@@ -49,7 +49,7 @@ class MemoryPanel extends React.PureComponent {
 
   onMenuAction(keyCode, index) {
     const { executeKeyCode, setMainPanel } = this.props
-    const instruction = `${keyCode}.${ALPHABET[index]}`.toLowerCase()
+    const instruction = `${keyCode} ${ALPHABET[index]}`
     executeKeyCode(instruction)
     if (RCL_KEYCODES.has(keyCode)) {
       setMainPanel(C.KEYPAD_PANEL)

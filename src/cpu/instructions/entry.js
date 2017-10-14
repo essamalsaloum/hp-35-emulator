@@ -108,8 +108,6 @@ const bufferToStack = (buffer, stack) => {
 }
 
 export default {
-  [K.CANCEL]: cancel,
-  [K.CLR]: clr,
   [K.CHS]: changeSign,
   [K.D0]: digit('0'),
   [K.D1]: digit('1'),
@@ -121,8 +119,6 @@ export default {
   [K.D7]: digit('7'),
   [K.D8]: digit('8'),
   [K.D9]: digit('9'),
-  [K.DEL]: del,
   [K.DOT]: decimal,
   [K.EEX]: enterExponent,
-  [K.ENTER]: enter,
 }

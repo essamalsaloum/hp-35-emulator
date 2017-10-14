@@ -9,10 +9,10 @@ import K from '../cpu/keyCodes'
 import './Key.css'
 
 const keyNames = {
-  [K.DIV]: 'div',
-  [K.MUL]: 'mul',
-  [K.SUB]: 'sub',
-  [K.ADD]: 'add'
+  [K.DIV]: 'DIV',
+  [K.MUL]: 'MUL',
+  [K.SUB]: 'SUB',
+  [K.ADD]: 'DIV'
 }
 
 const keyLabels = {

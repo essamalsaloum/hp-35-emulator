@@ -3,6 +3,7 @@ import inputInstructions from './instructions/input'
 import memoryInstructions from './instructions/memory'
 import stackInstructions from './instructions/stack'
 import mathInstructions from './instructions/math'
+import branchInstructions from './instructions/branch'
 
 import { formatNumber } from './util'
 // import { playSuccessSound } from '../services/audio'
@@ -100,7 +101,7 @@ export default class ControlUnit {
       this.timeoutID = setTimeout(() => {
         const keyCodes = keyCodesSelector(getState())
         const ip = ipSelector(getState())
-        const keyCode = keyCodes[ip].toLowerCase()
+        const keyCode = keyCodes[ip]
         let state = cpuSelector(getState())
         state = this.execute(state, keyCode)
         dispatch(updateState({ ...state, ip: ip + 1 }))
@@ -121,11 +122,16 @@ export default class ControlUnit {
       return this.enterNumber(state, keyCode)
     }
 
-    const pos = keyCode.indexOf('.')
+    const pos = keyCode.indexOf(' ')
     let operand = null
     if (pos !== -1) {
-      operand = keyCode.slice(pos + 1)
+      operand = keyCode.slice(pos + 1).trim()
       keyCode = keyCode.slice(0, pos)
+    }
+
+    const branchFn = branchInstructions[keyCode]
+    if (branchFn) {
+      return branchFn(state)
     }
 
     const inputFn = inputInstructions[keyCode]

@@ -29,15 +29,15 @@
   font-variant: small-caps;
 }
 
-.Key--button-keyCode-shiftup {
+.Key--button-keyCode-SHIFTUP {
   color: #2E7D32;
 }
 
-.Key--button-keyCode-shiftdown {
+.Key--button-keyCode-SHIFTDOWN {
   color: #EF6C00;
 }
 
-.Key--enter {
+.Key--ENTER {
   flex: 2;
 }
 
@@ -59,11 +59,11 @@
   top: -0.3rem;
 }
 
-.Key--label-main-add,
-.Key--label-main-sub,
-.Key--label-main-mul,
-.Key--label-main-div,
-.Key--label-main-del {
+.Key--label-main-ADD,
+.Key--label-main-SUB,
+.Key--label-main-MUL,
+.Key--label-main-DIV,
+.Key--label-main-DEL {
   font-size: 1.5rem;
   color: #000
 }
@@ -88,21 +88,21 @@
   font-size: 1rem;
 }
 
-.Key--color-shiftup,
-.Key--color-hyper,
-.Key--color-conv {
+.Key--color-SHIFTUP,
+.Key--color-HYPER,
+.Key--color-CONV {
   color: #2E7D32;
 }
 
-.Key--color-shiftdown {
+.Key--color-SHIFTDOWN {
   color: #EF6C00;
 }
 
-.Key--color-alpha {
+.Key--color-ALPHA {
   color: #D50000;
 }
 
-.Key--color-noop {
+.Key--color-NOOP {
   background-color: #EEEEEE;
 }
 

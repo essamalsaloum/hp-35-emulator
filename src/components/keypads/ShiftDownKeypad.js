@@ -28,7 +28,7 @@ export default function ShiftDownKeypad() {
         <Key keyCode={K.PCTCHG} />
       </div>
       <div className="Keypad--row">
-        <Key keyCode={K.LAST_X} className="Key--enter" />
+        <Key keyCode={K.LAST_X} className="Key--ENTER" />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />
         <Key keyCode={K.NOOP} />

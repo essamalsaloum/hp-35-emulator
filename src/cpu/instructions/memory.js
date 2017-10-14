@@ -1,7 +1,7 @@
 import math from 'mathjs'
 import K from '../keyCodes'
 
-const CHAR_CODE_A = 'a'.charCodeAt(0)
+const CHAR_CODE_A = 'A'.charCodeAt(0)
 
 const letterToIndex = operand => {
   const index = operand.charCodeAt(0) - CHAR_CODE_A

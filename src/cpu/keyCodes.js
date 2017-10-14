@@ -43,79 +43,76 @@ const physicsConstants = {
 }
 
 const conversions = {
-  // distance
-  IN2CM: 'in2cm',       // Convert inches to cm
-  CM2IN: 'cm2in',       // Converts inches to cm
-  FT2M: 'ft2m',
-  M2FT: 'm2ft',
-  MI2KM: 'mi2km',       // Converts miles to km
-  KM2MI: 'km2mi',       // Converts kilometers to miles
-  YD2M: 'yd2m',
-  M2YD: 'm2yd',
-
-  // weight
-  LB2KG: 'lb2kg',       // Converts pounds to kg
-  KG2LB: 'kg2lb',       // Converts kilograms to pounds
-  OZ2G: 'oz2g',
-  G2OZ: 'g2oz',
-  C2F: 'c2f',           // Convert degree C -> F
-  F2C: 'f2c',           // Convert degree F -> C
-  GAL2L: 'gal2l',       // Converts gallons to liters
-  L2GAL: 'l2gal',       // Convert liters to gallons
-  DEG2RAD: 'deg2rad',   // Degrees to radians. Returns (2π/360) x
-  RAD2DEG: 'rad2deg',   // Degrees to radians. Returns (2π/360) x
-  HMS2FRAC: 'hms2frac', // Convert hh:mm:ss to decimal fraction
-  FRAC2HMS: 'frac2hms', // Converts x from a decimal fraction to hh:mm:ss format
+  IN2CM: 'in->cm',
+  CM2IN: 'cm->in',
+  FT2M: 'ft->m',
+  M2FT: 'm->ft',
+  MI2KM: 'mi->km',
+  KM2MI: 'km->mi',
+  YD2M: 'yd->m',
+  M2YD: 'm->yd',
+  LB2KG: 'lb->kg',
+  KG2LB: 'kg->lb',
+  OZ2G: 'oz->g',
+  G2OZ: 'g->oz',
+  C2F: 'c->f',
+  F2C: 'f->c',
+  GAL2L: 'gal->l',
+  L2GAL: 'l->gal',
+  DEG2RAD: 'deg->rad',
+  RAD2DEG: 'rad->deg',
+  HMS2FRAC: 'hms->frac',
+  FRAC2HMS: 'frac->hms',
 }
 
 const memory = {
-  MEM: 'mem',
-  STO: 'sto',
-  MEM_CLR: 'mem_clr',
-  MEM_CLR_ALL: 'mem_clr_all',
-  STO_ADD: 'sto+',
-  STO_SUB: 'sto-',
-  STO_MUL: 'sto*',
-  STO_DIV: 'sto/',
-  RCL: 'rcl',
-  RCL_ADD: 'rcl+',
-  RCL_SUB: 'rcl-',
-  RCL_MUL: 'rcl*',
-  RCL_DIV: 'rcl/',
-  MEM_SWAP: 'mem<>',
+  MEM: 'MEM',
+  STO: 'STO',
+  MEM_CLR: 'MEM_CLR',
+  MEM_CLR_ALL: 'MEM_CLR_ALL',
+  STO_ADD: 'STO+',
+  STO_SUB: 'STO-',
+  STO_MUL: 'STO*',
+  STO_DIV: 'STO/',
+  RCL: 'RCL',
+  RCL_ADD: 'RCL+',
+  RCL_SUB: 'RCL-',
+  RCL_MUL: 'RCL*',
+  RCL_DIV: 'RCL/',
+  MEM_SWAP: 'MEM<>',
 }
 
 const input = {
-  CANCEL: 'cancel',
-  CHS: 'chs',
-  D0: 'd0',
-  D1: 'd1',
-  D2: 'd2',
-  D3: 'd3',
-  D4: 'd4',
-  D5: 'd5',
-  D6: 'd6',
-  D7: 'd7',
-  D8: 'd8',
-  D9: 'd9',
-  DEL: 'del',
-  DOT: 'dot',
-  EEX: 'eex',
-  PI: 'pi',
+  CANCEL: 'CANCEL',
+  CHS: 'CHS',
+  D0: 'D0',
+  D1: 'D1',
+  D2: 'D2',
+  D3: 'D3',
+  D4: 'D4',
+  D5: 'D5',
+  D6: 'D6',
+  D7: 'D7',
+  D8: 'D8',
+  D9: 'D9',
+  DEL: 'DEL',
+  DOT: 'DOT',
+  EEX: 'EEX',
+  PI: 'PI',
 }
 
 const stack = {
-  CLR: 'clr',
-  ENTER: 'enter',
-  LAST_X: 'lastx',
-  ROLL_DOWN: 'rolldown',
-  SWAP: 'swap',
+  CLR: 'CLR',
+  ENTER: 'ENTER',
+  LAST_X: 'LASTx',
+  ROLL_DOWN: 'ROLLDOWN',
+  SWAP: 'x<>y',
 }
 
 const math = {
   ACOS: 'acos',
   ACOSH: 'acosh',
-  ALOG: 'alog',
+  ALOG: '10^x',
   ASIN: 'asin',
   ASINH: 'asinh',
   ADD: '+',
@@ -124,31 +121,31 @@ const math = {
   COS: 'cos',
   COSH: 'cosh',
   DIV: '/',
-  EXP: 'exp',
-  EXPM: 'expm',
-  FACT: 'fact',
-  FP: 'fp',             // Fractional part of x
-  IDIV: 'idiv',         // Integer division
-  IP: 'ip',             // Integer part of x
-  INTG: 'intg',         // Obtains the greatest integer equal to or less than given number
-  INV: 'inv',           // Reciprocal of x
+  EXP: 'e^x',
+  EXPM: 'EXPM',
+  FACT: '!',
+  FP: 'FP',
+  IDIV: 'IDIV',
+  IP: 'IP',
+  INTG: 'INTG',
+  INV: '1/x',
   LN: 'ln',
-  LNP1: 'lnp1',
+  LNP1: 'LNP1',
   LOG: 'log',
   MUL: '*',
-  NCR: 'ncr',           // Combinations of n items taken r at a time = n!/(r!(n-r)!)
-  NPR: 'npr',           // Permutations of n items taken r at a time. Returns n!/(n – r)!
-  PCT: 'pct',             // (y × x) / 100
-  PCTCHG: 'pctchg',       // (x - y) (100 / y)
+  NCR: 'nCr',
+  NPR: 'nPr',
+  PCT: '%',
+  PCTCHG: '%CHG',
   POW: 'y^x',
   SIN: 'sin',
-  SINH: 'sinh',         // Hyperbolic sine
+  SINH: 'sinh',
   SQ: 'x^2',
-  SQRT: 'sqrt',
+  SQRT: 'SQRT',
   SUB: '-',
   TAN: 'tan',
-  TANH: 'tanh',         // Hyperbolic tangent
-  XROOT: 'xroot',       // x-th root of y
+  TANH: 'tanh',
+  XROOT: 'XROOT',
 }
 
 const alphabet = {
@@ -181,23 +178,18 @@ const alphabet = {
 }
 
 export default {
-  CONST: 'const',
-  CONV: 'conv',
-  RESET: 'reset',
-
-  SHIFT_UP: 'shiftup',        // Activates up-shifted key functions
-  SHIFT_DOWN: 'shiftdown',    // Activates down-shifted key functions
-  HYPER: 'hyper',
-  ALPHA: 'alpha',
-  NOOP: 'noop',
-
-  // New math functions. See page G2 ff. of the HP 35 Users Guide
-  ABS: 'abs',           // Absolute value
-  HMS2FRAC: 'hms2frac',    // Converts x from hours–minutes– seconds format to a decimal fraction
-
-  // extensions
-
-  HELP: 'help',
+  CONST: 'CONST',
+  CONV: 'CONV',
+  RESET: 'RESET',
+  SHIFT_UP: 'SHIFTUP',
+  SHIFT_DOWN: 'SHIFTDOWN',
+  HYPER: 'HYPER',
+  ALPHA: 'ALPHA',
+  NOOP: 'NOOP',
+  LBL: 'LBL',
+  ABS: 'ABS',
+  HMS2FRAC: 'HMS->FRAC',
+  HELP: 'HELP',
 
   ...input,
   ...stack,

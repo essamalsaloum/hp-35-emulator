@@ -12,7 +12,7 @@ import { grey700 } from 'material-ui/styles/colors'
 import { showGitHubPanel, resetKeypad } from '../ducks/ui'
 import { clearProgram, refreshProgramText, programTextSelector, isMarkdownSelector, setRecording, clearRecording, isRecordingSelector } from '../ducks/program'
 import { loadKeyCodes, clearKeyCodes, startProgram, stopProgram, isRunningSelector, clearDelayed } from '../cpu/reducer'
-import { compile, extractProgramText } from '../cpu/compiler'
+import Compiler from '../cpu/compiler'
 import { setLoading, clearLoading } from '../ducks/library'
 
 class ProgramToolbar extends React.PureComponent {
@@ -86,7 +86,8 @@ class ProgramToolbar extends React.PureComponent {
       clearKeyCodes()
       clearDelayed()
       setLoading()
-      compile(programText, isMarkdown ? 'markdown' : 'text')
+      const compiler = new Compiler()
+      compiler.compile(programText, isMarkdown ? 'markdown' : 'text')
         .then(keyCodes => {
           setError(null)
           clearLoading()
@@ -131,7 +132,7 @@ class ProgramToolbar extends React.PureComponent {
 
   extractProgram() {
     const { programText, refreshProgramText } = this.props
-    const text = extractProgramText(programText)
+    const text = Compiler.extractProgramText(programText)
     refreshProgramText(text)
   }
 
