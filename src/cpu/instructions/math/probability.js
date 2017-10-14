@@ -10,14 +10,14 @@ const fact = x => {
   return Number.isFinite(x) ? x : new Error('overflow')
 }
 
-const nCr = (x, y) => {
+const nCr = (y, x) => {
   if (x < 0 || math.floor(x) !== x || y < 0 || math.floor(y) !== y || x > y) {
     return new Error('invalid data')
   }
   return math.combinations(y, x)
 }
 
-const nPr = (x, y) => {
+const nPr = (y, x) => {
   if (x < 0 || math.floor(x) !== x || y < 0 || math.floor(y) !== y || x > y) {
     return new Error('invalid data')
   }

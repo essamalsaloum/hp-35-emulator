@@ -21,12 +21,12 @@ const cos = x => math.abs(degrees360(x) - 90) % 180 === 0 ? 0 : math.cos(degrees
 const expm = x => math.exp(x-1)
 const lnp1 = x => nonNegative(x+1, math.log)
 const log = x => nonNegative(x+1, math.log)
-const pow = (x, y) => math.pow(y, x)
+const pow = (y, x) => math.pow(y, x)
 const sin = x => math.sin(degreesToRadians(degrees360(x)))
 const sq = x => x * x
 const sqrt = x => x < 0 ? new Error('√(negative)') : math.sqrt(x)
 const tan = x => math.abs(degrees360(x) - 90) % 180 === 0 ? NaN : math.tan(degreesToRadians(degrees360(x)))
-const xRoot = (x, y) => math.pow(y, 1 / x)
+const xRoot = (y, x) => math.pow(y, 1 / x)
 
 export default {
   [K.ACOS]: monadic(acos),
