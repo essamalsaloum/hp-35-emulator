@@ -65,9 +65,9 @@ export default function reducer(state = initialState, { type, payload }) {
     case RESET:
       return { ...initialState }
     case LOAD_PROGRAM_MEMORY:
-      return { ...state, programMemory: payload }
+      return { ...state, programMemory: payload, ip: 0 }
     case CLEAR_PROGRAM_MEMORY:
-      return { ...state, programMemory: [] }
+      return { ...state, programMemory: [], ip: 0 }
     case EXECUTE_KEYCODE:
       return { ...state, ...alu(state, payload) }
     case RAISE_ERROR:

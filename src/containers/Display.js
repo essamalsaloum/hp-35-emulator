@@ -19,6 +19,8 @@ class Display extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    return true
+    // eslint-disable-next-line
     return !this.props.isRunning ||
       (this.props.isRunning && !nextProps.isRunning) ||
       this.props.isDelayed

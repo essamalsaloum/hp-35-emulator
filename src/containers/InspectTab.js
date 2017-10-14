@@ -17,13 +17,20 @@ class InspectTab extends React.PureComponent {
     this.renderInstruction = this.renderInstruction.bind(this)
   }
 
+  renderLabel(label) {
+    return label
+      ? <div className="InspectTab--list-item-label">{label}:</div>
+      : null
+  }
+
   renderInstruction({ label, opCode, operand = '' }, id) {
     const className = id === this.props.ip
       ? 'InspectTab--list-item-current'
       : 'InspectTab--list-item'
     return (
-      <div key={id} className={className}>
-        <span className="InspectTab--list-item-label">{label}:</span> {opCode} {operand}
+      <div key={id}>
+        {this.renderLabel(label)}
+        <div className={`InspectTab--list-item-instruction ${className}`}>{opCode} {operand}</div>
       </div>
     )
   }

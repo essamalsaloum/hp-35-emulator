@@ -40,6 +40,6 @@ store.subscribe(() => {
   saveStateThrottled()
 })
 
-window.onbeforeunload = saveStateHelper
+// window.onbeforeunload = saveStateHelper
 
 export default Root

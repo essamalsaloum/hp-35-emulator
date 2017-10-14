@@ -33,7 +33,8 @@ const isNumericString = num => numericRegExp.test(num)
 
 const validInstructions = new Set([
   ...Object.keys(inputInstructions),
-  ...Object.keys(stackLiftEnablingInstructions)
+  ...Object.keys(stackLiftEnablingInstructions),
+  ...Object.keys(branchInstructions),
 ])
 
 const stackLiftDisablers = new Set([K.ENTER, K.DEL, K.CANCEL, K.CHS])
@@ -103,8 +104,8 @@ export default class ControlUnit {
         const ip = ipSelector(getState())
         const instruction = instructions[ip]
         let state = cpuSelector(getState())
-        state = this.execute(state, instruction)
-        dispatch(updateState({ ...state, ip: ip + 1 }))
+        state = this.execute({ ...state, ip: state.ip + 1 }, instruction)
+        dispatch(updateState(state))
         this.timeoutID = null
         resolve()
       }, delay)
@@ -113,7 +114,7 @@ export default class ControlUnit {
 
   execute(state, instruction) {
     const { error, entry, stackLift } = state
-    const {opCode, operand} = instruction
+    const { opCode, operand } = instruction
 
     if (error && opCode !== K.CANCEL) {
       return state

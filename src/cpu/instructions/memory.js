@@ -3,7 +3,7 @@ import K from '../keyCodes'
 
 const CHAR_CODE_A = 'A'.charCodeAt(0)
 
-const letterToIndex = operand => {
+export const letterToIndex = operand => {
   const index = operand.charCodeAt(0) - CHAR_CODE_A
   if (index < 0 || index >= 26) {
     throw new Error('operand out of range')

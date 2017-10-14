@@ -24,7 +24,10 @@
   color: #888;
 }
 
+.InspectTab--list-item-instruction {
+  padding-left: 32px;
+}
+
 .InspectTab--list-item-current {
-  padding: 0 8px;
   background-color: lightgray;
 }

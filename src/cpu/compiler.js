@@ -48,8 +48,7 @@ async function assertEndOfLine(tokenizer) {
 export default class Compiler {
   instructions = []
   aliasMap = {}
-  currentLabel = null
-  labelCounter = 0
+  label = null
 
   static extractProgramText(text) {
     const matches = text.match(/^```txt[\s\S]+?```/gm)
@@ -96,14 +95,18 @@ export default class Compiler {
           case K.RCL_SUB:
           case K.RCL_MUL:
           case K.RCL_DIV:
-            await this.parseLabel(node, tokenizer)
+          case K.DSLE:
+          case K.ISGT:
+            await this.parseMemoryInstruction(node, tokenizer)
             break
-          case K.LBL:
-            await this.parseLabel(node, tokenizer)
+          case K.GOTO:
+            await this.parseBranchInstruction(node, tokenizer)
             break
           default:
             await this.parseOtherInstruction(node)
         }
+      } else if (node.type === TokenType.label) {
+        this.label = node.text
       } else if (node.type !== TokenType.eol) {
         throwError(`unexpected token: '${node.text}'`, node.context)
       }
@@ -157,7 +160,7 @@ export default class Compiler {
     this.aliasMap[aliasName] = instructions
   }
 
-  async parseLabel(node, tokenizer) {
+  async parseMemoryInstruction(node, tokenizer) {
     const opCode = node.upper
     node = await tokenizer.nextToken()
     if (node.type !== TokenType.token ||
@@ -166,8 +169,17 @@ export default class Compiler {
       throwError('memory identifier A-Z expected', node.context)
     }
     const operand = node.upper
-    this.labelCounter = 0
-    this.currentLabel = operand
+    this.addInstruction({ opCode, operand })
+    await assertEndOfLine(tokenizer)
+  }
+
+  async parseBranchInstruction(node, tokenizer) {
+    const opCode = node.upper
+    node = await tokenizer.nextToken()
+    if (node.type !== TokenType.token || !/^\w+$/.test(node.text)) {
+      throwError('branch destination label expected', node.context)
+    }
+    const operand = node.text
     this.addInstruction({ opCode, operand })
     await assertEndOfLine(tokenizer)
   }
@@ -179,23 +191,16 @@ export default class Compiler {
         this.addInstruction(instruction)
       }
     } else {
-      const opCode = node.text
+      const opCode = keyCodeMap[node.upper] || node.upper
       if (!cpu.isValidInstruction(opCode)) {
-        throwError(`syntax error: '${opCode}'`, node.context)
+        throwError(`syntax error: '${node.text}'`, node.context)
       }
       this.addInstruction({ opCode })
     }
   }
 
   addInstruction(instruction) {
-    this.labelCounter += 1
-    if (this.labelCounter > 999) {
-      throwError('program too large')
-    }
-    let label = this.labelCounter.toString().padStart(4, '0')
-    if (this.currentLabel) {
-      label = this.currentLabel + label.slice(1)
-    }
-    this.instructions.push({ ...instruction, label })
+    this.instructions.push(this.label ? {...instruction, label: this.label} : instruction)
+    this.label = null
   }
 }

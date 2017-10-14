@@ -2,10 +2,10 @@ import math from 'mathjs'
 import K from '../../keyCodes'
 import { monadic, dyadic, dyadic2 } from './mathHelpers'
 
-const div = (x, y) => x === 0 ? new Error('division by 0') : y / x
+const div = (y, x) => x === 0 ? new Error('division by 0') : y / x
 const inv = x => x === 0 ? new Error('division by 0') : 1 / x
-const pct = (x, y) => x * y / 100
-const pctChg = (x, y) => (x - y) * (100 / y)
+const pct = (y, x) => x * y / 100
+const pctChg = (y, x) => (x - y) * (100 / y)
 
 
 export default {

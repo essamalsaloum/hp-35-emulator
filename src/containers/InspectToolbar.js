@@ -10,7 +10,6 @@ import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Redo from 'material-ui/svg-icons/content/redo'
 import RunStopButton from '../components/RunStopButton'
 import Compiler from '../cpu/compiler'
-import { resetKeypad } from '../ducks/ui'
 import { programTextSelector, isMarkdownSelector } from '../ducks/program'
 import {
   loadProgramMemory,
@@ -42,7 +41,6 @@ class InspectToolbar extends React.PureComponent {
     setDelayed: PropTypes.func.isRequired,
     clearDelayed: PropTypes.func.isRequired,
     isMarkdown: PropTypes.bool.isRequired,
-    resetKeypad: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -70,17 +68,15 @@ class InspectToolbar extends React.PureComponent {
   }
 
   runStop() {
-    const { isRunning, startProgram, stopProgram, resetKeypad } = this.props
+    const { isRunning, startProgram, stopProgram } = this.props
     if (isRunning) {
       stopProgram()
     } else {
-      resetKeypad()
       startProgram()
     }
   }
 
   singleStep() {
-    this.props.resetKeypad()
     this.props.singleStep()
   }
 
@@ -121,7 +117,6 @@ const mapDispatchToProps = dispatch =>
     gotoProgramTop,
     setDelayed,
     clearDelayed,
-    resetKeypad,
   }, dispatch)
 
 const mapStateToProps = state => ({

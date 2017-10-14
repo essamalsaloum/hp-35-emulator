@@ -2,16 +2,19 @@ export const TokenType = {
   block: 'block',
   equalSign: 'equalSign',
   quotedString: 'quotedString',
+  label: 'label',
   token: 'token',
   eol: 'eol',
 }
 
 const tokenPatterns = [
+  { regex: /^\w[!=><>]+\w/, type: TokenType.token },
+  { regex: /^(\w+):/, type: TokenType.label },
+  { regex: /^'(.+?)'/, type: TokenType.quotedString },
   { regex: /^{(.*?)}/, type: TokenType.block },
   { regex: /^=/, type: TokenType.equalSign },
-  { regex: /^'(.+?)'/, type: TokenType.quotedString },
   { regex: /^[^{}=\s]+/, type: TokenType.token },
-  {regex: /^\n/, type: TokenType.eol}
+  { regex: /^\n/, type: TokenType.eol }
 ]
 
 export class Tokenizer {

@@ -177,6 +177,27 @@ const alphabet = {
   ALPHA_Z: 'Z',
 }
 
+const branch = {
+  GOTO: 'GOTO',
+  DSLE: 'DSLE',
+  ISGT: 'ISGT',
+}
+
+const conditionals = {
+  X_NE_Y: 'x!=y',
+  X_LE_Y: 'x<=y',
+  X_LT_Y: 'x<y',
+  X_GT_Y: 'x>y',
+  X_GE_Y: 'x>=y',
+  X_EQ_Y: 'x==y',
+  X_NE_0: 'x!=0',
+  X_LE_0: 'x<=0',
+  X_LT_0: 'x<0',
+  X_GT_0: 'x>0',
+  X_GE_0: 'x>=0',
+  X_EQ_0: 'x==0',
+}
+
 export default {
   CONST: 'CONST',
   CONV: 'CONV',
@@ -186,7 +207,6 @@ export default {
   HYPER: 'HYPER',
   ALPHA: 'ALPHA',
   NOOP: 'NOOP',
-  LBL: 'LBL',
   ABS: 'ABS',
   HMS2FRAC: 'HMS->FRAC',
   HELP: 'HELP',
@@ -197,5 +217,7 @@ export default {
   ...math,
   ...physicsConstants,
   ...conversions,
-  ...alphabet
+  ...alphabet,
+  ...branch,
+  ...conditionals,
 }
