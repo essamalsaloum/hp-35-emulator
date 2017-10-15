@@ -2,18 +2,11 @@ import math from 'mathjs'
 import K from '../keyCodes'
 import { letterToIndex } from './memory'
 
-const goto = (() => {
-  const memo = new Map()
-  return (state, operand) => {
-    let ip = memo.get(operand)
-    if (!ip) {
-      const { programMemory } = state
-      ip = programMemory.findIndex(({ label }) => label === operand)
-      memo.set(operand, ip)
-    }
-    return ip !== -1 ? { ...state, ip } : state
-  }
-})()
+const goto = (state, operand) => {
+  const { programMemory } = state
+  const ip = programMemory.findIndex(({ label }) => label === operand)
+  return ip !== -1 ? { ...state, ip } : state
+}
 
 const dsle = (state, operand) => {
   const index = letterToIndex(operand)
