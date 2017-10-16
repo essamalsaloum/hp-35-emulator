@@ -38,8 +38,8 @@ function throwError(message, context = '') {
   throw new Error(`${message}\nnear:\n${context}`)
 }
 
-async function assertEndOfLine(tokenizer) {
-  const node = await tokenizer.nextToken()
+function assertEndOfLine(tokenizer) {
+  const node = tokenizer.nextToken()
   if (node.type !== TokenType.eol) {
     throwError(`expected end-of-line, not: '${node.text}'`, node.context)
   }
@@ -75,7 +75,7 @@ export default class Compiler {
   async compileText(text) {
     text = removeBlankAndCommentLines(text)
     const tokenizer = new Tokenizer(text)
-    let node = await tokenizer.next()
+    let node = tokenizer.next()
     while (!node.done) {
       if (node.type === TokenType.token) {
         switch (node.upper) {
@@ -97,26 +97,26 @@ export default class Compiler {
           case K.RCL_DIV:
           case K.DSLE:
           case K.ISGT:
-            await this.parseMemoryInstruction(node, tokenizer)
+            this.parseMemoryInstruction(node, tokenizer)
             break
           case K.GOTO:
-            await this.parseBranchInstruction(node, tokenizer)
+            this.parseBranchInstruction(node, tokenizer)
             break
           default:
-            await this.parseOtherInstruction(node)
+            this.parseOtherInstruction(node)
         }
       } else if (node.type === TokenType.label) {
         this.label = node.text
       } else if (node.type !== TokenType.eol) {
         throwError(`unexpected token: '${node.text}'`, node.context)
       }
-      node = await tokenizer.next()
+      node = tokenizer.next()
     }
     return this.instructions.filter(instruction => instruction.length !== 0)
   }
 
   async parseImport(tokenizer) {
-    const node = await tokenizer.nextToken()
+    const node = tokenizer.nextToken()
     if (node.type !== TokenType.quotedString) {
       throwError(`expected quoted string`, node.context)
     }
@@ -128,7 +128,7 @@ export default class Compiler {
       path = importTarget.slice(0, pos)
       name = importTarget.slice(pos + 1)
     }
-    await assertEndOfLine(tokenizer)
+    assertEndOfLine(tokenizer)
     const programs = await github.fetchFileList(path)
     const program = programs[name]
     if (!program) {
@@ -140,29 +140,29 @@ export default class Compiler {
     await this.compile(text, mode)
   }
 
-  async parseAlias(tokenizer) {
-    let node = await tokenizer.nextToken()
+ async parseAlias(tokenizer) {
+    let node = tokenizer.nextToken()
     if (node.type !== TokenType.token) {
       throwError(`expected alias name`, node.context)
     }
     const aliasName = node.text
-    node = await tokenizer.nextToken()
+    node = tokenizer.nextToken()
     if (node.type !== TokenType.equalSign) {
       throwError(`expected '='`, node.context)
     }
-    node = await tokenizer.nextToken()
+    node = tokenizer.nextToken()
     if (node.type !== TokenType.block) {
       throwError(`expected text block`, node.context)
     }
-    await assertEndOfLine(tokenizer)
+    assertEndOfLine(tokenizer)
     const compiler = new Compiler()
     const instructions = await compiler.compile(node.text)
     this.aliasMap[aliasName] = instructions
   }
 
-  async parseMemoryInstruction(node, tokenizer) {
+  parseMemoryInstruction(node, tokenizer) {
     const opCode = node.upper
-    node = await tokenizer.nextToken()
+    node = tokenizer.nextToken()
     if (node.type !== TokenType.token ||
       node.upper.length !== 1 ||
       node.upper < 'A' || node.upper > 'Z') {
@@ -170,21 +170,21 @@ export default class Compiler {
     }
     const operand = node.upper
     this.addInstruction({ opCode, operand })
-    await assertEndOfLine(tokenizer)
+    assertEndOfLine(tokenizer)
   }
 
-  async parseBranchInstruction(node, tokenizer) {
+  parseBranchInstruction(node, tokenizer) {
     const opCode = node.upper
-    node = await tokenizer.nextToken()
+    node = tokenizer.nextToken()
     if (node.type !== TokenType.token || !/^\w+$/.test(node.text)) {
       throwError('branch destination label expected', node.context)
     }
     const operand = node.text
     this.addInstruction({ opCode, operand })
-    await assertEndOfLine(tokenizer)
+    assertEndOfLine(tokenizer)
   }
 
-  async parseOtherInstruction(node) {
+  parseOtherInstruction(node) {
     const instructions = this.aliasMap[node.text]
     if (instructions) {
       for (const instruction of instructions) {

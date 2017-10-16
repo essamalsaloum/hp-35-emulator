@@ -22,7 +22,7 @@ export class Tokenizer {
     this.text = text
   }
 
-  nextSync() {
+  next() {
     if (this.text === '') {
       return { done: true }
     }
@@ -44,18 +44,11 @@ export class Tokenizer {
     throw new Error('logic error in Tokenizer')
   }
 
-  next() {
-    return Promise.resolve(this.nextSync())
-  }
-
   nextToken() {
-    return new Promise((resolve, reject) => {
-      const node = this.nextSync()
-      if (node.done) {
-        reject(new Error('unexpected end of file'))
-      } else {
-        resolve(node)
-      }
-    })
+    const node = this.next()
+    if (node.done) {
+      throw new Error('unexpected end of file')
+    }
+    return node
   }
 }
