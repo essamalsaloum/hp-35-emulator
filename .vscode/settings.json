@@ -12,6 +12,7 @@
       "Selectable",
       "Unmount",
       "deserializing",
+      "gotos",
       "lastx",
       "memclr",
       "memswap",

@@ -2,10 +2,9 @@ import math from 'mathjs'
 import K from '../keyCodes'
 import { letterToIndex } from './memory'
 
-const goto = (state, operand) => {
-  const { programMemory } = state
-  const ip = programMemory.findIndex(({ label }) => label === operand)
-  return ip !== -1 ? { ...state, ip } : state
+const goto = state => {
+  const { ip } = state.programMemory[state.ip - 1]
+  return { ...state, ip }
 }
 
 const dsle = (state, operand) => {

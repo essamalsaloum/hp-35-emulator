@@ -112,7 +112,9 @@ export default class Compiler {
       }
       node = tokenizer.next()
     }
-    return this.instructions.filter(instruction => instruction.length !== 0)
+    this.instructions = this.instructions.filter(instr => instr.length !== 0)
+    this.fixUpBranchDestinations()
+    return this.instructions
   }
 
   async parseImport(tokenizer) {
@@ -202,5 +204,17 @@ export default class Compiler {
   addInstruction(instruction) {
     this.instructions.push(this.label ? {...instruction, label: this.label} : instruction)
     this.label = null
+  }
+
+  fixUpBranchDestinations() {
+    const gotos = this.instructions.filter(instr => instr.opCode === K.GOTO)
+    gotos.forEach(goto => {
+      const label = goto.operand
+      const index = this.instructions.findIndex(instr => instr.label === label)
+      if (index === -1) {
+        throw new Error(`GOTO ${label}: label is undefined`)
+      }
+      goto.ip = index
+    })
   }
 }
