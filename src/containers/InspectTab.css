@@ -18,16 +18,21 @@
 
 .InspectTab--list-item {
   padding: 0 8px;
+  color: #303F9F;
+  font-weight: bold;
+}
+
+.InspectTab--list-item-current {
+  background-color: #E0E0E0;
+  color: #303F9F;
+  font-weight: bold;
 }
 
 .InspectTab--list-item-label {
-  color: #888;
+  color: #388E3C;
 }
 
 .InspectTab--list-item-instruction {
   padding-left: 32px;
 }
 
-.InspectTab--list-item-current {
-  background-color: lightgray;
-}
