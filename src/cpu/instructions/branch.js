@@ -7,47 +7,51 @@ const goto = state => {
   return { ...state, ip }
 }
 
-const dsle = (state, operand) => {
-  const index = letterToIndex(operand)
-  const { memory } = state
-  let { ip } = state
-  let value = memory[index]
-  if (value < 0) {
-    throw new Error('invalid counter value')
+const dsle = (state, operand) => loopConditional(state, operand, K.DSLE)
+const isgt = (state, operand) => loopConditional(state, operand, K.ISGT)
+
+const loopConditional = (() => {
+  const memo = {}
+  return (state, operand, keyCode) => {
+    const index = letterToIndex(operand)
+    const { memory } = state
+    let { ip } = state
+    const value = memory[index]
+    if (value < 0) {
+      throw new Error('invalid counter value')
+    }
+    const [intPart, fracPart] = value.toString().split('.')
+    let counter = parseInt(intPart, 10)
+    let finalValue = 0
+    let increment = 1
+    if (fracPart) {
+      if (memo[fracPart]) {
+        [finalValue, increment] = memo[fracPart]
+      }
+      else {
+        if (fracPart.length !== 3 && fracPart.length !== 5) {
+          return { ...state, error: new Error(`invalid loop-control: ${value}`) }
+        }
+        finalValue = parseInt(fracPart.slice(0, 3), 10)
+        if (fracPart.length === 5) {
+          increment = parseInt(fracPart.slice(3), 10)
+        }
+        memo[fracPart] = [finalValue, increment]
+      }
+    }
+
+    if (keyCode === K.DSLE) {
+      counter -= increment
+      ip = counter <= finalValue ? ip + 1 : ip
+    }
+    else {
+      counter += increment
+      ip = counter > finalValue ? ip + 1 : ip
+    }
+    memory[index] = parseFloat(`${counter}.${fracPart}`)
+    return { ...state, memory: [...memory], ip }
   }
-  let counter = math.round(value)
-  const fraction = value - counter
-  const finalValue = math.round(fraction * 1000)
-  const increment = math.round(fraction * 100000 - finalValue * 100) || 1
-
-  counter -= increment
-  value = counter + fraction
-  memory[index] = value
-
-  ip = counter <= finalValue ? ip + 1 : ip
-  return { ...state, memory: [...memory], ip }
-}
-
-const isgt = (state, operand) => {
-  const index = letterToIndex(operand)
-  const { memory } = state
-  let { ip } = state
-  let value = memory[index]
-  if (value < 0) {
-    throw new Error('invalid counter value')
-  }
-  let counter = math.round(value)
-  const fraction = value - counter
-  const finalValue = math.round(fraction * 1000)
-  const increment = math.round(fraction * 100000 - finalValue * 100) || 1
-
-  counter += increment
-  value = counter + fraction
-  memory[index] = value
-
-  ip = counter > finalValue ? ip + 1 : ip
-  return { ...state, memory: [...memory], ip }
-}
+})()
 
 const x_ne_y = (x, y) => math.compare(x, y) !== 0
 const x_le_y = (x, y) => math.compare(x, y) <= 0
