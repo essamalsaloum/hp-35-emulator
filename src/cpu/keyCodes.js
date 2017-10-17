@@ -181,6 +181,9 @@ const branch = {
   GOTO: 'GOTO',
   DSLE: 'DSLE',
   ISGT: 'ISGT',
+  CALL: 'CALL',
+  RTN: 'RTN',
+  STOP: 'STOP',
 }
 
 const conditionals = {

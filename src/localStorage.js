@@ -1,10 +1,13 @@
+import C from './constants'
+
 export const loadState = () => {
   try {
     const serializedState = window.localStorage.getItem('state')
     if (!serializedState) {
       return undefined
     }
-    return JSON.parse(serializedState)
+    const state = JSON.parse(serializedState)
+    return state.cpu.version === C.STATE_VERSION ? state : null
   } catch (err) {
     console.log('error deserializing the state from localStorage')
   }

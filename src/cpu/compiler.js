@@ -100,6 +100,7 @@ export default class Compiler {
             this.parseMemoryInstruction(node, tokenizer)
             break
           case K.GOTO:
+          case K.CALL:
             this.parseBranchInstruction(node, tokenizer)
             break
           default:
@@ -207,14 +208,14 @@ export default class Compiler {
   }
 
   fixUpBranchDestinations() {
-    const gotos = this.instructions.filter(instr => instr.opCode === K.GOTO)
-    gotos.forEach(goto => {
-      const label = goto.operand
+    const fixups = this.instructions.filter(instr => instr.opCode === K.GOTO || instr.opCode === K.CALL)
+    fixups.forEach(fixup => {
+      const label = fixup.operand
       const index = this.instructions.findIndex(instr => instr.label === label)
       if (index === -1) {
-        throw new Error(`GOTO ${label}: label is undefined`)
+        throw new Error(`${fixup.opCode} ${label}: label is undefined`)
       }
-      goto.ip = index
+      fixup.ip = index
     })
   }
 }

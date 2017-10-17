@@ -7,6 +7,24 @@ const goto = state => {
   return { ...state, ip }
 }
 
+const call = state => {
+  const { callStack, programMemory } = state
+  callStack.push(state.ip)
+  const { ip } = programMemory[state.ip - 1]
+  return { ...state, ip, callStack: [...callStack] }
+}
+
+const rtn = state => {
+  const { callStack } = state
+  if (callStack.length === 0) {
+    return { ...state, isRunning: false, ip: 0, callStack: [] }
+  }
+  const ip = callStack.pop()
+  return { ...state, callStack: [...callStack], ip }
+}
+
+const stop = state => ({ ...state, isRunning: false })
+
 const dsle = (state, operand) => loopConditional(state, operand, K.DSLE)
 const isgt = (state, operand) => loopConditional(state, operand, K.ISGT)
 
@@ -72,8 +90,12 @@ const conditional = predicate => state => {
   return condition ? state : { ...state, ip: state.ip + 1 }
 }
 
+
 export default {
   [K.GOTO]: goto,
+  [K.CALL]: call,
+  [K.RTN]: rtn,
+  [K.STOP]: stop,
   [K.DSLE]: dsle,
   [K.ISGT]: isgt,
   [K.X_NE_Y]: conditional(x_ne_y),

@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions'
 import cpu from '../cpu'
 import { RESET } from '../ducks'
+import C from '../constants'
 
 const EXECUTE_KEYCODE = 'rpnext/cpu/EXECUTE_KEYCODE'
 const RAISE_ERROR = 'rpnext/cpu/RAISE_ERROR'
@@ -43,6 +44,7 @@ export const stopProgram = () => (dispatch) => {
 }
 
 const initialState = {
+  version: C.STATE_VERSION,
   stack: [0, 0, 0, 0],
   lastX: 0,
   buffer: '0',
@@ -52,6 +54,7 @@ const initialState = {
   memory: [],
   programMemory: [],
   ip: 0,
+  callStack: [],
   isRunning: false,
   isDelayed: false
 }
@@ -65,9 +68,9 @@ export default function reducer(state = initialState, { type, payload }) {
     case RESET:
       return { ...initialState }
     case LOAD_PROGRAM_MEMORY:
-      return { ...state, programMemory: payload, ip: 0 }
+      return { ...state, programMemory: payload, ip: 0, callStack: [] }
     case CLEAR_PROGRAM_MEMORY:
-      return { ...state, programMemory: [], ip: 0 }
+      return { ...state, programMemory: [], ip: 0, callStack: [] }
     case EXECUTE_KEYCODE:
       return { ...state, ...alu(state, payload) }
     case RAISE_ERROR:
@@ -75,7 +78,7 @@ export default function reducer(state = initialState, { type, payload }) {
     case UPDATE:
       return payload
     case GOTO_PROGRAM_TOP:
-      return { ...state, ip: 0 }
+      return { ...state, ip: 0, callStack: [] }
     case GOTO:
       return { ...state, ip: payload }
     case PROGRAM_STARTING:
