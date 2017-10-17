@@ -25,8 +25,7 @@ class InspectTab extends React.PureComponent {
   }
 
   renderInstruction({ label, opCode, operand = '' }, index) {
-    const { isDelayed } = this.props
-    const className = isDelayed && index === this.props.ip
+    const className = index === this.props.ip
       ? 'InspectTab--list-item-current'
       : 'InspectTab--list-item'
     return (
