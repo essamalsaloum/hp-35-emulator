@@ -10,7 +10,7 @@ import ChildToolbar from '../components/ChildToolbar'
 import WikiButton from '../components/WikiButton'
 import { physicsConstantDefs } from '../cpu/instructions/physicsConstants'
 import { setRecentConstant, recentConstantsSelector } from '../ducks/preferences'
-import { setMainPanel, keyPressed } from '../ducks/ui'
+import { setMainPanel, keyPressed, setShiftKey } from '../ducks/ui'
 import C from '../constants'
 import './ConstantsPanel.css'
 
@@ -25,6 +25,7 @@ class ConstantsPanel extends React.PureComponent {
     setMainPanel: PropTypes.func.isRequired,
     setRecentConstant: PropTypes.func.isRequired,
     recentConstants: PropTypes.array.isRequired,
+    setShiftKey: PropTypes.func.isRequired,
   }
 
   onItemClick(keyCode) {
@@ -36,6 +37,11 @@ class ConstantsPanel extends React.PureComponent {
   onWikiClick(keyCode) {
     const { wiki } = physicsConstantDefs[keyCode]
     window.open(wiki, '_blank')
+  }
+
+  onBackClick() {
+    this.props.setMainPanel(C.KEYPAD_PANEL)
+    this.props.setShiftKey(null)
   }
 
   renderRecent() {
@@ -72,10 +78,10 @@ class ConstantsPanel extends React.PureComponent {
   }
 
   render() {
-    const {setMainPanel, recentConstants} = this.props
+    const { recentConstants } = this.props
     return (
       <div className="ConstantsPanel">
-        <ChildToolbar title="Physics Constants" onBackClick={() => setMainPanel(C.KEYPAD_PANEL)} />
+        <ChildToolbar title="Physics Constants" onBackClick={() => this.onBackClick()} />
         <List className="ConstantsPanel--list">
           {this.renderRecent()}
           {recentConstants.length > 0 ? <Subheader>All Constants</Subheader> : null}
@@ -91,6 +97,7 @@ const mapDispatchToProps = dispatch =>
     keyPressed,
     setMainPanel,
     setRecentConstant,
+    setShiftKey,
   }, dispatch)
 
 const mapStateToProps = state => ({

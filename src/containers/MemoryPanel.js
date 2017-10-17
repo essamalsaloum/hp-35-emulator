@@ -10,7 +10,7 @@ import MemoryToolbar from '../components/MemoryToolbar'
 import memoryIconMenu from '../components/memoryIconMenu'
 import K from '../cpu/keyCodes'
 import C from '../constants'
-import { executeKeyCode, memorySelector } from '../cpu/reducer'
+import { executeKeyCode, memorySelector, isRunningSelector } from '../cpu/reducer'
 import { setMainPanel } from '../ducks/ui'
 import { formatNumber } from '../cpu/util'
 import './MemoryPanel.css'
@@ -30,6 +30,7 @@ class MemoryPanel extends React.PureComponent {
     executeKeyCode: PropTypes.func.isRequired,
     memory: PropTypes.array.isRequired,
     setMainPanel: PropTypes.func.isRequired,
+    running: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -49,25 +50,25 @@ class MemoryPanel extends React.PureComponent {
 
   onMenuAction(keyCode, index) {
     const { executeKeyCode, setMainPanel } = this.props
-    executeKeyCode({opCode: keyCode, operand: ALPHABET[index]})
+    executeKeyCode({ opCode: keyCode, operand: ALPHABET[index] })
     if (RCL_KEYCODES.has(keyCode)) {
       setMainPanel(C.KEYPAD_PANEL)
     }
   }
 
   renderListByUsage(type = 'used') {
-    const { memory } = this.props
+    const { memory, running } = this.props
     const list = []
     for (let i = 0; i < ALPHABET.length; i++) {
       const letter = ALPHABET.charAt(i)
-      const hasValue = Number.isFinite(memory[i])
+      const hasValue = memory[i] !== null && memory[i] !== undefined
       const skip = type === 'used' ? !hasValue : hasValue
       if (skip) {
         continue
       }
       list.push(
         <ListItem
-          key={i}
+          key={letter}
           leftAvatar={
             <Avatar color='white'
               backgroundColor={type === 'used' ? indigoA200 : grey400}
@@ -78,7 +79,7 @@ class MemoryPanel extends React.PureComponent {
             </Avatar>
           }
           primaryText={this.renderText(i)}
-          rightIconButton={memoryIconMenu(i, hasValue, this.onMenuAction)}
+          rightIconButton={running ? null : memoryIconMenu(i, hasValue, this.onMenuAction)}
         />
       )
     }
@@ -86,6 +87,7 @@ class MemoryPanel extends React.PureComponent {
   }
 
   renderList() {
+    // const { running } = this.props
     const usedList = this.renderListByUsage('used')
     const unusedList = this.renderListByUsage('unused')
 
@@ -109,13 +111,13 @@ class MemoryPanel extends React.PureComponent {
   }
 
   render() {
-    const {memory, setMainPanel, executeKeyCode} = this.props
+    const { memory, setMainPanel, executeKeyCode, running } = this.props
     return (
       <div className="MemoryPanel">
         <MemoryToolbar
-          disabled={memory.every(cell => !cell)}
+          disabled={running || memory.every(cell => !cell)}
           onBackClick={() => setMainPanel('keypad')}
-          onClearAllClick={() => executeKeyCode({opCode: K.MEM_CLR_ALL})}
+          onClearAllClick={() => executeKeyCode({ opCode: K.MEM_CLR_ALL })}
         />
         <List className="MemoryPanel--list">
           {this.renderList()}
@@ -126,6 +128,7 @@ class MemoryPanel extends React.PureComponent {
 }
 const mapStateToProps = state => ({
   memory: memorySelector(state),
+  running: isRunningSelector(state),
 })
 
 

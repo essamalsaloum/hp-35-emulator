@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { programMemorySelector, ipSelector } from '../cpu/reducer'
+import { programMemorySelector, ipSelector, isDelayedSelector } from '../cpu/reducer'
 import InspectToolbar from './InspectToolbar'
 import './InspectTab.css'
 
@@ -9,7 +9,8 @@ class InspectTab extends React.PureComponent {
 
   static propTypes = {
     keyCodes: PropTypes.array,
-    ip: PropTypes.number.isRequired
+    ip: PropTypes.number.isRequired,
+    isDelayed: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -23,12 +24,13 @@ class InspectTab extends React.PureComponent {
       : null
   }
 
-  renderInstruction({ label, opCode, operand = '' }, id) {
-    const className = id === this.props.ip
+  renderInstruction({ label, opCode, operand = '' }, index) {
+    const { isDelayed } = this.props
+    const className = isDelayed && index === this.props.ip
       ? 'InspectTab--list-item-current'
       : 'InspectTab--list-item'
     return (
-      <div key={id}>
+      <div key={index}>
         {this.renderLabel(label)}
         <div className={`InspectTab--list-item-instruction ${className}`}>{opCode} {operand}</div>
       </div>
@@ -49,7 +51,8 @@ class InspectTab extends React.PureComponent {
 
 const mapStateToProps = state => ({
   keyCodes: programMemorySelector(state),
-  ip: ipSelector(state)
+  ip: ipSelector(state),
+  isDelayed: isDelayedSelector(state),
 })
 
 export default connect(mapStateToProps)(InspectTab)
